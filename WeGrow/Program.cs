@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using WeGrow.DAL;
+using WeGrow.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
- 
+builder.Services.AddControllers();
+builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 var app = builder.Build();
+
+app.MapControllers();
 
 app.Run();
