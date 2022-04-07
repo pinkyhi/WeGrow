@@ -77,7 +77,7 @@ namespace WeGrow.Auth
                     Email = "ivanvladymyrov.pinky@gmail.com",
                     EmailConfirmed = true
                 };
-                var result = userMgr.CreateAsync(angella, "LVLF4cce").Result;
+                var result = userMgr.CreateAsync(angella, "P@ssw0rd").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);

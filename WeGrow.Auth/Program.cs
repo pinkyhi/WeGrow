@@ -2,10 +2,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WeGrow.Auth;
 
+var seed = args.Contains("/seed");
+if (seed)
+{
+    args = args.Except(new[] { "/seed" }).ToArray();
+}
+
 var builder = WebApplication.CreateBuilder(args);
+var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (seed)
+{
+    SeedData.EnsureSeedData(connString);
+}
 
 var assembly = typeof(Program).Assembly.GetName().Name;
-var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AspNetIdentityDbContext>(options =>
 {
@@ -31,7 +42,7 @@ builder.Services.AddIdentityServer()
         {
             b.UseSqlServer(connString, opt => opt.MigrationsAssembly(assembly));
         };
-    });
+    }).AddDeveloperSigningCredential();
 
 var app = builder.Build();
 
