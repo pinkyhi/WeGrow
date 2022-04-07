@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeGrow", "WeGrow\WeGrow.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeGrow.DAL", "WeGrow.DAL\WeGrow.DAL.csproj", "{14E7FE34-AC83-46C2-A4C8-FED934B12676}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeGrow.Auth", "WeGrow.Auth\WeGrow.Auth.csproj", "{D39905A1-35F1-41C0-BF86-E7F207DB8384}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{14E7FE34-AC83-46C2-A4C8-FED934B12676}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14E7FE34-AC83-46C2-A4C8-FED934B12676}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14E7FE34-AC83-46C2-A4C8-FED934B12676}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D39905A1-35F1-41C0-BF86-E7F207DB8384}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D39905A1-35F1-41C0-BF86-E7F207DB8384}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D39905A1-35F1-41C0-BF86-E7F207DB8384}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D39905A1-35F1-41C0-BF86-E7F207DB8384}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
