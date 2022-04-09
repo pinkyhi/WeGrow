@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using WeGrow.Client.Services;
@@ -10,9 +12,27 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 
 builder.Services.Configure<IdentityServerSettings>(builder.Configuration.GetSection(nameof(IdentityServerSettings)));
-
 builder.Services.AddScoped<ITokenService, TokenService>();
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddOpenIdConnect(
+        OpenIdConnectDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            options.Authority = builder.Configuration["InteractiveServiceSettings:AuthorityUrl"];
+            options.ClientId = builder.Configuration["InteractiveServiceSettings:ClientId"];
+            options.ClientSecret = builder.Configuration["InteractiveServiceSettings:ClientSecret"];
+            options.ResponseType = "code";
+            options.SaveTokens = true;
+            options.GetClaimsFromUserInfoEndpoint = true;
+        }
+    );
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -43,7 +43,10 @@ builder.Services.AddIdentityServer()
         {
             b.UseSqlServer(connString, opt => opt.MigrationsAssembly(assembly));
         };
-    }).AddDeveloperSigningCredential();
+    })
+    .AddDeveloperSigningCredential();
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 app.UseStaticFiles();
