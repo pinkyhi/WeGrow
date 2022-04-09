@@ -11,8 +11,8 @@ using WeGrow.DAL;
 namespace WeGrow.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220407142218_InitMigration")]
-    partial class InitMigration
+    [Migration("20220409210654_appDbContextInit")]
+    partial class appDbContextInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

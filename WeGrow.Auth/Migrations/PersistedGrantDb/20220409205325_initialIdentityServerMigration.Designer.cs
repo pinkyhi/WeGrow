@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace WeGrow.Auth.Migrations
+namespace WeGrow.Auth.Migrations.PersistedGrantDb
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20220407161029_initAuth")]
-    partial class initAuth
+    [Migration("20220409205325_initialIdentityServerMigration")]
+    partial class initialIdentityServerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

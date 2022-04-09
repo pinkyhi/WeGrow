@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace WeGrow.Auth.Migrations
+namespace WeGrow.Auth.Migrations.PersistedGrantDb
 {
-    public partial class initAuth : Migration
+    public partial class initialIdentityServerMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

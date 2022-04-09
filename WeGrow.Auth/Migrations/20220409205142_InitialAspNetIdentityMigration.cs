@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace WeGrow.Auth.Migrations.AspNetIdentityDb
+namespace WeGrow.Auth.Migrations
 {
-    public partial class initAspNetIdentity : Migration
+    public partial class InitialAspNetIdentityMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WeGrow.Auth.Migrations.ConfigurationDb
 {
-    public partial class initAuth : Migration
+    public partial class initialIdentityServerMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

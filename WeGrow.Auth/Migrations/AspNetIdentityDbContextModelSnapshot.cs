@@ -8,7 +8,7 @@ using WeGrow.Auth;
 
 #nullable disable
 
-namespace WeGrow.Auth.Migrations.AspNetIdentityDb
+namespace WeGrow.Auth.Migrations
 {
     [DbContext(typeof(AspNetIdentityDbContext))]
     partial class AspNetIdentityDbContextModelSnapshot : ModelSnapshot

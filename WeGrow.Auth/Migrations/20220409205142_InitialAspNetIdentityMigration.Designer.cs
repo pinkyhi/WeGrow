@@ -9,11 +9,11 @@ using WeGrow.Auth;
 
 #nullable disable
 
-namespace WeGrow.Auth.Migrations.AspNetIdentityDb
+namespace WeGrow.Auth.Migrations
 {
     [DbContext(typeof(AspNetIdentityDbContext))]
-    [Migration("20220407162636_initAspNetIdentity")]
-    partial class initAspNetIdentity
+    [Migration("20220409205142_InitialAspNetIdentityMigration")]
+    partial class InitialAspNetIdentityMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
