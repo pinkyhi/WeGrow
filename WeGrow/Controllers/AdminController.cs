@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
@@ -7,6 +8,7 @@ using WeGrow.Models.Entities;
 namespace WeGrow.Controllers
 {
     [Route("admin")]
+    [Authorize]
     public class AdminController : ControllerBase
     {
         private readonly IRepository repository;
