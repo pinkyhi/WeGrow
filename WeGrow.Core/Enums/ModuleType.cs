@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeGrow.DAL.Enums
+namespace WeGrow.Core.Enums
 {
     public enum ModuleType
     {

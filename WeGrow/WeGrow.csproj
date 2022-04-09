@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WeGrow.Core\WeGrow.Core.csproj" />
     <ProjectReference Include="..\WeGrow.DAL\WeGrow.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

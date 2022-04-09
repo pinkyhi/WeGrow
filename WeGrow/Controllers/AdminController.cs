@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
+using WeGrow.Models.Entities;
 
 namespace WeGrow.Controllers
 {
@@ -19,7 +21,8 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> Modules()
         {
             var modules = await repository.GetRangeAsync<Module>(false, x => true);
-            return Ok(modules);
+            var modulesEntities = modules.Select(x => new ModuleEntity(x));
+            return Ok(modulesEntities);
         }
     }
 }
