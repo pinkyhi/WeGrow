@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddAuthentication("Bearer")
     .AddIdentityServerAuthentication("Bearer", options =>
     {
-        options.Authority = builder.Configuration["apiUrl"];
+        options.Authority = builder.Configuration["authUrl"];
         options.ApiName = "WeGrow";
 
     });
