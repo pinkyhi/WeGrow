@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -23,6 +25,8 @@ builder.Services.AddAuthentication(options =>
         OpenIdConnectDefaults.AuthenticationScheme,
         options =>
         {
+            options.ClaimActions.MapJsonKey("role", "role", "role");
+            options.TokenValidationParameters.RoleClaimType = "role";
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
             options.Authority = builder.Configuration["InteractiveServiceSettings:AuthorityUrl"];

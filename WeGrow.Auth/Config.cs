@@ -11,13 +11,13 @@ namespace WeGrow.Auth
                 new IdentityResources.Profile(),
                 new IdentityResource
                 {
-                    Name = "role",
+                    Name = "roles",
                     UserClaims = new List<string> { "role" }
                 }
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
-            new[] { new ApiScope("WeGrow.read"), new ApiScope("WeGrow.write"), };
+            new[] { new ApiScope("WeGrow.read") { UserClaims = new List<string> { "role" } }, new ApiScope("WeGrow.write") { UserClaims = new List<string> { "role" } }, };
 
         public static IEnumerable<ApiResource> ApiResources =>
             new[]
@@ -40,7 +40,7 @@ namespace WeGrow.Auth
                     ClientName = "Client Credentials Client",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("ClientSecret1".Sha256()) },
-                    AllowedScopes = { "WeGrow.read", "WeGrow.write" }
+                    AllowedScopes = { "WeGrow.read", "WeGrow.write" },
                 },
                 // interactive client using code flow + pkce
                 new Client
@@ -52,7 +52,7 @@ namespace WeGrow.Auth
                     FrontChannelLogoutUri = "https://localhost:5445/signout-oidc",
                     PostLogoutRedirectUris = { "https://localhost:5445/signout-callback-oidc" },
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "WeGrow.read" },
+                    AllowedScopes = { "openid", "profile", "WeGrow.read", "roles" },
                     RequirePkce = true,
                     RequireConsent = true,
                     AllowPlainTextPkce = false

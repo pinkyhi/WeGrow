@@ -67,32 +67,43 @@ namespace WeGrow.Auth
         private static void EnsureUsers(IServiceScope scope)
         {
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var angella = userMgr.FindByNameAsync("admin").Result;
-            if (angella == null)
+            var adminRole = roleMgr.FindByNameAsync("admin").Result;
+            if(adminRole == null)
             {
-                angella = new IdentityUser
+                adminRole = new IdentityRole { Name = "admin" };
+                _ = roleMgr.CreateAsync(adminRole).Result;
+            }
+            var adminUser = userMgr.FindByNameAsync("admin").Result;
+            if (adminUser == null)
+            {
+                adminUser = new IdentityUser
                 {
                     UserName = "admin",
                     Email = "ivanvladymyrov.pinky@gmail.com",
                     EmailConfirmed = true
                 };
-                var result = userMgr.CreateAsync(angella, "P@ssw0rd").Result;
+                var result = userMgr.CreateAsync(adminUser, "P@ssw0rd").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
                 }
-
+                if(!userMgr.IsInRoleAsync(adminUser, adminRole.Name).Result)
+                {
+                    _ = userMgr.AddToRoleAsync(adminUser, adminRole.Name).Result;
+                }
                 result =
                     userMgr.AddClaimsAsync(
-                        angella,
+                        adminUser,
                         new Claim[]
                         {
                             new Claim(JwtClaimTypes.Name, "Ivan Vladymyrov"),
                             new Claim(JwtClaimTypes.GivenName, "Ivan"),
                             new Claim(JwtClaimTypes.FamilyName, "Vladymyrov"),
                             new Claim(JwtClaimTypes.WebSite, "https://github.com/pinkyhi"),
-                            new Claim("location", "Kharkiv, Ukraine")
+                            new Claim("location", "Kharkiv, Ukraine"),
+                            new Claim(JwtClaimTypes.Role, adminRole.Name)
                         }
                     ).Result;
                 if (!result.Succeeded)
