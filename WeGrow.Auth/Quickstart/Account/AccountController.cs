@@ -186,6 +186,14 @@ namespace IdentityServerHost.Quickstart.UI
             // build a model so the logout page knows what to display
             var vm = await BuildLogoutViewModelAsync(logoutId);
 
+            if (User?.Identity.IsAuthenticated == true)
+            {
+                // delete local authentication cookie
+                await _signInManager.SignOutAsync();
+
+                // raise the logout event
+                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+            }
             if (vm.ShowLogoutPrompt == false)
             {
                 // if the request for logout was properly authenticated from IdentityServer, then

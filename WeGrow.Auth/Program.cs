@@ -1,3 +1,4 @@
+using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WeGrow.Auth;
@@ -27,6 +28,13 @@ builder.Services.AddDbContext<AspNetIdentityDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AspNetIdentityDbContext>();
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication()
+    .AddGoogle("Google", options =>
+    {
+        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+        options.ClientId = "733138009138-5jc1v4isiomloiksb6asidkpo24qeajf.apps.googleusercontent.com";
+        options.ClientSecret = "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";    });
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentityServer()
     .AddAspNetIdentity<IdentityUser>()
