@@ -8,7 +8,7 @@ using WeGrow.Models.Entities;
 namespace WeGrow.Controllers
 {
     [Route("admin")]
-    [Authorize]
+    [Authorize(Roles="admin")]
     public class AdminController : ControllerBase
     {
         private readonly IRepository repository;
