@@ -16,5 +16,7 @@ namespace IdentityServerHost.Quickstart.UI
         public static bool AutomaticRedirectAfterSignOut = false;
 
         public static string InvalidCredentialsErrorMessage = "Invalid username or password";
+        public static string NotUniqueErrorMessage = "Email or username is not unique";
+
     }
 }
