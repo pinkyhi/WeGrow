@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WeGrow.Extensions;
 
@@ -5,6 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", p => p.RequireScope("WeGrow.admin"));
+});
 builder.Services.AddAuthentication("Bearer")
     .AddIdentityServerAuthentication("Bearer", options =>
     {

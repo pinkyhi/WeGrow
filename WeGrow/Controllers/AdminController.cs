@@ -9,7 +9,7 @@ using WeGrow.Models.Entities;
 namespace WeGrow.Controllers
 {
     [Route("admin")]
-    [Authorize(Roles="admin")]
+    [Authorize(Policy = "AdminPolicy")]
     public class AdminController : ControllerBase
     {
         private readonly IRepository repository;
@@ -26,7 +26,7 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> Modules()
         {
             var modules = await repository.GetRangeAsync<Module>(false, x => true);
-            var modulesEntities = mapper.Map<ModuleEntity>(modules);
+            var modulesEntities = modules.Select(x => mapper.Map<ModuleEntity>(x));
             return Ok(modulesEntities);
         }
     }

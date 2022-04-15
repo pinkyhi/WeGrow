@@ -12,8 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<IdentityServerSettings>(builder.Configuration.GetSection(nameof(IdentityServerSettings)));
+builder.Services.Configure<AdminIdentityServerSettings>(builder.Configuration.GetSection(nameof(AdminIdentityServerSettings)));
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAuthentication(options =>
 {

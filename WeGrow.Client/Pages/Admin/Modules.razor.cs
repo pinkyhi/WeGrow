@@ -19,7 +19,7 @@ namespace WeGrow.Client.Pages.Admin
 
         protected override async Task OnInitializedAsync()
         {
-            var tokenResponse = await TokenService.GetToken("WeGrow.read");
+            var tokenResponse = await TokenService.GetAdminToken();
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
             var result = await HttpClient.GetAsync(Configuration["apiUrl"] + "/admin/modules");
