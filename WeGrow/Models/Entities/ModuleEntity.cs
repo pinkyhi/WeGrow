@@ -1,8 +1,10 @@
-﻿using WeGrow.Core.Enums;
+﻿using AutoMapper;
+using WeGrow.Core.Enums;
 using WeGrow.DAL.Entities;
 
 namespace WeGrow.Models.Entities
 {
+    [AutoMap(typeof(Module), ReverseMap = true)]
     public class ModuleEntity
     {
         public ModuleEntity()
