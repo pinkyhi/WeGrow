@@ -1,6 +1,6 @@
 ﻿@page "/admin/modules"
 @attribute [Authorize(Roles = "admin")]
-
+@using WeGrow.Models.Entities
 <h3>Modules</h3>
 
 <div class="row">
@@ -11,7 +11,7 @@
             <div class="col-6 col-sm-12 col-md-6 col-lg-4 col-xl-4 mh-25 mb-4">
                 <div class="card shadow-sm rounded">
                     <h5 class="card-title">
-                        <b>@module.Title #@module.Id</b>
+                        <b>@module.Name #@module.Id</b>
                     </h5>
                     <p class="card-text">@module.Description</p>
                     <div class="card-footer text-muted">
@@ -21,6 +21,7 @@
                 </div>
             </div>
         }
+        <AdminTableCRUD TableTitle="Modules" Items="ModulesList" TItem="ModuleEntity"/>
     }
     else
     {

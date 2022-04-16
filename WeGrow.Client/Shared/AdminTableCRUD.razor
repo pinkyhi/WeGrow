@@ -1,0 +1,61 @@
+﻿@typeparam TItem
+@using System.Diagnostics.CodeAnalysis
+
+@code {
+    [Parameter]
+    public string TableTitle { get; set; }
+
+    [Parameter, AllowNull]
+    public List<TItem> Items { get; set; }
+}
+@{
+    var firstItem = Items.FirstOrDefault();
+    var properties = firstItem?.GetType().GetProperties();
+}
+
+<table class="table">
+    <thead>
+        <tr>@TableTitle</tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var prop in properties)
+            {
+                <th>
+                    @prop.Name
+                </th>
+            }
+        </tr>
+        @if (properties != null)
+        {
+            foreach (var item in Items)
+            {
+                <tr>
+                    @foreach(var prop in properties)
+                    {
+                        @if (prop.GetSetMethod(true).IsPublic)
+                        {
+                            <td>
+                                <input type="text" value="@prop.GetValue(item)" />
+                            </td>
+                        }
+                        else
+                        {
+                             <td>
+                                @prop.GetValue(item)
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                Sequence doesn't contain elements :(
+            </tr>
+        }
+    </tbody>
+</table>
+
+

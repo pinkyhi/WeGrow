@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeGrow.Auth", "WeGrow.Auth\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeGrow.Client", "WeGrow.Client\WeGrow.Client.csproj", "{10A3BCE6-E77E-4953-B029-34A207AE1A60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeGrow.Core", "WeGrow.Core\WeGrow.Core.csproj", "{0677B5FD-2B4B-4127-B57D-C7B33E2F702C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeGrow.Core", "WeGrow.Core\WeGrow.Core.csproj", "{0677B5FD-2B4B-4127-B57D-C7B33E2F702C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
