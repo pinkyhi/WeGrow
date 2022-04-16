@@ -1,5 +1,6 @@
-﻿@typeparam TItem
+﻿@typeparam TItem where TItem : new()
 @using System.Diagnostics.CodeAnalysis
+@using System.Reflection
 
 @code {
     [Parameter]
@@ -7,10 +8,64 @@
 
     [Parameter, AllowNull]
     public List<TItem> Items { get; set; }
+
+    private List<TItem> ChangedItems { get; set; } = new List<TItem>();
+
+    private IEnumerable<PropertyInfo> Properties { get; set; }
+    private IEnumerable<PropertyInfo> IdProperties { get; set; }
+
+    private async Task OnChangeEvent(ChangeEventArgs e, PropertyInfo property, TItem item)
+    {
+        var changedItem = ChangedItems.FirstOrDefault(ci => CompareItemIds(ci, item));
+        if(changedItem != null){
+            property.SetValue(changedItem, e.Value);
+            if(CompareItems(changedItem, item)){
+                ChangedItems.Remove(changedItem);
+            }
+        }
+        else
+        {
+            var copyItem = new TItem();
+            CopyItemValues(item, ref copyItem);
+            property.SetValue(copyItem, e.Value);
+            ChangedItems.Add(copyItem);
+        }
+    }
+
+    private async Task DeleteEvent(MouseEventArgs e, TItem item)
+    {
+        Items.Remove(item);
+    }
+
+    private bool CompareItemIds(TItem item1, TItem item2)
+    {
+        bool result = true;
+        foreach(var prop in IdProperties){
+            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
+        }
+        return result;
+    }
+
+    private bool CompareItems(TItem item1, TItem item2)
+    {
+        bool result = true;
+        foreach(var prop in Properties){
+            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
+        }
+        return result;
+    }
+
+    private void CopyItemValues(TItem source, ref TItem destination)
+    {
+        foreach(var prop in Properties){
+            prop.SetValue(destination, prop.GetValue(source));
+        }
+    }
 }
 @{
     var firstItem = Items.FirstOrDefault();
-    var properties = firstItem?.GetType().GetProperties();
+    Properties = firstItem?.GetType().GetProperties();
+    IdProperties = Properties?.Where(p => !p.GetSetMethod(true).IsPublic && p.Name.Contains("id", StringComparison.OrdinalIgnoreCase));
 }
 
 <table class="table">
@@ -19,24 +74,32 @@
     </thead>
     <tbody>
         <tr>
-            @foreach (var prop in properties)
+            @if (Properties != null)
             {
-                <th>
-                    @prop.Name
-                </th>
+                @foreach (var prop in Properties)
+                {
+                    <th>
+                        @prop.Name
+                    </th>
+                }
+                <th>Actions</th>
+            }
+            else
+            {
+                <th>Error</th>
             }
         </tr>
-        @if (properties != null)
+        @if (Properties != null)
         {
-            foreach (var item in Items)
+            @foreach (var item in Items)
             {
                 <tr>
-                    @foreach(var prop in properties)
+                    @foreach (var prop in Properties)
                     {
                         @if (prop.GetSetMethod(true).IsPublic)
                         {
                             <td>
-                                <input type="text" value="@prop.GetValue(item)" />
+                                <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@prop.GetValue(item)" />
                             </td>
                         }
                         else
@@ -46,6 +109,13 @@
                             </td>
                         }
                     }
+                    <td>
+                        <button @onclick="events => DeleteEvent(events, item)">Delete</button>
+                        @if (ChangedItems.Any(x => CompareItemIds(x, item)))
+                        {
+                            <button>Edit</button>
+                        }
+                    </td>
                 </tr>
             }
         }

@@ -29,5 +29,13 @@ namespace WeGrow.Controllers
             var modulesEntities = modules.Select(x => mapper.Map<ModuleEntity>(x));
             return Ok(modulesEntities);
         }
+        [Route("modules")]
+        [HttpDelete]
+        public async Task<IActionResult> Modules(int deleteId)
+        {
+            var e = await repository.GetAsync<Module>(true, x => x.Id == deleteId);
+            await repository.DeleteAsync(e);
+            return Ok();
+        }
     }
 }
