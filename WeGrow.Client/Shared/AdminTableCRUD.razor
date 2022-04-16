@@ -87,14 +87,23 @@
                         if (propValue.GetType().IsEnum)
                         {
                             <td>
-                                <select class="enum-select" selected="@propValue"  @onchange="events => OnChangeEvent(events, prop, item)">
+                                <select class="enum-select"  @onchange="events => OnChangeEvent(events, prop, item)">
                                     @{
                                         var enumValues = Enum.GetValues(propType);
                                         foreach(var val in enumValues)
                                         {
+                                            if(val.Equals(propValue))
+                                            {
+                                                <option value="@val" selected>
+                                                    @val
+                                                </option>
+                                            }
+                                            else
+                                            {
                                             <option value="@val">
                                                 @val
                                             </option>
+                                            }
                                         }
                                     }
                                 </select>
