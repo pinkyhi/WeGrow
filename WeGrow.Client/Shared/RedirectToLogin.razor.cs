@@ -15,8 +15,14 @@ namespace WeGrow.Client.Shared
 
         protected async override Task OnInitializedAsync()
         {
-            // TODO: Redirect if problem is not in admin rights
-            Navigation.NavigateTo($"/login?redirectUri={Uri.EscapeDataString(Navigation.Uri)}", true);
+            if(Accessor.HttpContext.User.Claims.Count() == 0)
+            {
+                Navigation.NavigateTo($"/login?redirectUri={Uri.EscapeDataString(Navigation.Uri)}", true);
+            }
+            else
+            {
+                Navigation.NavigateTo("/error");
+            }
         }
     }
 }
