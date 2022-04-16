@@ -1,6 +1,7 @@
 ﻿@typeparam TItem where TItem : new()
 @using System.Diagnostics.CodeAnalysis
 @using System.Reflection
+@using System.ComponentModel.DataAnnotations
 @using WeGrow.Core.Enums
 @using System.Globalization;
 
@@ -11,6 +12,8 @@
     [Parameter, AllowNull]
     public List<TItem> Items { get; set; }
 
+    private bool AddRow { get; set; } = true;
+    private TItem NewItem { get; set; } = new TItem();
     private List<TItem> ChangedItems { get; set; } = new List<TItem>();
 
     private IEnumerable<PropertyInfo> Properties { get; set; }
@@ -18,12 +21,11 @@
 
     private async Task OnChangeEvent(ChangeEventArgs e, PropertyInfo property, TItem item)
     {
-        var propValue = property.GetValue(item);
-        var propValueType = propValue.GetType();
+        var propValueType = property.PropertyType;
         var changedItem = ChangedItems.FirstOrDefault(ci => CompareItemIds(ci, item));
         if(changedItem != null)
         {
-            property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) :
+            property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValueType.GetType(), e.Value.ToString(), true) :
                                            propValueType == typeof(Decimal) ? Decimal.Parse(e.Value.ToString()) :
                                            propValueType == typeof(Int32) ? Int32.Parse(e.Value.ToString()) :
                                            e.Value);
@@ -36,7 +38,7 @@
         {
             var copyItem = new TItem();
             CopyItemValues(item, ref copyItem);
-            property.SetValue(copyItem, propValueType.IsEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) :
+            property.SetValue(copyItem, propValueType.IsEnum ? Enum.Parse(propValueType.GetType(), e.Value.ToString(), true) :
                                         propValueType == typeof(Decimal) ? Decimal.Parse(e.Value.ToString()) :
                                         propValueType == typeof(Int32) ? Int32.Parse(e.Value.ToString()) :
                                         e.Value);
@@ -50,9 +52,13 @@
     }
 }
 @{
-    var firstItem = Items.FirstOrDefault();
-    Properties = firstItem?.GetType().GetProperties();
+    var itemType = Items.GetType().GenericTypeArguments.First();
+    Properties = itemType.GetProperties();
     IdProperties = Properties?.Where(p => !p.GetSetMethod(true).IsPublic && p.Name.Contains("id", StringComparison.OrdinalIgnoreCase));
+    if (AddRow)
+    {
+        Items.Insert(0, NewItem);
+    }
 }
 
 <table class="table">
@@ -61,76 +67,78 @@
     </thead>
     <tbody>
         <tr>
-            @if (Properties != null)
+            @foreach (var prop in Properties)
             {
+                <th>
+                    @prop.Name
+                </th>
+            }
+            <th>Actions</th>
+        </tr>
+        @foreach (var item in Items)
+        {
+            <tr>
                 @foreach (var prop in Properties)
                 {
-                    <th>
-                        @prop.Name
-                    </th>
-                }
-                <th>Actions</th>
-            }
-            else
-            {
-                <th>Error</th>
-            }
-        </tr>
-        @if (Properties != null)
-        {
-            @foreach (var item in Items)
-            {
-                <tr>
-                    @foreach (var prop in Properties)
+                    var propValue = prop.GetValue(item) ?? "";
+                    var propType = prop.GetMethod.ReturnType;
+                    @if (prop.GetCustomAttribute<KeyAttribute>() == null)
                     {
-                        var propValue = prop.GetValue(item);
-                        @if (prop.GetSetMethod(true).IsPublic)
+                        if (propValue.GetType().IsEnum)
                         {
-                            if (propValue.GetType().IsEnum)
-                            {
-                                <td>
-                                    <select class="enum-select" selected="@propValue"  @onchange="events => OnChangeEvent(events, prop, item)">
-                                        @{
-                                            var enumValues = Enum.GetValues(propValue.GetType());
-                                            foreach(var val in enumValues)
-                                            {
-                                                <option value="@val">
-                                                    @val
-                                                </option>
-                                            }
+                            <td>
+                                <select class="enum-select" selected="@propValue"  @onchange="events => OnChangeEvent(events, prop, item)">
+                                    @{
+                                        var enumValues = Enum.GetValues(propType);
+                                        foreach(var val in enumValues)
+                                        {
+                                            <option value="@val">
+                                                @val
+                                            </option>
                                         }
-                                    </select>
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue" />
-                                </td>
-                            }
+                                    }
+                                </select>
+                            </td>
                         }
                         else
                         {
-                             <td>
+                            <td>
+                                <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue" />
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        if (AddRow)
+                        {
+                            <td>Auto</td>
+                        }
+                        else
+                        {
+                            <td>
                                 @propValue
                             </td>
                         }
                     }
-                    <td>
+
+                }
+                <td>
+                    @if(AddRow){
+                        <button>Add</button>
+                    }
+                    else{
                         <button @onclick="events => DeleteEvent(events, item)">Delete</button>
                         @if (ChangedItems.Any(x => CompareItemIds(x, item)))
                         {
                             <button>Edit</button>
                         }
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                Sequence doesn't contain elements :(
+                    }
+                </td>
             </tr>
+            @if (AddRow)
+            {
+                AddRow = false;
+            }
         }
     </tbody>
 </table>
@@ -148,7 +156,7 @@
     {
         bool result = true;
         foreach(var prop in Properties){
-            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
+            result = (prop.GetValue(item1)?.Equals(prop.GetValue(item2) ?? prop.GetValue(item1) == prop.GetValue(item2)) == true);
         }
         return result;
     }
