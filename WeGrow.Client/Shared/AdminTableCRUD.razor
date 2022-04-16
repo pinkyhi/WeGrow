@@ -2,6 +2,7 @@
 @using System.Diagnostics.CodeAnalysis
 @using System.Reflection
 @using WeGrow.Core.Enums
+@using System.Globalization;
 
 @code {
     [Parameter]
@@ -18,11 +19,14 @@
     private async Task OnChangeEvent(ChangeEventArgs e, PropertyInfo property, TItem item)
     {
         var propValue = property.GetValue(item);
-        bool isEnum = propValue.GetType().IsEnum;
+        var propValueType = propValue.GetType();
         var changedItem = ChangedItems.FirstOrDefault(ci => CompareItemIds(ci, item));
         if(changedItem != null)
         {
-            property.SetValue(changedItem, isEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) : e.Value);
+            property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) :
+                                           propValueType == typeof(Decimal) ? Decimal.Parse(e.Value.ToString()) :
+                                           propValueType == typeof(Int32) ? Int32.Parse(e.Value.ToString()) :
+                                           e.Value);
             if(CompareItems(changedItem, item))
             {
                 ChangedItems.Remove(changedItem);
@@ -32,7 +36,10 @@
         {
             var copyItem = new TItem();
             CopyItemValues(item, ref copyItem);
-            property.SetValue(copyItem, isEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) : e.Value);
+            property.SetValue(copyItem, propValueType.IsEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) :
+                                        propValueType == typeof(Decimal) ? Decimal.Parse(e.Value.ToString()) :
+                                        propValueType == typeof(Int32) ? Int32.Parse(e.Value.ToString()) :
+                                        e.Value);
             ChangedItems.Add(copyItem);
         }
     }
@@ -50,7 +57,7 @@
 
 <table class="table">
     <thead>
-        <tr>@TableTitle</tr>
+        <tr><td>@TableTitle</td></tr>
     </thead>
     <tbody>
         <tr>
