@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAnnotationsExtensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,9 @@ namespace WeGrow.DAL.Entities
         public ModuleSubject Subject { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        [Min(0)]
         public decimal Price { get; set; }
+        [Min(0)]
         public int Amount { get; set; }
         public bool Is_Public { get; set; }
 
