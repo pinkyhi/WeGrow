@@ -12,7 +12,7 @@
     [Parameter, AllowNull]
     public List<TItem> Items { get; set; }
 
-    private bool AddRow { get; set; } = true;
+    private bool IsInitLoad { get; set; } = true;
     private TItem NewItem { get; set; } = new TItem();
     private List<TItem> ChangedItems { get; set; } = new List<TItem>();
 
@@ -54,11 +54,12 @@
 @{
     var itemType = Items.GetType().GenericTypeArguments.First();
     Properties = itemType.GetProperties();
-    IdProperties = Properties?.Where(p => !p.GetSetMethod(true).IsPublic && p.Name.Contains("id", StringComparison.OrdinalIgnoreCase));
-    if (AddRow)
+    IdProperties = Properties?.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)));
+    if (IsInitLoad)
     {
         Items.Insert(0, NewItem);
     }
+    bool addRow = true;
 }
 
 <table class="table">
@@ -118,7 +119,7 @@
                     }
                     else
                     {
-                        if (AddRow)
+                        if (addRow)
                         {
                             <td>Auto</td>
                         }
@@ -132,7 +133,7 @@
 
                 }
                 <td>
-                    @if(AddRow){
+                    @if(addRow){
                         <button>Add</button>
                     }
                     else{
@@ -144,13 +145,16 @@
                     }
                 </td>
             </tr>
-            @if (AddRow)
+            @if (addRow)
             {
-                AddRow = false;
+                addRow = false;
             }
         }
     </tbody>
 </table>
+@{
+    IsInitLoad = false;
+}
 @code{
     private bool CompareItemIds(TItem item1, TItem item2)
     {
