@@ -12,9 +12,13 @@ namespace WeGrow.DAL.Entities
         public int Id { get; set; }
         public ModuleType Type { get; set; }
         public ModuleSubject Subject { get; set; }
-        public string Title { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int Amount { get; set; }
+        public bool Is_Public { get; set; }
+
+        public IEnumerable<ModuleInstance> ModuleInstances { get; set; }
+        public IEnumerable<Receipt> Receipts { get; set; }
     }
 }
