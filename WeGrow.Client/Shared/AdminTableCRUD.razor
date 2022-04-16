@@ -25,7 +25,7 @@
         var changedItem = ChangedItems.FirstOrDefault(ci => CompareItemIds(ci, item));
         if(changedItem != null)
         {
-            property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValueType.GetType(), e.Value.ToString(), true) :
+            property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValueType, e.Value.ToString(), true) :
                                            propValueType == typeof(Decimal) ? Decimal.Parse(e.Value.ToString()) :
                                            propValueType == typeof(Int32) ? Int32.Parse(e.Value.ToString()) :
                                            e.Value);
@@ -38,7 +38,7 @@
         {
             var copyItem = new TItem();
             CopyItemValues(item, ref copyItem);
-            property.SetValue(copyItem, propValueType.IsEnum ? Enum.Parse(propValueType.GetType(), e.Value.ToString(), true) :
+            property.SetValue(copyItem, propValueType.IsEnum ? Enum.Parse(propValueType, e.Value.ToString(), true) :
                                         propValueType == typeof(Decimal) ? Decimal.Parse(e.Value.ToString()) :
                                         propValueType == typeof(Int32) ? Int32.Parse(e.Value.ToString()) :
                                         e.Value);
