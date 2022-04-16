@@ -1,6 +1,7 @@
 ﻿@typeparam TItem where TItem : new()
 @using System.Diagnostics.CodeAnalysis
 @using System.Reflection
+@using WeGrow.Core.Enums
 
 @code {
     [Parameter]
@@ -16,10 +17,14 @@
 
     private async Task OnChangeEvent(ChangeEventArgs e, PropertyInfo property, TItem item)
     {
+        var propValue = property.GetValue(item);
+        bool isEnum = propValue.GetType().IsEnum;
         var changedItem = ChangedItems.FirstOrDefault(ci => CompareItemIds(ci, item));
-        if(changedItem != null){
-            property.SetValue(changedItem, e.Value);
-            if(CompareItems(changedItem, item)){
+        if(changedItem != null)
+        {
+            property.SetValue(changedItem, isEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) : e.Value);
+            if(CompareItems(changedItem, item))
+            {
                 ChangedItems.Remove(changedItem);
             }
         }
@@ -27,7 +32,7 @@
         {
             var copyItem = new TItem();
             CopyItemValues(item, ref copyItem);
-            property.SetValue(copyItem, e.Value);
+            property.SetValue(copyItem, isEnum ? Enum.Parse(propValue.GetType(), e.Value.ToString(), true) : e.Value);
             ChangedItems.Add(copyItem);
         }
     }
@@ -35,31 +40,6 @@
     private async Task DeleteEvent(MouseEventArgs e, TItem item)
     {
         Items.Remove(item);
-    }
-
-    private bool CompareItemIds(TItem item1, TItem item2)
-    {
-        bool result = true;
-        foreach(var prop in IdProperties){
-            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
-        }
-        return result;
-    }
-
-    private bool CompareItems(TItem item1, TItem item2)
-    {
-        bool result = true;
-        foreach(var prop in Properties){
-            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
-        }
-        return result;
-    }
-
-    private void CopyItemValues(TItem source, ref TItem destination)
-    {
-        foreach(var prop in Properties){
-            prop.SetValue(destination, prop.GetValue(source));
-        }
     }
 }
 @{
@@ -96,16 +76,36 @@
                 <tr>
                     @foreach (var prop in Properties)
                     {
+                        var propValue = prop.GetValue(item);
                         @if (prop.GetSetMethod(true).IsPublic)
                         {
-                            <td>
-                                <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@prop.GetValue(item)" />
-                            </td>
+                            if (propValue.GetType().IsEnum)
+                            {
+                                <td>
+                                    <select class="enum-select" selected="@propValue"  @onchange="events => OnChangeEvent(events, prop, item)">
+                                        @{
+                                            var enumValues = Enum.GetValues(propValue.GetType());
+                                            foreach(var val in enumValues)
+                                            {
+                                                <option value="@val">
+                                                    @val
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue" />
+                                </td>
+                            }
                         }
                         else
                         {
                              <td>
-                                @prop.GetValue(item)
+                                @propValue
                             </td>
                         }
                     }
@@ -127,5 +127,29 @@
         }
     </tbody>
 </table>
+@code{
+    private bool CompareItemIds(TItem item1, TItem item2)
+    {
+        bool result = true;
+        foreach(var prop in IdProperties){
+            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
+        }
+        return result;
+    }
 
+    private bool CompareItems(TItem item1, TItem item2)
+    {
+        bool result = true;
+        foreach(var prop in Properties){
+            result = prop.GetValue(item1).Equals(prop.GetValue(item2));
+        }
+        return result;
+    }
 
+    private void CopyItemValues(TItem source, ref TItem destination)
+    {
+        foreach(var prop in Properties){
+            prop.SetValue(destination, prop.GetValue(source));
+        }
+    }
+}
