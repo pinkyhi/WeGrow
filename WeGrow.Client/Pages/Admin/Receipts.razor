@@ -1,0 +1,16 @@
+﻿@page "/admin/receipts"
+@attribute [Authorize(Roles = "admin")]
+@using WeGrow.Models.Entities
+
+<h3>Receipts</h3>
+
+<div class="row">
+    @if (ItemsList.Any())
+    {
+        <AdminTableCRUD TableTitle="Receipts" Items="ItemsList" TItem="ReceiptEntity" ApiUrl="@ApiUrl"/>
+    }
+    else
+    {
+        <p>No modules available</p>
+    }
+</div>

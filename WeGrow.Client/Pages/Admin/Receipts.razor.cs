@@ -6,25 +6,27 @@ using WeGrow.Models.Entities;
 
 namespace WeGrow.Client.Pages.Admin
 {
-    public partial class Modules
+    public partial class Receipts
     {
-        public List<ModuleEntity> ItemsList = new();
+        public List<ReceiptEntity> ItemsList = new();
         public string ApiUrl { get; set; }
+
         [Inject] private HttpClient HttpClient { get; set; }
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private ITokenService TokenService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            ApiUrl = Configuration["apiUrl"] + ApiRoutes.AdminModules;
+            ApiUrl = Configuration["apiUrl"] + ApiRoutes.AdminReceipts;
+
             var tokenResponse = await TokenService.GetAdminToken();
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var result = await HttpClient.GetAsync(ApiUrl);
+            var result = await HttpClient.GetAsync(Configuration["apiUrl"] + "/admin/receipts");
 
             if (result.IsSuccessStatusCode)
             {
-                ItemsList = await result.Content.ReadFromJsonAsync<List<ModuleEntity>>();
+                ItemsList = await result.Content.ReadFromJsonAsync<List<ReceiptEntity>>();
             }
         }
     }

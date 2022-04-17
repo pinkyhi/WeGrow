@@ -17,6 +17,9 @@
     [Parameter]
     public string TableTitle { get; set; }
 
+    [Parameter]
+    public string ApiUrl { get; set; }
+
     [Parameter, AllowNull]
     public List<TItem> Items { get; set; }
 
@@ -59,7 +62,7 @@
         var tokenResponse = await TokenService.GetAdminToken();
         HttpClient.SetBearerToken(tokenResponse.AccessToken);
         var id = GetIdValues(item);
-        var uri = QueryHelpers.AddQueryString(Configuration["apiUrl"] + "/admin/modules", id);
+        var uri = QueryHelpers.AddQueryString(ApiUrl, id);
         var result = await HttpClient.DeleteAsync(new Uri(uri));
 
         if (result.IsSuccessStatusCode)
@@ -81,7 +84,7 @@
             var tokenResponse = await TokenService.GetAdminToken();
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var uri = Configuration["apiUrl"] + "/admin/modules";
+            var uri = ApiUrl;
             var result = await HttpClient.PostAsync(new Uri(uri), JsonContent.Create(changedItem));
 
             if (result.IsSuccessStatusCode)
@@ -107,7 +110,7 @@
             var tokenResponse = await TokenService.GetAdminToken();
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var uri = Configuration["apiUrl"] + "/admin/modules";
+            var uri = ApiUrl;
             var result = await HttpClient.PatchAsync(new Uri(uri), JsonContent.Create(changedItem));
 
             if (result.IsSuccessStatusCode)

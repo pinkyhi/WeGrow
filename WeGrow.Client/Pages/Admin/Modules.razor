@@ -1,12 +1,13 @@
 ﻿@page "/admin/modules"
 @attribute [Authorize(Roles = "admin")]
 @using WeGrow.Models.Entities
+
 <h3>Modules</h3>
 
 <div class="row">
-    @if (ModulesList.Any())
+    @if (ItemsList.Any())
     {
-        @foreach (var module in ModulesList)
+        @foreach (var module in ItemsList)
         {
             <div class="col-6 col-sm-12 col-md-6 col-lg-4 col-xl-4 mh-25 mb-4">
                 <div class="card shadow-sm rounded">
@@ -21,7 +22,7 @@
                 </div>
             </div>
         }
-        <AdminTableCRUD TableTitle="Modules" Items="ModulesList" TItem="ModuleEntity"/>
+        <AdminTableCRUD TableTitle="Modules" Items="ItemsList" TItem="ModuleEntity" ApiUrl="@ApiUrl"/>
     }
     else
     {
