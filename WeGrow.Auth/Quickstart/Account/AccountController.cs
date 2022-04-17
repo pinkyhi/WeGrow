@@ -9,15 +9,10 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using WeGrow.Auth.Quickstart.Account;
 
 namespace IdentityServerHost.Quickstart.UI

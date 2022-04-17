@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WeGrow.Core.Enums;
+﻿using WeGrow.Core.Enums;
 
 namespace WeGrow.DAL.Entities
 {

@@ -8,12 +8,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
 using IdentityServer4.Validation;
-using System.Collections.Generic;
-using System;
 
 namespace IdentityServerHost.Quickstart.UI
 {

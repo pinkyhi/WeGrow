@@ -2,7 +2,6 @@ using IdentityServer4;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using WeGrow.Auth;
 using WeGrow.Auth.Services;
 
