@@ -20,13 +20,15 @@ namespace WeGrow.Controllers
             this.mapper = mapper;
         }
 
+        #region Modules
+
         [Route("modules")]
         [HttpGet]
         public async Task<IActionResult> GetModules()
         {
-            var modules = await repository.GetRangeAsync<Module>(false, x => true);
-            var modulesEntities = modules.Select(x => mapper.Map<ModuleEntity>(x));
-            return Ok(modulesEntities);
+            var items = await repository.GetRangeAsync<Module>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<ModuleEntity>(x));
+            return Ok(itemsEntities);
         }
         [Route("modules")]
         [HttpDelete]
@@ -41,8 +43,8 @@ namespace WeGrow.Controllers
         [HttpPost]
         public async Task<IActionResult> AddModule([FromBody] ModuleEntity addItem)
         {
-            Module newModule = mapper.Map<Module>(addItem);
-            var exemplar = await repository.AddAsync(newModule);
+            Module newItem = mapper.Map<Module>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
             return Ok(mapper.Map<ModuleEntity>(exemplar));
         }
 
@@ -55,5 +57,44 @@ namespace WeGrow.Controllers
             await repository.UpdateAsync(exemplar);
             return Ok();
         }
+        #endregion
+        #region Receipts
+
+        [Route("receipts")]
+        [HttpGet]
+        public async Task<IActionResult> GetReceipts()
+        {
+            var items = await repository.GetRangeAsync<Receipt>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<ReceiptEntity>(x));
+            return Ok(itemsEntities);
+        }
+        [Route("receipts")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteReceipt(ReceiptEntity deleteItem)
+        {
+            var exemplar = await repository.GetAsync<Receipt>(true, x => x.Module_Id == deleteItem.Module_Id && x.Order_Id == deleteItem.Order_Id);
+            await repository.DeleteAsync(exemplar);
+            return Ok();
+        }
+
+        [Route("receipts")]
+        [HttpPost]
+        public async Task<IActionResult> AddReceipt([FromBody] ReceiptEntity addItem)
+        {
+            var newItem = mapper.Map<Receipt>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
+            return Ok(mapper.Map<ReceiptEntity>(exemplar));
+        }
+
+        [Route("receipts")]
+        [HttpPatch]
+        public async Task<IActionResult> EditReceipt([FromBody] ReceiptEntity addItem)
+        {
+            var exemplar = await repository.GetAsync<Receipt>(true, x => x.Module_Id == addItem.Module_Id && x.Order_Id == addItem.Order_Id);
+            mapper.Map(addItem, exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
+        }
+        #endregion
     }
 }

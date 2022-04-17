@@ -5,12 +5,5 @@
 <h3>Receipts</h3>
 
 <div class="row">
-    @if (ItemsList.Any())
-    {
-        <AdminTableCRUD TableTitle="Receipts" Items="ItemsList" TItem="ReceiptEntity" ApiUrl="@ApiUrl"/>
-    }
-    else
-    {
-        <p>No modules available</p>
-    }
+    <AdminTableCRUD TableTitle="Receipts" Items="ItemsList" TItem="ReceiptEntity" ApiUrl="@ApiUrl"/>
 </div>

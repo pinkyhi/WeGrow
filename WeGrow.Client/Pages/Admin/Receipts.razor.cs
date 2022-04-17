@@ -22,7 +22,7 @@ namespace WeGrow.Client.Pages.Admin
             var tokenResponse = await TokenService.GetAdminToken();
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var result = await HttpClient.GetAsync(Configuration["apiUrl"] + "/admin/receipts");
+            var result = await HttpClient.GetAsync(ApiUrl);
 
             if (result.IsSuccessStatusCode)
             {
