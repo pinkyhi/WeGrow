@@ -2,10 +2,17 @@
 @using System.Diagnostics.CodeAnalysis
 @using System.Reflection
 @using System.ComponentModel.DataAnnotations
+@using IdentityModel.Client
+@using Microsoft.AspNetCore.WebUtilities
+@using WeGrow.Client.Services
 @using WeGrow.Core.Enums
 @using System.Globalization;
 
 @code {
+    [Inject] private HttpClient HttpClient { get; set; }
+    [Inject] private ITokenService TokenService { get; set; }
+    [Inject] private IConfiguration Configuration { get; set; }
+
     [Parameter]
     public string TableTitle { get; set; }
 
@@ -49,7 +56,20 @@
 
     private async Task DeleteEvent(MouseEventArgs e, TItem item)
     {
-        Items.Remove(item);
+        var tokenResponse = await TokenService.GetAdminToken();
+        HttpClient.SetBearerToken(tokenResponse.AccessToken);
+        var id = GetIdValues(item);
+        var uri = QueryHelpers.AddQueryString(Configuration["apiUrl"] + "/admin/modules", id);
+        var result = await HttpClient.DeleteAsync(new Uri(uri));
+
+        if (result.IsSuccessStatusCode)
+        {
+            Items.Remove(item);
+        }
+        else
+        {
+            throw new Exception("Delete server error");
+        }
     }
 }
 @{
@@ -180,5 +200,15 @@
         foreach(var prop in Properties){
             prop.SetValue(destination, prop.GetValue(source));
         }
+    }
+
+    private Dictionary<string,string> GetIdValues(TItem item)
+    {
+        Dictionary<string, string> result = new();
+        foreach(var prop in IdProperties)
+        {
+            result.Add(prop.Name, prop.GetValue(item).ToString());
+        }
+        return result;
     }
 }

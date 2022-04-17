@@ -31,10 +31,10 @@ namespace WeGrow.Controllers
         }
         [Route("modules")]
         [HttpDelete]
-        public async Task<IActionResult> Modules(int deleteId)
+        public async Task<IActionResult> Modules(ModuleEntity deleteItem)
         {
-            var e = await repository.GetAsync<Module>(true, x => x.Id == deleteId);
-            await repository.DeleteAsync(e);
+            var exemplar = await repository.GetAsync<Module>(true, x => x.Id == deleteItem.Id);
+            await repository.DeleteAsync(exemplar);
             return Ok();
         }
     }
