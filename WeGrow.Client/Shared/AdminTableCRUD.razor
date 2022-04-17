@@ -21,7 +21,6 @@
     public List<TItem> Items { get; set; }
 
     private bool IsInitLoad { get; set; } = true;
-    private TItem NewItem { get; set; } = new TItem();
     private List<TItem> ChangedItems { get; set; } = new List<TItem>();
 
     private IEnumerable<PropertyInfo> Properties { get; set; }
@@ -89,13 +88,37 @@
             {
                 var newItem = await result.Content.ReadFromJsonAsync<TItem>();
                 ChangedItems.Remove(changedItem);
-                NewItem = new TItem();
+                Items.Add(newItem);
+            }
+            else
+            {
+                throw new Exception("Adding server error");
+            } 
+        }        
+    }
+
+    private async Task EditEvent(MouseEventArgs e, TItem item)
+    {
+        var changedItem = ChangedItems.FirstOrDefault(x => CompareItemIds(x, item));
+        if (changedItem != null)
+        {
+
+            var tokenResponse = await TokenService.GetAdminToken();
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var uri = Configuration["apiUrl"] + "/admin/modules";
+            var result = await HttpClient.PatchAsync(new Uri(uri), JsonContent.Create(changedItem));
+
+            if (result.IsSuccessStatusCode)
+            {
+                var newItem = await result.Content.ReadFromJsonAsync<TItem>();
+                ChangedItems.Remove(changedItem);
                 Items.Add(newItem);
 
             }
             else
             {
-                throw new Exception("Adding server error");
+                throw new Exception("Edit server error");
             } 
         }        
     }
@@ -106,7 +129,7 @@
     IdProperties = Properties?.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)));
     if (IsInitLoad)
     {
-        Items.Insert(0, NewItem);
+        Items.Insert(0, new TItem());
     }
     bool addRow = true;
 }
@@ -189,7 +212,7 @@
                         <button @onclick="events => DeleteEvent(events, item)">Delete</button>
                         @if (ChangedItems.Any(x => CompareItemIds(x, item)))
                         {
-                            <button>Edit</button>
+                            <button @onclick="events => EditEvent(events, item)">Edit</button>
                         }
                     }
                 </td>

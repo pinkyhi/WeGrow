@@ -31,7 +31,7 @@ namespace WeGrow.Controllers
         }
         [Route("modules")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteModules(ModuleEntity deleteItem)
+        public async Task<IActionResult> DeleteModule(ModuleEntity deleteItem)
         {
             var exemplar = await repository.GetAsync<Module>(true, x => x.Id == deleteItem.Id);
             await repository.DeleteAsync(exemplar);
@@ -40,11 +40,21 @@ namespace WeGrow.Controllers
 
         [Route("modules")]
         [HttpPost]
-        public async Task<IActionResult> AddModules([FromBody] ModuleEntity addItem)
+        public async Task<IActionResult> AddModule([FromBody] ModuleEntity addItem)
         {
             Module newModule = mapper.Map<Module>(addItem);
             var exemplar = await repository.AddAsync(newModule);
             return Ok(mapper.Map<ModuleEntity>(exemplar));
+        }
+
+        [Route("modules")]
+        [HttpPatch]
+        public async Task<IActionResult> EditModule([FromBody] ModuleEntity addItem)
+        {
+            var exemplar = await repository.GetAsync<Module>(true, x => x.Id == addItem.Id);
+            mapper.Map(addItem, exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
         }
     }
 }
