@@ -87,8 +87,9 @@
             if (result.IsSuccessStatusCode)
             {
                 var newItem = await result.Content.ReadFromJsonAsync<TItem>();
-                ChangedItems.Remove(changedItem);
                 Items.Add(newItem);
+
+                // ChangedItems.Remove(changedItem);
             }
             else
             {
@@ -111,10 +112,7 @@
 
             if (result.IsSuccessStatusCode)
             {
-                var newItem = await result.Content.ReadFromJsonAsync<TItem>();
                 ChangedItems.Remove(changedItem);
-                Items.Add(newItem);
-
             }
             else
             {
