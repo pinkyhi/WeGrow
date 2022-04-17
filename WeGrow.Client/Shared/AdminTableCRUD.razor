@@ -7,6 +7,7 @@
 @using WeGrow.Client.Services
 @using WeGrow.Core.Enums
 @using System.Globalization;
+@using WeGrow.Models.Entities
 
 @code {
     [Inject] private HttpClient HttpClient { get; set; }
@@ -70,6 +71,33 @@
         {
             throw new Exception("Delete server error");
         }
+    }
+
+    private async Task AddEvent(MouseEventArgs e, TItem item)
+    {
+        var changedItem = ChangedItems.FirstOrDefault(x => CompareItemIds(x, item));
+        if (changedItem != null)
+        {
+
+            var tokenResponse = await TokenService.GetAdminToken();
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var uri = Configuration["apiUrl"] + "/admin/modules";
+            var result = await HttpClient.PostAsync(new Uri(uri), JsonContent.Create(changedItem));
+
+            if (result.IsSuccessStatusCode)
+            {
+                var newItem = await result.Content.ReadFromJsonAsync<TItem>();
+                ChangedItems.Remove(changedItem);
+                NewItem = new TItem();
+                Items.Add(newItem);
+
+            }
+            else
+            {
+                throw new Exception("Adding server error");
+            } 
+        }        
     }
 }
 @{
@@ -155,7 +183,7 @@
                 }
                 <td>
                     @if(addRow){
-                        <button>Add</button>
+                        <button @onclick="events => AddEvent(events, item)">Add</button>
                     }
                     else{
                         <button @onclick="events => DeleteEvent(events, item)">Delete</button>
@@ -182,6 +210,10 @@
         bool result = true;
         foreach(var prop in IdProperties){
             result = prop.GetValue(item1).Equals(prop.GetValue(item2));
+            if (!result)
+            {
+                return result;
+            }
         }
         return result;
     }
@@ -191,6 +223,10 @@
         bool result = true;
         foreach(var prop in Properties){
             result = (prop.GetValue(item1)?.Equals(prop.GetValue(item2) ?? prop.GetValue(item1) == prop.GetValue(item2)) == true);
+            if (!result)
+            {
+                return result;
+            }
         }
         return result;
     }
