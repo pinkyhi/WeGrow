@@ -10,6 +10,7 @@ namespace WeGrow.Models.Entities
         [Key]
         public string Id { get; set; }
         public string Name { get; set; }
+        [Required]
         public string User_Id { get; set; }
         public bool Is_Active { get; set; }
     }

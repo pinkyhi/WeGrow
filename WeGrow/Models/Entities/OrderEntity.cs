@@ -14,6 +14,7 @@ namespace WeGrow.Models.Entities
         public DateTime Date { get; set; }
         public OrderStatus Status { get; set; }
         public string Description { get; set; }
+        [Required]
         public string User_Id { get; set; }
     }
 }

@@ -13,7 +13,9 @@ namespace WeGrow.Models.Entities
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public string Timelaps { get; set; }
+        [Required]
         public int Schedule_Id { get; set; }
+        [Required]
         public string System_Id { get; set; }
         public GrowStatus Status { get; set; }
         public string HistoryFile { get; set; }

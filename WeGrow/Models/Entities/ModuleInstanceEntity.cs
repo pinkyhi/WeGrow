@@ -9,7 +9,9 @@ namespace WeGrow.Models.Entities
     {
         [Key]
         public string Id { get; set; }
+        [Required]
         public string System_Id { get; set; }
+        [Required]
         public int Module_Id { get; set; }
         public DateTime LastResponse { get; set; }
     }

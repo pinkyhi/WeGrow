@@ -127,6 +127,10 @@
     var itemType = Items.GetType().GenericTypeArguments.First();
     Properties = itemType.GetProperties();
     IdProperties = Properties?.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)));
+    if(IdProperties.Count() == 0)
+    {
+        IdProperties = Properties?.Where(p => Attribute.IsDefined(p, typeof(RequiredAttribute)));
+    }
     bool addRow = true;
 }
 

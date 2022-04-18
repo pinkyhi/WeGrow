@@ -1,4 +1,4 @@
-﻿using DataAnnotationsExtensions;
+﻿using System.ComponentModel.DataAnnotations;
 using WeGrow.Core.Enums;
 
 namespace WeGrow.DAL.Entities
@@ -10,9 +10,9 @@ namespace WeGrow.DAL.Entities
         public ModuleSubject Subject { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [Min(0)]
+        [Range(0, Double.PositiveInfinity)]
         public decimal Price { get; set; }
-        [Min(0)]
+        [Range(0, Double.PositiveInfinity)]
         public int Amount { get; set; }
         public bool Is_Public { get; set; }
 
