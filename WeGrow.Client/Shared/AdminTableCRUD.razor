@@ -33,12 +33,35 @@
         var valueStr = e.Value.ToString();
         var propValueType = property.PropertyType;
         var changedItem = ChangedItems.GetValueOrDefault(item);
+        dynamic changedItemValue = valueStr;
+        if (propValueType.IsEnum)
+        {
+            changedItemValue = Enum.Parse(propValueType, changedItemValue, true);
+        }
+        else if (propValueType == typeof(Decimal))
+        {
+            changedItemValue = Decimal.Parse(changedItemValue);
+        }
+        else if (propValueType == typeof(Int32))
+        {
+            changedItemValue = Int32.Parse(changedItemValue);
+        }
+        else if (propValueType == typeof(DateTime))
+        {
+            changedItemValue = DateTime.Parse(changedItemValue);
+        }
+        else if (propValueType == typeof(TimeSpan))
+        {
+            changedItemValue = TimeSpan.Parse(changedItemValue);
+        }
+        else if (propValueType == typeof(Boolean))
+        {
+            changedItemValue = Boolean.Parse(changedItemValue);
+        }
+
         if(changedItem != null)
         {
-            property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValueType, valueStr, true) :
-                                           propValueType == typeof(Decimal) ? Decimal.Parse(valueStr) :
-                                           propValueType == typeof(Int32) ? Int32.Parse(valueStr) :
-                                           e.Value);
+            property.SetValue(changedItem, changedItemValue);
             if(CompareItems(changedItem, item))
             {
                 ChangedItems.Remove(item);
@@ -48,10 +71,7 @@
         {
             var copyItem = new TItem();
             CopyItemValues(item, ref copyItem);
-            property.SetValue(copyItem, propValueType.IsEnum ? Enum.Parse(propValueType, valueStr, true) :
-                                        propValueType == typeof(Decimal) ? Decimal.Parse(valueStr) :
-                                        propValueType == typeof(Int32) ? Int32.Parse(valueStr) :
-                                        e.Value);
+            property.SetValue(copyItem, changedItemValue);
             ChangedItems.Add(item, copyItem);
         }
     }

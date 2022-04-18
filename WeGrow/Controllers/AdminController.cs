@@ -96,5 +96,42 @@ namespace WeGrow.Controllers
             return Ok();
         }
         #endregion
+        #region Orders
+        [Route("orders")]
+        [HttpGet]
+        public async Task<IActionResult> GetOrders()
+        {
+            var items = await repository.GetRangeAsync<Order>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<OrderEntity>(x));
+            return Ok(itemsEntities);
+        }
+        [Route("orders")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOrder(OrderEntity deleteItem)
+        {
+            var exemplar = await repository.GetAsync<Order>(true, x => x.Id == deleteItem.Id);
+            await repository.DeleteAsync(exemplar);
+            return Ok();
+        }
+
+        [Route("orders")]
+        [HttpPost]
+        public async Task<IActionResult> AddOrder([FromBody] OrderEntity addItem)
+        {
+            var newItem = mapper.Map<Order>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
+            return Ok(mapper.Map<OrderEntity>(exemplar));
+        }
+
+        [Route("orders")]
+        [HttpPatch]
+        public async Task<IActionResult> EditOrder([FromBody] OrderEntity[] oldAndEditedItem)
+        {
+            var exemplar = await repository.GetAsync<Order>(true, x => x.Id == oldAndEditedItem[0].Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
+        }
+        #endregion
     }
 }

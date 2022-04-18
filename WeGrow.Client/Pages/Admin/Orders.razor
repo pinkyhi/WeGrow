@@ -1,0 +1,9 @@
+﻿@page "/admin/orders"
+@attribute [Authorize(Roles = "admin")]
+@using WeGrow.Models.Entities
+
+<h3>Receipts</h3>
+
+<div class="row">
+    <AdminTableCRUD TableTitle="Orders" Items="ItemsList" TItem="OrderEntity" ApiUrl="@ApiUrl"/>
+</div>
