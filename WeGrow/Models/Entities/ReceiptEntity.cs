@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DataAnnotationsExtensions;
 using System.ComponentModel.DataAnnotations;
 using WeGrow.DAL.Entities;
 
@@ -13,9 +12,9 @@ namespace WeGrow.Models.Entities
         [Key]
         public int Module_Id { get; set; }
         public string Cache_System_Id { get; set; }
-        [Min(0)]
+        [Range(0, Double.PositiveInfinity)]
         public int Amount { get; set; }
-        [Min(0)]
+        [Range(0, Double.PositiveInfinity)]
         public decimal Cache_Price { get; set; }
     }
 }

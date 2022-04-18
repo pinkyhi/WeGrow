@@ -1,4 +1,4 @@
-﻿using DataAnnotationsExtensions;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WeGrow.DAL.Entities
 {
@@ -7,9 +7,9 @@ namespace WeGrow.DAL.Entities
         public int Order_Id { get; set; }
         public int Module_Id { get; set; }
         public string Cache_System_Id { get; set; }
-        [Min(0)]
+        [Range(0,Double.PositiveInfinity)]
         public int Amount { get; set; }
-        [Min(0)]
+        [Range(0, Double.PositiveInfinity)]
         public decimal Cache_Price { get; set; }
 
         public Order Order { get; set; }
