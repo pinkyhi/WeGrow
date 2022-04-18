@@ -1,0 +1,9 @@
+﻿@page "/admin/system-instances"
+@attribute [Authorize(Roles = "admin")]
+@using WeGrow.Models.Entities
+
+<h3>System Instances</h3>
+
+<div class="row">
+    <AdminTableCRUD TableTitle="System Instances" Items="ItemsList" TItem="SystemInstanceEntity" ApiUrl="@ApiUrl"/>
+</div>

@@ -63,7 +63,7 @@
                     }
                     else
                     {
-                        if (propValue.GetType().IsEnum)
+                        if (propType.IsEnum)
                         {
                             <td>
                                 <select class="enum-select"  @onchange="events => OnChangeEvent(events, prop, item)">
@@ -86,6 +86,12 @@
                                         }
                                     }
                                 </select>
+                            </td>
+                        }
+                        else if(propType == typeof(Boolean))
+                        {
+                            <td>
+                                <input @onchange="events => OnChangeEvent(events, prop, item)" type="checkbox" checked="@propValue">
                             </td>
                         }
                         else

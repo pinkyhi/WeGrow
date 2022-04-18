@@ -173,5 +173,43 @@ namespace WeGrow.Controllers
             return Ok();
         }
         #endregion
+
+        #region SystemInstance
+        [Route("system-instances")]
+        [HttpGet]
+        public async Task<IActionResult> GetSystemInstances()
+        {
+            var items = await repository.GetRangeAsync<SystemInstance>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<SystemInstanceEntity>(x));
+            return Ok(itemsEntities);
+        }
+        [Route("system-instances")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSystemInstance(SystemInstanceEntity deleteItem)
+        {
+            var exemplar = await repository.GetAsync<SystemInstance>(true, x => x.Id == deleteItem.Id);
+            await repository.DeleteAsync(exemplar);
+            return Ok();
+        }
+
+        [Route("system-instances")]
+        [HttpPost]
+        public async Task<IActionResult> AddSystemInstance([FromBody] SystemInstanceEntity addItem)
+        {
+            var newItem = mapper.Map<SystemInstance>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
+            return Ok(mapper.Map<SystemInstanceEntity>(exemplar));
+        }
+
+        [Route("system-instances")]
+        [HttpPatch]
+        public async Task<IActionResult> EditSystemInstance([FromBody] SystemInstanceEntity[] oldAndEditedItem)
+        {
+            var exemplar = await repository.GetAsync<SystemInstance>(true, x => x.Id == oldAndEditedItem[0].Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
+        }
+        #endregion
     }
 }
