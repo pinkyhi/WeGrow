@@ -58,6 +58,7 @@ namespace WeGrow.Controllers
             return Ok();
         }
         #endregion
+
         #region Receipts
 
         [Route("receipts")]
@@ -96,6 +97,7 @@ namespace WeGrow.Controllers
             return Ok();
         }
         #endregion
+
         #region Orders
         [Route("orders")]
         [HttpGet]
@@ -128,6 +130,44 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> EditOrder([FromBody] OrderEntity[] oldAndEditedItem)
         {
             var exemplar = await repository.GetAsync<Order>(true, x => x.Id == oldAndEditedItem[0].Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
+        }
+        #endregion
+
+        #region ModuleInstance
+        [Route("module-instances")]
+        [HttpGet]
+        public async Task<IActionResult> GetModuleInstances()
+        {
+            var items = await repository.GetRangeAsync<ModuleInstance>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<ModuleInstanceEntity>(x));
+            return Ok(itemsEntities);
+        }
+        [Route("module-instances")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteModuleInstance(ModuleInstanceEntity deleteItem)
+        {
+            var exemplar = await repository.GetAsync<ModuleInstance>(true, x => x.Id == deleteItem.Id);
+            await repository.DeleteAsync(exemplar);
+            return Ok();
+        }
+
+        [Route("module-instances")]
+        [HttpPost]
+        public async Task<IActionResult> AddModuleInstance([FromBody] ModuleInstanceEntity addItem)
+        {
+            var newItem = mapper.Map<ModuleInstance>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
+            return Ok(mapper.Map<ModuleInstanceEntity>(exemplar));
+        }
+
+        [Route("module-instances")]
+        [HttpPatch]
+        public async Task<IActionResult> EditModuleInstance([FromBody] ModuleInstanceEntity[] oldAndEditedItem)
+        {
+            var exemplar = await repository.GetAsync<ModuleInstance>(true, x => x.Id == oldAndEditedItem[0].Id);
             mapper.Map(oldAndEditedItem[1], exemplar);
             await repository.UpdateAsync(exemplar);
             return Ok();
