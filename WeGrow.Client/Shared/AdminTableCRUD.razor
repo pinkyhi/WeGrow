@@ -23,7 +23,7 @@
     [Parameter, AllowNull]
     public List<TItem> Items { get; set; }
 
-    private List<TItem> ChangedItems { get; set; } = new List<TItem>();
+    private Dictionary<TItem, TItem> ChangedItems { get; set; } = new();
 
     private IEnumerable<PropertyInfo> Properties { get; set; }
     private IEnumerable<PropertyInfo> IdProperties { get; set; }
@@ -32,7 +32,7 @@
     {
         var valueStr = e.Value.ToString();
         var propValueType = property.PropertyType;
-        var changedItem = ChangedItems.FirstOrDefault(ci => CompareItemIds(ci, item));
+        var changedItem = ChangedItems.GetValueOrDefault(item);
         if(changedItem != null)
         {
             property.SetValue(changedItem, propValueType.IsEnum ? Enum.Parse(propValueType, valueStr, true) :
@@ -41,7 +41,7 @@
                                            e.Value);
             if(CompareItems(changedItem, item))
             {
-                ChangedItems.Remove(changedItem);
+                ChangedItems.Remove(item);
             }
         }
         else
@@ -52,7 +52,7 @@
                                         propValueType == typeof(Decimal) ? Decimal.Parse(valueStr) :
                                         propValueType == typeof(Int32) ? Int32.Parse(valueStr) :
                                         e.Value);
-            ChangedItems.Add(copyItem);
+            ChangedItems.Add(item, copyItem);
         }
     }
 
@@ -76,7 +76,7 @@
 
     private async Task AddEvent(MouseEventArgs e, TItem item)
     {
-        var changedItem = ChangedItems.FirstOrDefault(x => CompareItemIds(x, item));
+        var changedItem = ChangedItems.GetValueOrDefault(item);
         if (changedItem != null)
         {
 
@@ -91,7 +91,7 @@
                 var newItem = await result.Content.ReadFromJsonAsync<TItem>();
                 Items.Add(newItem);
 
-                // ChangedItems.Remove(changedItem);
+                // ChangedItems.Remove(item);
             }
             else
             {
@@ -102,7 +102,7 @@
 
     private async Task EditEvent(MouseEventArgs e, TItem item)
     {
-        var changedItem = ChangedItems.FirstOrDefault(x => CompareItemIds(x, item));
+        var changedItem = ChangedItems.GetValueOrDefault(item);
         if (changedItem != null)
         {
 
@@ -110,11 +110,11 @@
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
             var uri = ApiUrl;
-            var result = await HttpClient.PatchAsync(new Uri(uri), JsonContent.Create(changedItem));
+            var result = await HttpClient.PatchAsync(new Uri(uri), JsonContent.Create(new[] { item, changedItem }));
 
             if (result.IsSuccessStatusCode)
             {
-                ChangedItems.Remove(changedItem);
+                ChangedItems.Remove(item);
             }
             else
             {
@@ -210,7 +210,7 @@
                     }
                     else{
                         <button @onclick="events => DeleteEvent(events, item)">Delete</button>
-                        @if (ChangedItems.Any(x => CompareItemIds(x, item)))
+                        @if (ChangedItems.GetValueOrDefault(item) != null)
                         {
                             <button @onclick="events => EditEvent(events, item)">Edit</button>
                         }

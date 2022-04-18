@@ -50,10 +50,10 @@ namespace WeGrow.Controllers
 
         [Route("modules")]
         [HttpPatch]
-        public async Task<IActionResult> EditModule([FromBody] ModuleEntity addItem)
+        public async Task<IActionResult> EditModule([FromBody] ModuleEntity[] oldAndEditedItem)
         {
-            var exemplar = await repository.GetAsync<Module>(true, x => x.Id == addItem.Id);
-            mapper.Map(addItem, exemplar);
+            var exemplar = await repository.GetAsync<Module>(true, x => x.Id == oldAndEditedItem[0].Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
             await repository.UpdateAsync(exemplar);
             return Ok();
         }
@@ -88,10 +88,10 @@ namespace WeGrow.Controllers
 
         [Route("receipts")]
         [HttpPatch]
-        public async Task<IActionResult> EditReceipt([FromBody] ReceiptEntity addItem)
+        public async Task<IActionResult> EditReceipt([FromBody] ReceiptEntity[] oldAndEditedItem)
         {
-            var exemplar = await repository.GetAsync<Receipt>(true, x => x.Module_Id == addItem.Module_Id && x.Order_Id == addItem.Order_Id);
-            mapper.Map(addItem, exemplar);
+            var exemplar = await repository.GetAsync<Receipt>(true, x => x.Module_Id == oldAndEditedItem[0].Module_Id && x.Order_Id == oldAndEditedItem[0].Order_Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
             await repository.UpdateAsync(exemplar);
             return Ok();
         }
