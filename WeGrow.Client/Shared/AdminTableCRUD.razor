@@ -155,7 +155,27 @@
                 {
                     var propValue = prop.GetValue(item) ?? "";
                     var propType = prop.GetMethod.ReturnType;
-                    @if (prop.GetCustomAttribute<KeyAttribute>() == null)
+
+                    @if(prop.GetCustomAttribute<KeyAttribute>() != null)
+                    {
+                        if (addRow)
+                        {
+                            <td>Auto</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @propValue
+                            </td>
+                        }
+                    }
+                    else if(prop.GetCustomAttribute<RequiredAttribute>() != null && !addRow)
+                    {
+                        <td>
+                            @propValue
+                        </td>
+                    }
+                    else
                     {
                         if (propValue.GetType().IsEnum)
                         {
@@ -185,22 +205,9 @@
                         else
                         {
                             <td>
-                                <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue" />
+                                <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue"/>
                             </td>
-                        }
-                    }
-                    else
-                    {
-                        if (addRow)
-                        {
-                            <td>Auto</td>
-                        }
-                        else
-                        {
-                            <td>
-                                @propValue
-                            </td>
-                        }
+                        } 
                     }
 
                 }
