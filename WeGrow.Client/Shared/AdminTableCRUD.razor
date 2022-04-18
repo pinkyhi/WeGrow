@@ -23,7 +23,6 @@
     [Parameter, AllowNull]
     public List<TItem> Items { get; set; }
 
-    private bool IsInitLoad { get; set; } = true;
     private List<TItem> ChangedItems { get; set; } = new List<TItem>();
 
     private IEnumerable<PropertyInfo> Properties { get; set; }
@@ -128,10 +127,6 @@
     var itemType = Items.GetType().GenericTypeArguments.First();
     Properties = itemType.GetProperties();
     IdProperties = Properties?.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)));
-    if (IsInitLoad)
-    {
-        Items.Insert(0, new TItem());
-    }
     bool addRow = true;
 }
 
@@ -225,10 +220,21 @@
         }
     </tbody>
 </table>
-@{
-    IsInitLoad = false;
-}
 @code{
+    protected override async Task OnInitializedAsync()
+    {
+        var tokenResponse = await TokenService.GetAdminToken();
+        HttpClient.SetBearerToken(tokenResponse.AccessToken);
+
+        var result = await HttpClient.GetAsync(ApiUrl);
+
+        if (result.IsSuccessStatusCode)
+        {
+            Items = await result.Content.ReadFromJsonAsync<List<TItem>>();
+            Items.Insert(0, new TItem());
+
+        }
+    }
     private bool CompareItemIds(TItem item1, TItem item2)
     {
         bool result = true;

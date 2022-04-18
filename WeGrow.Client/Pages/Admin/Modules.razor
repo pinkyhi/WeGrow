@@ -5,27 +5,5 @@
 <h3>Modules</h3>
 
 <div class="row">
-    @if (ItemsList.Any())
-    {
-        @foreach (var module in ItemsList)
-        {
-            <div class="col-6 col-sm-12 col-md-6 col-lg-4 col-xl-4 mh-25 mb-4">
-                <div class="card shadow-sm rounded">
-                    <h5 class="card-title">
-                        <b>@module.Name #@module.Id</b>
-                    </h5>
-                    <p class="card-text">@module.Description</p>
-                    <div class="card-footer text-muted">
-                        <span>Price: @module.Price</span>
-                        <span>Amount: @module.Amount</span>
-                    </div>
-                </div>
-            </div>
-        }
-        <AdminTableCRUD TableTitle="Modules" Items="ItemsList" TItem="ModuleEntity" ApiUrl="@ApiUrl"/>
-    }
-    else
-    {
-        <p>No modules available</p>
-    }
+    <AdminTableCRUD TableTitle="Modules" Items="ItemsList" TItem="ModuleEntity" ApiUrl="@ApiUrl"/>
 </div>
