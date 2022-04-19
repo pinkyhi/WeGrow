@@ -211,5 +211,81 @@ namespace WeGrow.Controllers
             return Ok();
         }
         #endregion
+
+        #region Grows
+        [Route("grows")]
+        [HttpGet]
+        public async Task<IActionResult> GetGrows()
+        {
+            var items = await repository.GetRangeAsync<Grow>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<GrowEntity>(x));
+            return Ok(itemsEntities);
+        }
+        [Route("grows")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteGrow(GrowEntity deleteItem)
+        {
+            var exemplar = await repository.GetAsync<Grow>(true, x => x.Id == deleteItem.Id);
+            await repository.DeleteAsync(exemplar);
+            return Ok();
+        }
+
+        [Route("grows")]
+        [HttpPost]
+        public async Task<IActionResult> AddGrow([FromBody] GrowEntity addItem)
+        {
+            var newItem = mapper.Map<Grow>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
+            return Ok(mapper.Map<GrowEntity>(exemplar));
+        }
+
+        [Route("grows")]
+        [HttpPatch]
+        public async Task<IActionResult> EditGrow([FromBody] GrowEntity[] oldAndEditedItem)
+        {
+            var exemplar = await repository.GetAsync<Grow>(true, x => x.Id == oldAndEditedItem[0].Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
+        }
+        #endregion
+
+        #region Schedules
+        [Route("schedules")]
+        [HttpGet]
+        public async Task<IActionResult> GetSchedules()
+        {
+            var items = await repository.GetRangeAsync<Schedule>(false, x => true);
+            var itemsEntities = items.Select(x => mapper.Map<ScheduleEntity>(x));
+            return Ok(itemsEntities);
+        }
+        [Route("schedules")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSchedule(ScheduleEntity deleteItem)
+        {
+            var exemplar = await repository.GetAsync<Schedule>(true, x => x.Id == deleteItem.Id);
+            await repository.DeleteAsync(exemplar);
+            return Ok();
+        }
+
+        [Route("schedules")]
+        [HttpPost]
+        public async Task<IActionResult> AddSchedule([FromBody] ScheduleEntity addItem)
+        {
+            var newItem = mapper.Map<Schedule>(addItem);
+            var exemplar = await repository.AddAsync(newItem);
+            return Ok(mapper.Map<ScheduleEntity>(exemplar));
+        }
+
+        [Route("schedules")]
+        [HttpPatch]
+        public async Task<IActionResult> EditSchedule([FromBody] ScheduleEntity[] oldAndEditedItem)
+        {
+            var exemplar = await repository.GetAsync<Schedule>(true, x => x.Id == oldAndEditedItem[0].Id);
+            mapper.Map(oldAndEditedItem[1], exemplar);
+            await repository.UpdateAsync(exemplar);
+            return Ok();
+        }
+        #endregion
     }
 }

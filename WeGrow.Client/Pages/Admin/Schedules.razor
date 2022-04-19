@@ -1,0 +1,9 @@
+﻿@page "/admin/schedules"
+@attribute [Authorize(Roles = "admin")]
+@using WeGrow.Models.Entities
+
+<h3>Schedules</h3>
+
+<div class="row">
+    <AdminTableCRUD TableTitle="Schedules" Items="ItemsList" TItem="ScheduleEntity" ApiUrl="@ApiUrl"/>
+</div>
