@@ -20,109 +20,117 @@
     bool addRow = true;
 }
 
-<table class="table">
-    <thead>
-        <tr><td>@TableTitle</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-            @foreach (var prop in Properties)
-            {
-                <th>
-                    @prop.Name
-                </th>
-            }
-            <th>Actions</th>
-        </tr>
-        @foreach (var item in Items)
-        {
-            <tr>
-                @foreach (var prop in Properties)
-                {
-                    var propValue = prop.GetValue(item) ?? "";
-                    var propType = prop.GetMethod.ReturnType;
+<h1>@TableTitle</h1>
 
-                    @if(prop.GetCustomAttribute<KeyAttribute>() != null)
+<div class="mud-table mud-xs-table mud-table-hover mud-elevation-0">
+    <div class="mud-table-container">
+        <table class="mud-table-root">
+            <thead class="mud-table-head">
+                <tr class="mud-table-row">
+                    @foreach (var prop in Properties)
                     {
-                        if (addRow)
+                        <th scope="col" class="mud-table-cell">
+                            <span class="mud-button-root">@prop.Name</span>
+                        </th>
+                    }
+                    <th scope="col" class="mud-table-cell">
+                        <span class="mud-button-root">Actions</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="mud-table-body">
+            @foreach (var item in Items)
+            {
+                <tr class="mud-table-row">
+                    @foreach (var prop in Properties)
+                    {
+                        var propValue = prop.GetValue(item) ?? "";
+                        var propType = prop.GetMethod.ReturnType;
+
+                        @if(prop.GetCustomAttribute<KeyAttribute>() != null)
                         {
-                            <td>Auto</td>
+                            if (addRow)
+                            {
+                                <td class="mud-table-cell">Auto</td>
+                            }
+                            else
+                            {
+                                <td class="mud-table-cell">
+                                    @propValue
+                                </td>
+                            }
                         }
-                        else
+                        else if(prop.GetCustomAttribute<RequiredAttribute>() != null && !addRow)
                         {
-                            <td>
+                            <td class="mud-table-cell">
                                 @propValue
                             </td>
                         }
-                    }
-                    else if(prop.GetCustomAttribute<RequiredAttribute>() != null && !addRow)
-                    {
-                        <td>
-                            @propValue
-                        </td>
-                    }
-                    else
-                    {
-                        if (propType.IsEnum)
-                        {
-                            <td>
-                                <select class="enum-select"  @onchange="events => OnChangeEvent(events, prop, item)">
-                                    @{
-                                        var enumValues = Enum.GetValues(propType);
-                                        foreach(var val in enumValues)
-                                        {
-                                            if(val.Equals(propValue))
-                                            {
-                                                <option value="@val" selected>
-                                                    @val
-                                                </option>
-                                            }
-                                            else
-                                            {
-                                            <option value="@val">
-                                                @val
-                                            </option>
-                                            }
-                                        }
-                                    }
-                                </select>
-                            </td>
-                        }
-                        else if(propType == typeof(Boolean))
-                        {
-                            <td>
-                                <input @onchange="events => OnChangeEvent(events, prop, item)" type="checkbox" checked="@propValue">
-                            </td>
-                        }
                         else
                         {
-                            <td>
-                                <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue"/>
-                            </td>
-                        } 
-                    }
-
-                }
-                <td>
-                    @if(addRow){
-                        <button @onclick="events => AddEvent(events, item)">Add</button>
-                    }
-                    else{
-                        <button @onclick="events => DeleteEvent(events, item)">Delete</button>
-                        @if (ChangedItems.GetValueOrDefault(item) != null)
-                        {
-                            <button @onclick="events => EditEvent(events, item)">Edit</button>
+                            if (propType.IsEnum)
+                            {
+                                <td class="mud-table-cell">
+                                    <select class="enum-select"  @onchange="events => OnChangeEvent(events, prop, item)">
+                                        @{
+                                            var enumValues = Enum.GetValues(propType);
+                                            foreach(var val in enumValues)
+                                            {
+                                                if(val.Equals(propValue))
+                                                {
+                                                    <option value="@val" selected>
+                                                        @val
+                                                    </option>
+                                                }
+                                                else
+                                                {
+                                                <option value="@val">
+                                                    @val
+                                                </option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                            }
+                            else if(propType == typeof(Boolean))
+                            {
+                                <td class="mud-table-cell">
+                                    <input @onchange="events => OnChangeEvent(events, prop, item)" type="checkbox" checked="@propValue">
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="mud-table-cell">
+                                    <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue"/>
+                                </td>
+                            } 
                         }
+
                     }
-                </td>
-            </tr>
-            @if (addRow)
-            {
-                addRow = false;
+                    <td>
+                        @if(addRow){
+                            <button @onclick="events => AddEvent(events, item)">Add</button>
+                        }
+                        else{
+                            <button @onclick="events => DeleteEvent(events, item)">Delete</button>
+                            @if (ChangedItems.GetValueOrDefault(item) != null)
+                            {
+                                <button @onclick="events => EditEvent(events, item)">Edit</button>
+                            }
+                        }
+                    </td>
+                </tr>
+                @if (addRow)
+                {
+                    addRow = false;
+                }
             }
-        }
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 @code {
     private async Task OnChangeEvent(ChangeEventArgs e, PropertyInfo property, TItem item)
     {
