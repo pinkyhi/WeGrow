@@ -1,10 +1,16 @@
-﻿<MudNavMenu>
+﻿@using WeGrow.Core.Resources
+<MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
     <AuthorizeView Roles="admin">
         <Authorized>
             <MudNavGroup Title="Admin" Expanded="true">
-                <MudNavLink Href="/admin/modules"  Match="NavLinkMatch.Prefix">Modules</MudNavLink>
-                <MudNavLink Href="/admin/receipts"  Match="NavLinkMatch.Prefix">Receipts</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminModules"  Match="NavLinkMatch.Prefix">Modules</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminReceipts"  Match="NavLinkMatch.Prefix">Receipts</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminOrders"  Match="NavLinkMatch.Prefix">Orders</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminModuleInstances"  Match="NavLinkMatch.Prefix">Module instances</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminSystemInstances"  Match="NavLinkMatch.Prefix">System instances</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminGrows"  Match="NavLinkMatch.Prefix">Grows</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminSchedules"  Match="NavLinkMatch.Prefix">Schedules</MudNavLink>
             </MudNavGroup>
         </Authorized>
     </AuthorizeView>
