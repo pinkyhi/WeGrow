@@ -110,13 +110,13 @@
                     }
                     <td>
                         @if(addRow){
-                            <button @onclick="events => AddEvent(events, item)">Add</button>
+                            <MudButton Variant="Variant.Filled" OnClick="events => AddEvent(events, item)">Add</MudButton>
                         }
                         else{
-                            <button @onclick="events => DeleteEvent(events, item)">Delete</button>
+                            <MudButton Variant="Variant.Filled" OnClick="events => DeleteEvent(events, item)">Delete</MudButton>
                             @if (ChangedItems.GetValueOrDefault(item) != null)
                             {
-                                <button @onclick="events => EditEvent(events, item)">Edit</button>
+                                <MudButton Variant="Variant.Filled" OnClick="events => EditEvent(events, item)">Edit</MudButton>
                             }
                         }
                     </td>
