@@ -56,18 +56,18 @@ else
                             {
                                 if (addRow)
                                 {
-                                    <td class="mud-table-cell">Auto</td>
+                                    <td class="mud-table-cell" data-label="@prop.Name">Auto</td>
                                 }
                                 else
                                 {
-                                    <td class="mud-table-cell">
+                                    <td class="mud-table-cell" data-label="@prop.Name">
                                         @propValue
                                     </td>
                                 }
                             }
                             else if(prop.GetCustomAttribute<RequiredAttribute>() != null && !addRow)
                             {
-                                <td class="mud-table-cell">
+                                <td class="mud-table-cell" data-label="@prop.Name">
                                     @propValue
                                 </td>
                             }
@@ -75,7 +75,7 @@ else
                             {
                                 if (propType.IsEnum)
                                 {
-                                    <td class="mud-table-cell">
+                                    <td class="mud-table-cell" data-label="@prop.Name">
                                         <select class="enum-select"  @onchange="events => OnChangeEvent(events, prop, item)">
                                             @{
                                                 var enumValues = Enum.GetValues(propType);
@@ -100,13 +100,13 @@ else
                                 }
                                 else if(propType == typeof(Boolean))
                                 {
-                                    <td class="mud-table-cell">
+                                    <td class="mud-table-cell" data-label="@prop.Name">
                                         <input @onchange="events => OnChangeEvent(events, prop, item)" type="checkbox" checked="@propValue">
                                     </td>
                                 }
                                 else
                                 {
-                                    <td class="mud-table-cell">
+                                    <td class="mud-table-cell" data-label="@prop.Name">
                                         <input @onchange="events => OnChangeEvent(events, prop, item)"  type="text" value="@propValue"/>
                                     </td>
                                 } 
