@@ -26,6 +26,7 @@ namespace WeGrow.Client.Shared
         [Parameter, AllowNull]
         public List<TItem> Items { get; set; }
 
+        private bool IsLoading;
         private Dictionary<TItem, TItem> ChangedItems { get; set; } = new();
 
         private IEnumerable<PropertyInfo> Properties { get; set; }
@@ -33,6 +34,7 @@ namespace WeGrow.Client.Shared
 
         protected override async Task OnInitializedAsync()
         {
+            IsLoading = true;
             var tokenResponse = await TokenService.GetAdminToken();
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
@@ -42,7 +44,12 @@ namespace WeGrow.Client.Shared
             {
                 Items = await result.Content.ReadFromJsonAsync<List<TItem>>();
                 Items.Insert(0, new TItem());
-
+                IsLoading = false;
+            }
+            else
+            {
+                IsLoading = false;
+                throw new Exception("Fetch data error");
             }
         }
         private bool CompareItemIds(TItem item1, TItem item2)
