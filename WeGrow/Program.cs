@@ -4,6 +4,7 @@ using WeGrow.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddJwtSwagger();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper();
 builder.Services.AddAuthorization(options =>
@@ -20,10 +21,13 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 var app = builder.Build();
+app.UseSwagger();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSwaggerUI();
 
 app.Run();
