@@ -1,0 +1,10 @@
+﻿@using WeGrow.Models.Shop
+
+@page "/shop"
+@{
+    if(CurrentPage < 1)
+    {
+        CurrentPage = 1;
+    }
+}
+<ShopFilter FilterModel="FilterModel" OnFilterApplied="OnFilterApplied" />

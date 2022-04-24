@@ -10,5 +10,7 @@
         public const string AdminSchedules = "/admin/schedules";
         public const string AdminSystemInstances = "/admin/system-instances";
 
+        public const string ShopModules = "/shop/modules";
+
     }
 }
