@@ -27,7 +27,14 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-
+    <script>
+        window.ChangeUrl = function(url){debugger; history.pushState(null, '', url);}
+        window.ChangeQueryString = function(queryString){
+            debugger; 
+            let path = window.location.href.split('?')[0];
+            history.pushState(null, '', path.concat(queryString));
+        }
+    </script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script src="_framework/blazor.server.js"></script>
 </body>

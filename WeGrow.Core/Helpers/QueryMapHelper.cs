@@ -25,8 +25,11 @@ namespace WeGrow.Core.Helpers
                     if (valueType != typeof(string) && (valueType.GetInterfaces().Contains(typeof(IEnumerable)) || valueType is IEnumerable))
                     {
                         var enumerableValue = value as IEnumerable<object>;
-                        string joinedArr = string.Join(',', enumerableValue);
-                        result.Add(property.Name, joinedArr);
+                        if(enumerableValue?.Count() > 0)
+                        {
+                            string joinedArr = string.Join(',', enumerableValue);
+                            result.Add(property.Name, joinedArr);
+                        }
                     }
                     else
                     {

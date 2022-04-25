@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.JSInterop;
 using WeGrow.Core.Helpers;
 using WeGrow.Core.Resources;
 using WeGrow.Models.Entities;
@@ -13,7 +14,7 @@ namespace WeGrow.Client.Pages.Shop
 
         [Parameter]
         [SupplyParameterFromQuery(Name = "page")]
-        public int? CurrentPage { get; set; }
+        public int CurrentPage { get; set; } = 0;
 
         [Parameter]
         [SupplyParameterFromQuery(Name = "search")]
@@ -27,6 +28,7 @@ namespace WeGrow.Client.Pages.Shop
 
         [Inject] private HttpClient HttpClient { get; set; }
         [Inject] private IConfiguration Configuration { get; set; }
+        [Inject] private IJSRuntime JsRuntime { get; set; }
 
         protected override void OnInitialized()
         {
@@ -38,10 +40,8 @@ namespace WeGrow.Client.Pages.Shop
             
             var queryParams = new Dictionary<string, string>();
 
-            if (CurrentPage != null)
-            {
-                queryParams.Add("page", CurrentPage.ToString());
-            }
+            queryParams.Add("page", CurrentPage.ToString());
+
             if (!string.IsNullOrWhiteSpace(Search))
             {
                 queryParams.Add("search", Search);
@@ -51,11 +51,12 @@ namespace WeGrow.Client.Pages.Shop
                 queryParams.Add(param.Key, param.Value);
             }
 
-            string url = QueryHelpers.AddQueryString(ApiUrl, queryParams);
+            var uri = new Uri(QueryHelpers.AddQueryString(ApiUrl, queryParams));
+            await JsRuntime.InvokeVoidAsync("ChangeQueryString", uri.Query);
 
             isLoading = true;
 
-            var result = await HttpClient.GetAsync(url);
+            var result = await HttpClient.GetAsync(uri);
 
             if (result.IsSuccessStatusCode)
             {

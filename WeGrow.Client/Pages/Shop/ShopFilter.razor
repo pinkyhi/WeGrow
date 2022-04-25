@@ -33,7 +33,7 @@
     <MudNumericField @bind-Value="FilterModel.MinPrice" Label="MinPrice" Variant="Variant.Text" Min="0" Max="1000000" />
     <MudNumericField @bind-Value="FilterModel.MaxPrice" Label="MaxPrice" Variant="Variant.Text" Min="0" Max="1000000" />
     <MudCheckBox @bind-Checked="@FilterModel.IsInStock" Label="In stock"></MudCheckBox>
-    <MudButton OnClick="@(()=>FilterModel.IsInStock=null)">Reset checkbox</MudButton>
+    <MudButton OnClick="@(ResetFields)">Reset filter</MudButton>
 
     <MudButton Disabled="@filterLoading" Variant="Variant.Outlined" Color="Color.Primary" OnClick="FilterClick">
         @if (filterLoading)
@@ -57,5 +57,15 @@
         {
             filterLoading = false;
         });
+    }
+
+    private void ResetFields()
+    {
+        FilterModel.Types = null;
+        FilterModel.Subjects = null;
+        FilterModel.MaxPrice = null;
+        FilterModel.MinPrice = null;
+        FilterModel.SortingType = null;
+        FilterModel.IsInStock = null;
     }
 }
