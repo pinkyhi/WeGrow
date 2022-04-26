@@ -16,7 +16,7 @@ namespace WeGrow.Client.Pages.Shop
 
         [Parameter]
         [SupplyParameterFromQuery(Name = "page")]
-        public int CurrentPage { get; set; } = 0;
+        public int CurrentPage { get; set; } = 1;
 
         [Parameter]
         [SupplyParameterFromQuery(Name = "search")]
@@ -78,10 +78,8 @@ namespace WeGrow.Client.Pages.Shop
 
             queryParams.Add("page", "1");
 
-            if (!string.IsNullOrWhiteSpace(Search))
-            {
-                queryParams.Add("search", Search);
-            }
+            queryParams.Add("search", Search);
+
             var currentLocation = await JsRuntime.InvokeAsync<string>("GetWindowLocation");
 
             Dictionary<string, string> currentParameters = QueryMapHelper.NameValuesToDictionary(HttpUtility.ParseQueryString(new Uri(currentLocation).Query));
@@ -99,6 +97,38 @@ namespace WeGrow.Client.Pages.Shop
                 ItemsList = resultModel.Items;
                 PagesCount = resultModel.PagesCount;
                 CurrentPage = 1;
+                await JsRuntime.InvokeVoidAsync("ChangeQueryString", uri.Query);
+                isLoading = false;
+            }
+            else
+            {
+                isLoading = false;
+                throw new Exception("Fetch data error");
+            }
+        }
+        protected async Task OnPageChange(int newPage)
+        {
+            var queryParams = new Dictionary<string, string>();
+
+            queryParams.Add("page", newPage.ToString());
+
+            var currentLocation = await JsRuntime.InvokeAsync<string>("GetWindowLocation");
+
+            Dictionary<string, string> currentParameters = QueryMapHelper.NameValuesToDictionary(HttpUtility.ParseQueryString(new Uri(currentLocation).Query));
+
+            var uri = new Uri(QueryHelpers.AddQueryString(ApiUrl, QueryMapHelper.UpdateDictionary(currentParameters, queryParams)));
+
+            isLoading = true;
+
+            var result = await HttpClient.GetAsync(uri);
+
+
+            if (result.IsSuccessStatusCode)
+            {
+                var resultModel = await result.Content.ReadFromJsonAsync<ShopModel>();
+                ItemsList = resultModel.Items;
+                PagesCount = resultModel.PagesCount;
+                CurrentPage = newPage;
                 await JsRuntime.InvokeVoidAsync("ChangeQueryString", uri.Query);
                 isLoading = false;
             }
