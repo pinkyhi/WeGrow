@@ -56,15 +56,26 @@ namespace WeGrow.Core.Helpers
             foreach(var property in modelProperties)
             {
                 var propVal = valuesDict.FirstOrDefault(x => string.Equals(property.Name, x.Key, StringComparison.OrdinalIgnoreCase)).Value;
-                if (property.PropertyType?.GetInterfaces().Contains(typeof(IEnumerable<>)) == true && string.IsNullOrWhiteSpace(propVal))
+                if (!string.IsNullOrWhiteSpace(propVal))
                 {
-                    var splittedArr = propVal.Split(',').ToList();
-                    property.SetValue(result, propVal);
-                }
-                else if (string.IsNullOrWhiteSpace(propVal))
-                {
-                    property.SetValue(result, propVal);
-                }
+                    if (property.PropertyType?.GetInterfaces().Contains(typeof(IEnumerable)) == true && property.PropertyType != typeof(string))
+                    {
+                        var splittedArr = propVal.Split(',').ToList();
+                        property.SetValue(result, splittedArr);
+                    }
+                    else if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
+                    {
+                        property.SetValue(result, Boolean.Parse(propVal));
+                    }
+                    else if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                    {
+                        property.SetValue(result, Int32.Parse(propVal));
+                    }
+                    else if (property.PropertyType == typeof(string))
+                    {
+                        property.SetValue(result, propVal);
+                    }
+                }      
             }
             return result;
         }

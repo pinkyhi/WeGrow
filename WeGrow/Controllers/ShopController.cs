@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using WeGrow.Core.Helpers;
 using WeGrow.DAL.Interfaces;
 using WeGrow.Models.Entities;
 using WeGrow.Models.Shop;
@@ -23,6 +25,8 @@ namespace WeGrow.Controllers
         [HttpGet]
         public async Task<IActionResult> GetModules([FromQuery] int page, [FromQuery] string search)
         {
+            var filter = QueryMapHelper.GetModelFromQueryUrl<ModulesShopFilter>(this.HttpContext.Request.GetEncodedUrl());
+
             var items = await repository.GetRangeAsync<DAL.Entities.Module>(false, x => true);
             var itemsEntities = items.Select(x => mapper.Map<ModuleEntity>(x));
             if (!string.IsNullOrWhiteSpace(search))
