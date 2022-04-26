@@ -40,6 +40,7 @@ namespace WeGrow.Core.Helpers
 
             return result;
         }
+
         public static T GetModelFromQueryUrl<T>(string url) where T : new()
         {
             Uri uri = new Uri(url);
@@ -81,6 +82,34 @@ namespace WeGrow.Core.Helpers
             }
 
             return dict;
+        }
+
+        public static Dictionary<string, string> UpdateDictionary(Dictionary<string, string> subjectDictionary, Dictionary<string, string> updateDictionary)
+        {
+            foreach(var keyValue in updateDictionary)
+            {
+                var subjectKeyValue = subjectDictionary.FirstOrDefault(x => string.Equals(keyValue.Key, x.Key, StringComparison.OrdinalIgnoreCase));
+
+                if (string.IsNullOrWhiteSpace(keyValue.Value))
+                {
+                    if(subjectKeyValue.Key != null)
+                    {
+                        subjectDictionary.Remove(subjectKeyValue.Key);
+                    }
+                }
+                else
+                {
+                    if (subjectKeyValue.Key == null)
+                    {
+                        subjectDictionary.Add(keyValue.Key, keyValue.Value);
+                    }
+                    else
+                    {
+                        subjectDictionary[subjectKeyValue.Key] = keyValue.Value;
+                    }
+                }
+            }
+            return subjectDictionary;
         }
     }
 }

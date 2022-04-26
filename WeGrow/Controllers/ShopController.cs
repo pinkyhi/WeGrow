@@ -25,7 +25,13 @@ namespace WeGrow.Controllers
         {
             var items = await repository.GetRangeAsync<DAL.Entities.Module>(false, x => true);
             var itemsEntities = items.Select(x => mapper.Map<ModuleEntity>(x));
-
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                itemsEntities = itemsEntities.Where(x => x.Id.ToString().Contains(search, StringComparison.OrdinalIgnoreCase)
+                                                    || x.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                                    || x.Description.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                                    ).ToList();
+            }
             var result = new ShopModel()
             {
                 Items = itemsEntities.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
