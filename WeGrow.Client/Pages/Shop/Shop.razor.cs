@@ -20,6 +20,8 @@ namespace WeGrow.Client.Pages.Shop
         [SupplyParameterFromQuery(Name = "search")]
         public string Search { get; set; }
 
+        public int PagesCount { get; set; } = 1;
+
         public ModulesShopFilter FilterModel { get; set; } = new();
 
         public string ApiUrl { get; set; }
@@ -40,7 +42,7 @@ namespace WeGrow.Client.Pages.Shop
             
             var queryParams = new Dictionary<string, string>();
 
-            queryParams.Add("page", CurrentPage.ToString());
+            queryParams.Add("page", "1");
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
@@ -52,7 +54,6 @@ namespace WeGrow.Client.Pages.Shop
             }
 
             var uri = new Uri(QueryHelpers.AddQueryString(ApiUrl, queryParams));
-            await JsRuntime.InvokeVoidAsync("ChangeQueryString", uri.Query);
 
             isLoading = true;
 
@@ -60,7 +61,11 @@ namespace WeGrow.Client.Pages.Shop
 
             if (result.IsSuccessStatusCode)
             {
-                ItemsList = await result.Content.ReadFromJsonAsync<List<ModuleEntity>>();
+                var resultModel = await result.Content.ReadFromJsonAsync<ShopModel>();
+                ItemsList = resultModel.Items;
+                PagesCount = resultModel.PagesCount;
+                CurrentPage = 1;
+                await JsRuntime.InvokeVoidAsync("ChangeQueryString", uri.Query);
                 isLoading = false;
             }
             else
