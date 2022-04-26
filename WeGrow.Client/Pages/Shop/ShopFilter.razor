@@ -3,9 +3,9 @@
 
 @code {
     [Parameter]
-    public ModulesShopFilter FilterModel { get; set; }
+    public ModulesShopFilterModel FilterModel { get; set; }
     [Parameter]
-    public EventCallback<ModulesShopFilter> OnFilterApplied { get; set; }
+    public EventCallback<ModulesShopFilterModel> OnFilterApplied { get; set; }
 
     private bool filterLoading = false;
 }

@@ -1,11 +1,13 @@
-﻿using WeGrow.Core.Enums;
+﻿using AutoMapper;
+using WeGrow.Core.Enums;
 
 namespace WeGrow.Models.Shop
 {
+    [AutoMap(typeof(ModulesShopFilterModel), ReverseMap = true)]
     public class ModulesShopFilter
     {
-        public IEnumerable<string> Types { get; set; }
-        public IEnumerable<string> Subjects { get; set; }
+        public IEnumerable<ModuleType> Types { get; set; }
+        public IEnumerable<ModuleSubject> Subjects { get; set; }
         public string SortingType { get; set; }
         public int? MinPrice { get; set; }
         public int? MaxPrice { get; set; }

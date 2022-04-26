@@ -24,7 +24,7 @@ namespace WeGrow.Client.Pages.Shop
 
         public int PagesCount { get; set; } = 1;
 
-        public ModulesShopFilter FilterModel { get; set; } = new();
+        public ModulesShopFilterModel FilterModel { get; set; } = new();
 
         public string ApiUrl { get; set; }
 
@@ -39,7 +39,7 @@ namespace WeGrow.Client.Pages.Shop
             ApiUrl = Configuration["apiUrl"] + ApiRoutes.ShopModules;
         }
 
-        protected async Task OnFilterApplied(ModulesShopFilter filterModel)
+        protected async Task OnFilterApplied(ModulesShopFilterModel filterModel)
         {
             
             var queryParams = new Dictionary<string, string>();
