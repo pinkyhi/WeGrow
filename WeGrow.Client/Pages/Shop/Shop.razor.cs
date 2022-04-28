@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using System.Web;
@@ -33,15 +34,47 @@ namespace WeGrow.Client.Pages.Shop
         [Inject] private HttpClient HttpClient { get; set; }
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IJSRuntime JsRuntime { get; set; }
+        [Inject] private IHttpContextAccessor Accessor { get; set; }
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             ApiUrl = Configuration["apiUrl"] + ApiRoutes.ShopModules;
+            string currentLocation = "";
+            try
+            {
+                currentLocation = await JsRuntime.InvokeAsync<string>("GetWindowLocation");
+            }
+            catch
+            {
+                currentLocation = Accessor.HttpContext.Request.GetEncodedUrl();
+            }
+            FilterModel = QueryMapHelper.GetModelFromQueryUrl<ModulesShopFilterModel>(currentLocation);
+
+            if (ItemsList.Count == 0)
+            {
+                var requestUrl = QueryHelpers.AddQueryString(ApiUrl, QueryMapHelper.NameValuesToDictionary(HttpUtility.ParseQueryString(new Uri(currentLocation).Query)));
+                var uri = new Uri(requestUrl);
+                isLoading = true;
+
+                var result = await HttpClient.GetAsync(uri);
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var resultModel = await result.Content.ReadFromJsonAsync<ShopModel>();
+                    ItemsList = resultModel.Items;
+                    PagesCount = resultModel.PagesCount;
+                    isLoading = false;
+                }
+                else
+                {
+                    isLoading = false;
+                    throw new Exception("Fetch data error");
+                }
+            }
         }
 
         protected async Task OnFilterApplied(ModulesShopFilterModel filterModel)
         {
-            
             var queryParams = new Dictionary<string, string>();
 
             queryParams.Add("page", "1");

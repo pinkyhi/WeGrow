@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Reflection;
+using WeGrow.Core.Enums;
 using WeGrow.Core.Helpers;
 using WeGrow.DAL.Interfaces;
 using WeGrow.Models.Entities;
@@ -28,15 +29,55 @@ namespace WeGrow.Controllers
         {
             var filterModel = QueryMapHelper.GetModelFromQueryUrl<ModulesShopFilterModel>(this.HttpContext.Request.GetEncodedUrl());
             var filter = mapper.Map<ModulesShopFilter>(filterModel);
-            var items = await repository.GetRangeAsync<DAL.Entities.Module>(false, x => true);
-            var itemsEntities = items.Select(x => mapper.Map<ModuleEntity>(x));
-            if (!string.IsNullOrWhiteSpace(search))
+
+            // Filtering
+            var items = await repository.GetRangeAsync<DAL.Entities.Module>(false, x => 
             {
-                itemsEntities = itemsEntities.Where(x => x.Id.ToString().Contains(search, StringComparison.OrdinalIgnoreCase)
-                                                    || x.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
-                                                    || x.Description.Contains(search, StringComparison.OrdinalIgnoreCase)
-                                                    ).ToList();
+                bool result = true;
+
+                if(result && filterModel.IsInStock != null)
+                {
+                    result = x.Amount > 0 && filter.IsInStock == true;
+                }
+                if (result && filterModel.MinPrice != null)
+                {
+                    result = x.Price > filter.MinPrice;
+                }
+                if (result && filterModel.MaxPrice != null)
+                {
+                    result = x.Price < filter.MaxPrice;
+                }
+                if (result && filterModel.Types != null)
+                {
+                    result = filter.Types.Contains(x.Type);
+                }
+                if (result && filterModel.Subjects != null)
+                {
+                    result = filter.Subjects.Contains(x.Subject);
+                }
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    result = x.Id.ToString().Contains(search, StringComparison.OrdinalIgnoreCase)
+                                                        || x.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                                        || x.Description.Contains(search, StringComparison.OrdinalIgnoreCase);
+                }
+                return result;
+            });
+            // Sorting
+            if (filter.SortingType != null)
+            {
+                if(filter.SortingType == SortingType.PriceASC)
+                {
+                    items = items.OrderBy(x => x.Price);
+                }
+                else if(filter.SortingType == SortingType.PriceDESC)
+                {
+                    items = items.OrderByDescending(x => x.Price);
+                }
             }
+
+            var itemsEntities = items.Select(x => mapper.Map<ModuleEntity>(x));
+
             var result = new ShopModel()
             {
                 Items = itemsEntities.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
