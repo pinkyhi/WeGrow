@@ -1,6 +1,7 @@
 ﻿@using WeGrow.Core.Resources
 <MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
+    <MudNavLink Href="/shop/modules"  Match="NavLinkMatch.Prefix">Shop</MudNavLink>
     <AuthorizeView Roles="admin">
         <Authorized>
             <MudNavGroup Title="Admin" Expanded="true">
