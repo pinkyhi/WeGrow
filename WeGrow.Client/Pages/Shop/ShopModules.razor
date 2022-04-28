@@ -18,9 +18,11 @@
                     <MudText Class="d-flex" Typo="Typo.body1">@item.Description</MudText>
                     <MudText Class="d-flex" Typo="Typo.body2">#@item.Id</MudText>
                 </MudPaper>
-                <MudPaper Class="flex-none pa-4 shopItemPrice" Elevation="2" Width="200px">
+                <MudPaper Class="flex-none pa-4" Elevation="2" Width="200px">
                     <MudContainer Class="d-flex flex-column justify-center">
-                        <MudText Typo="Typo.h6">@item.Price</MudText>
+                        <div class="shop-item-price-wrap">
+                            <MudText Typo="Typo.h6">@item.Price UAH</MudText>
+                        </div>
                         <MudDivider Class="ma-3" DividerType="DividerType.Middle" />
                         <MudButton Variant="Variant.Outlined" Color="Color.Secondary">Add to cart</MudButton>
                     </MudContainer>
