@@ -9,4 +9,5 @@
 }
 <MudTextField  @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" OnAdornmentClick="OnSearch" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
 <ShopFilter FilterModel="FilterModel" OnFilterApplied="OnFilterApplied" />
+<ShopModules ShopItems="ItemsList" />
 <MudPagination Color="Color.Primary" Count="@PagesCount" SelectedChanged="OnPageChange"/>

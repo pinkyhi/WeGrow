@@ -1,0 +1,28 @@
+﻿@using WeGrow.Models.Entities;
+
+@code {
+    [Parameter]
+    public List<ModuleEntity> ShopItems { get; set; }
+}
+
+<MudPaper Width="100%">
+    @foreach(var item in ShopItems)
+    {
+        <MudPaper Class="d-flex gap-4 pa-2" Height="190px" Width="100%" Square="true">
+                <MudPaper Class="flex-none d-flex py-8 mud-theme-primary pa-3" Width="180px" Height="180px" Elevation="2">
+                    <img src="https://www.sharabangla.com/wp-content/uploads/woocommerce-placeholder-300x300.png" />
+                </MudPaper>
+                <MudPaper Class="flex-1 d-flex py-8" Elevation="1">
+                    <MudText Typo="Typo.h5">@item.Name</MudText>
+                    <MudText Typo="Typo.body1">@item.Description</MudText>
+                    <MudText Typo="Typo.body2">#@item.Id</MudText>
+                </MudPaper>
+                <MudPaper Class="flex-none d-flex py-8" Elevation="2" Width="200px">
+                    <MudText Typo="Typo.h6">@item.Price</MudText>
+                    <MudDivider />
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary">Primary</MudButton>
+                </MudPaper>
+        </MudPaper>
+        <MudDivider />
+    }
+</MudPaper>

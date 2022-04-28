@@ -13,7 +13,6 @@ namespace WeGrow.Client.Pages.Shop
     partial class Shop
     {
         public List<ModuleEntity> ItemsList = new();
-        public List<ModuleEntity> SearchedItemsList = new();
 
         [Parameter]
         [SupplyParameterFromQuery(Name = "page")]
