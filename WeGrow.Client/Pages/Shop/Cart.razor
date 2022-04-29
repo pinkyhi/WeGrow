@@ -7,5 +7,9 @@
 <div class="cart-wrap">
     <div class="cart">
         <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ShoppingCart" DisableElevation="true" />
+        @if(CartItems?.Count() > 0)
+        {
+            <h5 class="cart-counter">@CartItems.Count</h5>
+        }
     </div>
 </div>

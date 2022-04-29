@@ -3,6 +3,10 @@
 @code {
     [Parameter]
     public List<ModuleEntity> ShopItems { get; set; }
+    [Parameter]
+    public List<ModuleEntity> CartItems { get; set; }
+    [Parameter]
+    public EventCallback<List<ModuleEntity>> CartItemsChanged { get; set; }
 }
 
 @foreach(var item in ShopItems)
@@ -23,9 +27,16 @@
                         <MudText Typo="Typo.h6">@item.Price UAH</MudText>
                     </div>
                     <MudDivider Class="ma-3" DividerType="DividerType.Middle" />
-                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary">Add to cart</MudButton>
+                    <MudButton OnClick="events=> OnAddToCart(item)" Variant="Variant.Outlined" Color="Color.Secondary">Add to cart</MudButton>
                 </MudContainer>
             </MudPaper>
     </MudPaper>
     <MudDivider />
+}
+@code {
+    private async Task OnAddToCart(ModuleEntity item)
+    {
+        CartItems.Add(item);
+        await CartItemsChanged.InvokeAsync(CartItems);
+    }
 }

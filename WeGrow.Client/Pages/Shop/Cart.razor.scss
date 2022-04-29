@@ -5,3 +5,16 @@
 .cart-wrap {
     width: 56px;
 }
+.cart-counter {
+    pointer-events: none;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background-color: crimson;
+    border-radius: 50%;
+    color: white;
+    bottom: 0;
+    right: 0;
+    padding: 3px;
+    text-align: center;
+}
