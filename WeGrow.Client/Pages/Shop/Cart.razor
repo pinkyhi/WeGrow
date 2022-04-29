@@ -1,0 +1,11 @@
+﻿@using WeGrow.Models.Entities
+
+@code {
+    [Parameter]
+    public List<ModuleEntity> CartItems { get; set; }
+}
+<div class="cart-wrap">
+    <div class="cart">
+        <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ShoppingCart" DisableElevation="true" />
+    </div>
+</div>

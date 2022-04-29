@@ -7,7 +7,8 @@
         CurrentPage = 1;
     }
 }
-
+<div class="cart-wrap">
+</div>
  <MudPaper Class="d-flex flex-row pa-5 gap-3">
     <MudPaper Outlined="false" Elevation="0" Class="d-inline-flex flex-column flex-none">
         <ShopFilter FilterModel="FilterModel" OnFilterApplied="OnFilterApplied" />
@@ -23,4 +24,5 @@
         }
         <MudPagination Class="d-flex flex-1 justify-center mb-3 mt-5" Color="Color.Primary" Size="Size.Large" Count="@PagesCount" SelectedChanged="OnPageChange"/>
     </MudPaper>
+    <Cart CartItems="ItemsList" />
 </MudPaper>
