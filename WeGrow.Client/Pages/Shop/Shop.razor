@@ -7,7 +7,20 @@
         CurrentPage = 1;
     }
 }
-<MudTextField  @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" OnAdornmentClick="OnSearch" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
-<ShopFilter FilterModel="FilterModel" OnFilterApplied="OnFilterApplied" />
-<ShopModules ShopItems="ItemsList" />
-<MudPagination Color="Color.Primary" Count="@PagesCount" SelectedChanged="OnPageChange"/>
+
+ <MudPaper Class="d-flex flex-row pa-5 gap-3">
+    <MudPaper Outlined="false" Elevation="0" Class="d-inline-flex flex-column flex-none">
+        <ShopFilter FilterModel="FilterModel" OnFilterApplied="OnFilterApplied" />
+    </MudPaper> 
+    <MudPaper Outlined="false" Class="d-inline-flex flex-column flex-1">
+        <MudTextField Class="d-flex mb-5" @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" OnAdornmentClick="OnSearch" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
+        @if(isLoading){
+            <MudProgressCircular Class="d-flex" Style="height:100px;width:100px;" Color="Color.Default" Indeterminate="true" />
+        }
+        else
+        {
+            <ShopModules ShopItems="ItemsList" />
+        }
+        <MudPagination Class="d-flex flex-1 justify-center mb-3 mt-5" Color="Color.Primary" Size="Size.Large" Count="@PagesCount" SelectedChanged="OnPageChange"/>
+    </MudPaper>
+</MudPaper>

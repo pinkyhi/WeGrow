@@ -9,7 +9,7 @@
 
     private bool filterLoading = false;
 }
-<MudContainer Height="100%" Width="400px">
+<MudPaper Width="300px" Class="flex-none pa-6" Elevation="3">
     <MudText Typo="Typo.h5">Filtering</MudText>
     <MudDivider DividerType="DividerType.Middle" Class="my-6"/>
     <MudSelect T="string" Label="Types" MultiSelection="true" @bind-SelectedValues="FilterModel.Types" Variant="Variant.Outlined">
@@ -47,7 +47,7 @@
         }
     </MudButton>
 
-</MudContainer>
+</MudPaper>
 @code{
     private async Task FilterClick()
     {

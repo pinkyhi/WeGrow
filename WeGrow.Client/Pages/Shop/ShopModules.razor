@@ -5,29 +5,27 @@
     public List<ModuleEntity> ShopItems { get; set; }
 }
 
-<MudPaper Width="100%">
-    @foreach(var item in ShopItems)
-    {
-        <MudPaper Class="d-flex gap-4 pa-2" Height="190px" Width="100%" Square="true">
-                <MudPaper Class="flex-none d-flex pa-3 mud-theme-primary" Width="180px" Height="180px" Elevation="2">
-                    <img src="https://www.sharabangla.com/wp-content/uploads/woocommerce-placeholder-300x300.png" />
-                </MudPaper>
-                <MudPaper Class="flex-1 pa-3 flex-wrap" Elevation="1">
-                    <MudText Class="d-flex" Typo="Typo.h5">@item.Name</MudText>
-                    <MudDivider Class="d-flex" DividerType="DividerType.Middle" />
-                    <MudText Class="d-flex" Typo="Typo.body1">@item.Description</MudText>
-                    <MudText Class="d-flex" Typo="Typo.body2">#@item.Id</MudText>
-                </MudPaper>
-                <MudPaper Class="flex-none pa-4" Elevation="2" Width="200px">
-                    <MudContainer Class="d-flex flex-column justify-center">
-                        <div class="shop-item-price-wrap">
-                            <MudText Typo="Typo.h6">@item.Price UAH</MudText>
-                        </div>
-                        <MudDivider Class="ma-3" DividerType="DividerType.Middle" />
-                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary">Add to cart</MudButton>
-                    </MudContainer>
-                </MudPaper>
-        </MudPaper>
-        <MudDivider />
-    }
-</MudPaper>
+@foreach(var item in ShopItems)
+{
+    <MudPaper Class="d-flex gap-4 pa-2" Height="190px" Square="true">
+            <MudPaper Class="flex-none d-flex pa-3 mud-theme-primary" Width="180px" Height="180px" Elevation="2">
+                <img src="https://www.sharabangla.com/wp-content/uploads/woocommerce-placeholder-300x300.png" />
+            </MudPaper>
+            <MudPaper Class="flex-1 pa-3 flex-wrap" Elevation="1">
+                <MudText Class="d-flex" Typo="Typo.h5">@item.Name</MudText>
+                <MudDivider Class="d-flex" DividerType="DividerType.Middle" />
+                <MudText Class="d-flex" Typo="Typo.body1">@item.Description</MudText>
+                <MudText Class="d-flex" Typo="Typo.body2">#@item.Id</MudText>
+            </MudPaper>
+            <MudPaper Class="flex-none pa-4" Elevation="2" Width="200px">
+                <MudContainer Class="d-flex flex-column justify-center">
+                    <div class="shop-item-price-wrap">
+                        <MudText Typo="Typo.h6">@item.Price UAH</MudText>
+                    </div>
+                    <MudDivider Class="ma-3" DividerType="DividerType.Middle" />
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary">Add to cart</MudButton>
+                </MudContainer>
+            </MudPaper>
+    </MudPaper>
+    <MudDivider />
+}

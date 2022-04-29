@@ -28,7 +28,7 @@ namespace WeGrow.Client.Pages.Shop
 
         public string ApiUrl { get; set; }
 
-        private bool isLoading = false;
+        private bool isLoading = true;
 
         [Inject] private HttpClient HttpClient { get; set; }
         [Inject] private IConfiguration Configuration { get; set; }
