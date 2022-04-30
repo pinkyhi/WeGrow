@@ -57,7 +57,7 @@
                                 <td data-label="Count" class="mud-table-cell">@kv.Value</td>
                                 <td data-label="Full price" class="mud-table-cell">@(kv.Key.Price * kv.Value)</td>
                                 <td class="d-flex justify-end mud-table-cell">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete"></MudIconButton>
+                                    <MudIconButton OnClick="events => OnRemoveFromCart(kv.Key)" Icon="@Icons.Material.Filled.Delete" aria-label="delete"></MudIconButton>
                                 </td>
                             </tr>
                         }
@@ -79,5 +79,9 @@
     </div>
 </div>
 @code{
-
+    private async Task OnRemoveFromCart(ModuleEntity item)
+    {
+        CartItems.Remove(item);
+        await CartItemsChanged.InvokeAsync(CartItems);
+    }
 }
