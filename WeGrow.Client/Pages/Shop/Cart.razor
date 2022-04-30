@@ -3,6 +3,26 @@
 @code {
     [Parameter]
     public List<ModuleEntity> CartItems { get; set; }
+    [Parameter]
+    public EventCallback<List<ModuleEntity>> CartItemsChanged { get; set; }
+    private Dictionary<ModuleEntity, int> CartViewDictionary { get; set; } = new();
+    private decimal TotalPrice = 0;
+}
+@{
+    CartViewDictionary.Clear();
+    foreach(var item in CartItems)
+    {
+        var isAdded = CartViewDictionary.FirstOrDefault(x => x.Key.Id == item.Id).Key != null;
+        if (isAdded)
+        {
+            CartViewDictionary[item] += 1;
+        }
+        else
+        {
+            CartViewDictionary.Add(item, 1);
+        }
+        TotalPrice += item.Price;
+    }
 }
 <div class="cart-wrap">
     <div class="cart">
@@ -12,4 +32,50 @@
             <h5 class="cart-counter">@CartItems.Count</h5>
         }
     </div>
+    <div class="cart-list">
+        <div class="mud-table mud-data-grid mud-xs-table mud-table-dense mud-table-bordered mud-elevation-1">
+            <div class="mud-table-container">
+                <table class="mud-table-root">
+                    <thead class="mud-table-head">
+                        <tr class="mud-table-row">
+                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Name</span></th>
+                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Description</span></th>
+                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Count</span></th>
+                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Full price</span></th>
+                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header"><span class="column-options"></span></span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="mud-table-body">
+                        @foreach(var kv in CartViewDictionary)
+                        {
+                            <tr class="mud-table-row">
+                                <td data-label="Name" class="mud-table-cell">@kv.Key.Name</td>
+                                <td data-label="Description" class="mud-table-cell">@kv.Key.Description</td>
+                                <td data-label="Count" class="mud-table-cell">@kv.Value</td>
+                                <td data-label="Full price" class="mud-table-cell">@(kv.Key.Price * kv.Value)</td>
+                                <td class="d-flex justify-end mud-table-cell">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete"></MudIconButton>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="mud-table-foot">
+                        <tr class="mud-table-row">
+                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
+                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
+                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
+                            <td class="mud-table-cell" style="font-weight:600;" colspan="1">Total price: @TotalPrice UAH</td>
+                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+@code{
+    private void UpdateCartDict(List<ModuleEntity> items)
+    {
+        
+    }
+}

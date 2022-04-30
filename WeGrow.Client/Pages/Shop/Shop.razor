@@ -23,5 +23,5 @@
         }
         <MudPagination Class="d-flex flex-1 justify-center mb-3 mt-5" Color="Color.Primary" Size="Size.Large" Count="@PagesCount" SelectedChanged="OnPageChange"/>
     </MudPaper>
-    <Cart CartItems="CartItems" />
+    <Cart @bind-CartItems="CartItems" />
 </MudPaper>
