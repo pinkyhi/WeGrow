@@ -18,3 +18,16 @@
     padding: 3px;
     text-align: center;
 }
+.cart-list{
+    position: fixed;
+    z-index: 1;
+    display: none;
+    padding: 4px;
+    border-radius: 5px;
+    width: 600px;
+    right: 10px;
+    top: 170px;
+}
+.cart-list-toggle{
+    display: block;
+}

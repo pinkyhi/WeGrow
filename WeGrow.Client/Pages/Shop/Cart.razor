@@ -5,11 +5,14 @@
     public List<ModuleEntity> CartItems { get; set; }
     [Parameter]
     public EventCallback<List<ModuleEntity>> CartItemsChanged { get; set; }
+
     private Dictionary<ModuleEntity, int> CartViewDictionary { get; set; } = new();
     private decimal TotalPrice = 0;
+    private bool toggleCart = false;
 }
 @{
     CartViewDictionary.Clear();
+    TotalPrice = 0;
     foreach(var item in CartItems)
     {
         var isAdded = CartViewDictionary.FirstOrDefault(x => x.Key.Id == item.Id).Key != null;
@@ -26,13 +29,13 @@
 }
 <div class="cart-wrap">
     <div class="cart">
-        <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ShoppingCart" DisableElevation="true" />
+        <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ShoppingCart" OnClick="events => toggleCart = !toggleCart" DisableElevation="true" />
         @if(CartItems?.Count() > 0)
         {
             <h5 class="cart-counter">@CartItems.Count</h5>
         }
     </div>
-    <div class="cart-list">
+    <div class="cart-list @(toggleCart ? "cart-list-toggle" : "")">
         <div class="mud-table mud-data-grid mud-xs-table mud-table-dense mud-table-bordered mud-elevation-1">
             <div class="mud-table-container">
                 <table class="mud-table-root">
@@ -61,9 +64,11 @@
                     </tbody>
                     <tfoot class="mud-table-foot">
                         <tr class="mud-table-row">
-                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
-                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
-                            <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
+                            <td class="mud-table-cell" style="font-weight:600; text-align: center;" colspan="3">
+                                @if(CartItems?.Count() > 0){
+                                    <MudButton Style="padding-top: 7px; width: 80%;" Variant="Variant.Filled" EndIcon="@Icons.Filled.AttachMoney" Color="Color.Success">Order! </MudButton>
+                                }
+                            </td>
                             <td class="mud-table-cell" style="font-weight:600;" colspan="1">Total price: @TotalPrice UAH</td>
                             <td class="mud-table-cell" style="font-weight:600;" colspan="1"></td>
                         </tr>
@@ -74,8 +79,5 @@
     </div>
 </div>
 @code{
-    private void UpdateCartDict(List<ModuleEntity> items)
-    {
-        
-    }
+
 }
