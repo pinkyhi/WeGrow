@@ -1,6 +1,10 @@
-﻿@using WeGrow.Models.Entities;
+﻿@using WeGrow.Models.Entities
+@using Microsoft.JSInterop
+@using System.Text.Json
 
 @code {
+    [Inject] private IJSRuntime JsRuntime { get; set; }
+
     [Parameter]
     public List<ModuleEntity> ShopItems { get; set; }
     [Parameter]
@@ -37,6 +41,7 @@
     private async Task OnAddToCart(ModuleEntity item)
     {
         CartItems.Add(item);
+        await JsRuntime.InvokeVoidAsync("UpdateCookie", "cart", JsonSerializer.Serialize(CartItems), 30);
         await CartItemsChanged.InvokeAsync(CartItems);
     }
 }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Reflection;
 using WeGrow.Core.Enums;
 using WeGrow.Core.Helpers;
+using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
 using WeGrow.Models.Entities;
 using WeGrow.Models.Shop;
@@ -85,6 +87,32 @@ namespace WeGrow.Controllers
             };
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [Route("modules")]
+        [HttpPost]
+        public async Task<IActionResult> Order(Dictionary<ModuleEntity, int> order)
+        {
+            Order newOrder = new Order()
+            {
+                Date = DateTime.Now,
+            };
+            List<Receipt> receipts = order.Select(x =>
+            {
+                var receipt = new Receipt()
+                {
+                    Amount = x.Value,
+                    Module_Id = x.Key.Id,
+                    Cache_Price = x.Key.Price,
+                    Order = newOrder,
+                };
+                return receipt;
+            }).ToList();
+            newOrder.Receipts = receipts;
+            newOrder = await repository.AddAsync(newOrder);
+
+            return Ok();
         }
     }
 }

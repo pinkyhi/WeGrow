@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
+using System.Text.Json;
 using System.Web;
 using WeGrow.Core.Helpers;
 using WeGrow.Core.Resources;
@@ -38,6 +39,22 @@ namespace WeGrow.Client.Pages.Shop
 
         protected override async Task OnInitializedAsync()
         {
+            string cookieCart = "";
+            try
+            {
+                cookieCart = await JsRuntime.InvokeAsync<string>("GetCookie", "cart");
+            }
+            catch
+            {
+                cookieCart = Accessor.HttpContext.Request.Cookies["cart"];
+            }
+            try
+            {
+                var cartObj = JsonSerializer.Deserialize<List<ModuleEntity>>(cookieCart);
+                CartItems.AddRange(cartObj);
+            }
+            catch { }
+
             ApiUrl = Configuration["apiUrl"] + ApiRoutes.ShopModules;
             string currentLocation = "";
             try

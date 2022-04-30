@@ -28,7 +28,7 @@
         <a class="dismiss">🗙</a>
     </div>
     <script>
-        window.ChangeUrl = function(url){debugger; history.pushState(null, '', url);}
+        window.ChangeUrl = function(url){history.pushState(null, '', url);}
         window.ChangeQueryString = function(queryString){
             let path = window.location.href.split('?')[0];
             history.pushState(null, '', path.concat(queryString));
@@ -36,6 +36,23 @@
         window.GetWindowLocation = function(){
             return window.location.href;
         }
+        window.GetCookie = function(key){
+            const name = key + "=";
+            const cDecoded = decodeURIComponent(document.cookie); //to be careful
+            const cArr = cDecoded .split('; ');
+            let res;
+            cArr.forEach(val => {
+                if (val.indexOf(name) === 0) res = val.substring(name.length);
+            })
+            return res;
+        }
+        window.UpdateCookie = function(key, value, expDays){
+            let date = new Date();
+            date.setTime(date.getTime() + (expDays * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = key + "=" + value + "; " + expires + "; path=/";
+        }
+
     </script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script src="_framework/blazor.server.js"></script>
