@@ -42,11 +42,11 @@ namespace WeGrow.Client.Pages.Shop
             string cookieCart = "";
             try
             {
-                cookieCart = await JsRuntime.InvokeAsync<string>("GetCookie", "cart");
+                cookieCart = await JsRuntime.InvokeAsync<string>("GetCookie", ConstNames.Cart);
             }
             catch
             {
-                cookieCart = Accessor.HttpContext.Request.Cookies["cart"];
+                cookieCart = Accessor.HttpContext.Request.Cookies[ConstNames.Cart];
             }
             try
             {

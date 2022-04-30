@@ -28,7 +28,9 @@
         <a class="dismiss">🗙</a>
     </div>
     <script>
-        window.ChangeUrl = function(url){history.pushState(null, '', url);}
+        window.ChangeUrl = function(url){
+            history.pushState(null, '', url);
+        }
         window.ChangeQueryString = function(queryString){
             let path = window.location.href.split('?')[0];
             history.pushState(null, '', path.concat(queryString));

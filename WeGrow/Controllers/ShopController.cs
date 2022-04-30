@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using WeGrow.Core.Enums;
 using WeGrow.Core.Helpers;
+using WeGrow.Core.Resources;
 using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
 using WeGrow.Models.Entities;
@@ -92,12 +93,24 @@ namespace WeGrow.Controllers
         [Authorize]
         [Route("modules")]
         [HttpPost]
-        public async Task<IActionResult> Order(Dictionary<ModuleEntity, int> order)
+        public async Task<IActionResult> Order([FromBody] Dictionary<int, int> idCount)
         {
             Order newOrder = new Order()
             {
                 Date = DateTime.Now,
+                User_Id = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value
             };
+            Dictionary<DAL.Entities.Module, int> order = new();
+            foreach(var item in idCount)
+            {
+                var module = await repository.GetAsync<DAL.Entities.Module>(false, x => x.Id == item.Key);
+                module.Amount -= item.Value;
+                if(module.Amount < 0)
+                {
+                    throw new Exception($"Not enough amount of module #{item.Key}");
+                }
+                order.Add(module, item.Value);
+            }
             List<Receipt> receipts = order.Select(x =>
             {
                 var receipt = new Receipt()
@@ -111,8 +124,8 @@ namespace WeGrow.Controllers
             }).ToList();
             newOrder.Receipts = receipts;
             newOrder = await repository.AddAsync(newOrder);
-
-            return Ok();
+            await repository.UpdateRangeAsync(order.Keys);
+            return Ok(newOrder.Id);
         }
     }
 }
