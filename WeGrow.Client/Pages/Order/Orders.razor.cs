@@ -28,6 +28,8 @@ namespace WeGrow.Client.Pages.Order
         [Inject] private IJSRuntime JsRuntime { get; set; }
         [Inject] private IHttpContextAccessor Accessor { get; set; }
         [Inject] private ITokenService TokenService { get; set; }
+        [Inject] public NavigationManager Navigation { get; set; }
+
 
 
         protected override async Task OnInitializedAsync()

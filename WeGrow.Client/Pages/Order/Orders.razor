@@ -1,11 +1,14 @@
 ﻿@using IdentityModel.Client
 @using System.Security.Claims
+@using Microsoft.AspNetCore.WebUtilities
 @using WeGrow.Core.Resources
+@using WeGrow.LiqPay.Models
 @using WeGrow.Models.Order
 @using WeGrow.Models.Shop
 
 @page "/orders"
 @attribute [Authorize]
+
 @if (redirectToLogin)
 {
     <RedirectToLogin />
@@ -76,7 +79,7 @@
                 @if (order.Status == Core.Enums.OrderStatus.Unconfirmed)
                 {
                     <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Success">Pay this order</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="events => OnOrderPayClicked(order)">Pay this order</MudButton>
                         <MudButton Style="margin-left:auto" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => OnOrderDeleteClicked(order)">Remove this order</MudButton>
                     </MudCardActions>
                 }
@@ -110,6 +113,30 @@
         else
         {
             throw new Exception("Order delete server error");
+        }
+    }
+    private async Task OnOrderPayClicked(OrderModel order)
+    {
+        var tokenResponse = await TokenService.GetToken("WeGrow.write");
+        HttpClient.SetBearerToken(tokenResponse.AccessToken);
+
+        var content = JsonContent.Create(order.Id);
+
+        var result = await HttpClient.PostAsync(new Uri(Configuration["apiUrl"]+ApiRoutes.LiqPayCheckout), content);
+
+        if (result.IsSuccessStatusCode)
+        {
+            var dataSignature = await result.Content.ReadFromJsonAsync<DataSignaturePair>();
+            var queryParams = new Dictionary<string, string>();
+            queryParams.Add("data", dataSignature.Data);
+            queryParams.Add("signature", dataSignature.Signature);
+            var checkoutLink = new Uri(QueryHelpers.AddQueryString("https://www.liqpay.ua/api/3/checkout", queryParams));
+
+            Navigation.NavigateTo(checkoutLink.ToString(), true);
+        }
+        else
+        {
+            throw new Exception("Order checkout server error");
         }
     }
 }

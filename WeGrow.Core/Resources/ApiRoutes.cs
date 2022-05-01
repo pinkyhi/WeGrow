@@ -13,5 +13,8 @@
         public const string ShopModules = "/shop/modules";
 
         public const string Orders = "/orders";
+
+        public const string LiqPayCheckout = "/orders/liqpay-checkout";
+        public const string LiqPayNotification = "/orders/liqpay-notification";
     }
 }

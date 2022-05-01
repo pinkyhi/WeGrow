@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WeGrow.Core.Enums;
 using WeGrow.Core.Resources;
 using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
@@ -58,7 +59,7 @@ namespace WeGrow.Controllers
         [HttpPost]
         public async Task<IActionResult> LiqPayCheckout([FromBody] int orderId)
         {
-            var order = await repository.GetAsync<Order>(false, x => x.Id == orderId, y => y.Include(i => i.Receipts));
+            var order = await repository.GetAsync<Order>(false, x => x.Id == orderId && x.Status == OrderStatus.Unconfirmed, y => y.Include(i => i.Receipts));
             if (order != null)
             {
                 var checkoutModel = new LiqPayCheckoutModel()
@@ -80,14 +81,34 @@ namespace WeGrow.Controllers
             }
         }
 
+        [AllowAnonymous]
         [Route("liqpay-notification")]
         [HttpPost]
-        public IActionResult Notifications(DataSignaturePair request)
+        public async Task<IActionResult> Notifications(DataSignaturePair request)
         {
             if (this.liqPayService.CheckDataBySignature(request.Data, request.Signature))
             {
                 LiqPayAnswerModel model = this.liqPayService.AnswerModelFromData(request.Data);
-                // Model rework
+                try
+                {
+                    // Model handling
+                    var order = await repository.GetAsync<Order>(false, x => x.Id == Convert.ToInt32(model.Order_Id), y => y.Include(i => i.Receipts));
+                    if (order.Status == OrderStatus.Unconfirmed)
+                    {
+                        order.Status = OrderStatus.Confirmed;
+                        var mInstaces = new List<ModuleInstance>();
+                        foreach (Receipt r in order.Receipts)
+                        {
+                            mInstaces.Add(new ModuleInstance { Module_Id = r.Module_Id });
+                        }
+                        await repository.UpdateAsync(order);
+                        await repository.AddRangeAsync(mInstaces);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
             else
             {

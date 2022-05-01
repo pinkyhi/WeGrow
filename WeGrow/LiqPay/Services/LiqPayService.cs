@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using WeGrow.Core.Resources;
 using WeGrow.LiqPay.Interfaces;
 using WeGrow.LiqPay.Models;
 using WeGrow.LiqPay.Resolvers;
@@ -40,7 +41,10 @@ namespace WeGrow.LiqPay.Services
             if (string.IsNullOrWhiteSpace(model.Private_Key))
             {
                 model.Private_Key = liqPayOptions.PrivateKey;
-
+            }
+            if (!string.IsNullOrEmpty(liqPayOptions.ServerUrl))
+            {
+                model.Server_Url = liqPayOptions.ServerUrl + ApiRoutes.LiqPayNotification;
             }
             string data = this.CreateData(model);
             string signature = this.CreateSignature(data, model.Private_Key);
