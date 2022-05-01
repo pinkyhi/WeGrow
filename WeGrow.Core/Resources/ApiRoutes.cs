@@ -12,5 +12,6 @@
 
         public const string ShopModules = "/shop/modules";
 
+        public const string Orders = "/orders";
     }
 }

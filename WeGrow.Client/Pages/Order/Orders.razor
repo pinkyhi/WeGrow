@@ -1,0 +1,32 @@
+﻿@using WeGrow.Models.Shop
+
+@page "/orders"
+@attribute [Authorize]
+@{
+
+}
+@if (redirectToLogin)
+{
+    <RedirectToLogin />
+}
+ <MudPaper Class="d-flex flex-column pa-5 gap-3">
+    @if(isLoading){
+        <MudProgressCircular Class="d-flex" Style="height:150px;width:150px;margin:auto;" Color="Color.Default" Indeterminate="true" />
+    }
+    else
+    {
+        @foreach(var order in ItemsList)
+        {
+            <MudCard>
+                <MudCardContent>
+                    <MudText>#@order.Id</MudText>
+                    <MudText Typo="Typo.body1">@order.Description</MudText>
+                    <MudText Typo="Typo.body2">@order.Date</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Success">Pay this order</MudButton>
+                </MudCardActions>
+            </MudCard>
+        }
+    }
+</MudPaper>

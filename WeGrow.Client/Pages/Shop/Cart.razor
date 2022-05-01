@@ -123,7 +123,7 @@
         {
             content.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
-        catch(NullReferenceException ex)
+        catch(NullReferenceException)
         {
             redirectToLogin = true;
             return;

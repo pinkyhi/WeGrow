@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
-using System.ComponentModel.DataAnnotations;
 using WeGrow.Core.Enums;
 
-namespace WeGrow.Models.Entities
+namespace WeGrow.Models.Order
 {
     [AutoMap(typeof(DAL.Entities.Order), ReverseMap = true)]
-    public class OrderEntity
+    public class OrderModel
     {
-        [Key]
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public OrderStatus Status { get; set; }
         public string Description { get; set; }
-        [Required]
-        public string User_Id { get; set; }
+
+        public IEnumerable<ReceiptModel> Receipts { get; set; }
     }
 }
