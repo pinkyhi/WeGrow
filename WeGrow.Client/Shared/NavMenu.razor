@@ -4,6 +4,7 @@
     <MudNavLink Href="/shop/modules"  Match="NavLinkMatch.Prefix">Shop</MudNavLink>
     <AuthorizeView Roles="admin">
         <Authorized>
+            <MudNavLink Href="/orders"  Match="NavLinkMatch.Prefix">Orders</MudNavLink>
             <MudNavGroup Title="Admin" Expanded="true">
                 <MudNavLink Href="@ApiRoutes.AdminModules"  Match="NavLinkMatch.Prefix">Modules</MudNavLink>
                 <MudNavLink Href="@ApiRoutes.AdminReceipts"  Match="NavLinkMatch.Prefix">Receipts</MudNavLink>

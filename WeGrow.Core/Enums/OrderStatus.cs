@@ -6,7 +6,6 @@
         Confirmed,
         ReadyToDelivery,
         Sent,
-        Accepted,
-        Successed
+        Accepted
     }
 }

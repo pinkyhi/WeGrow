@@ -31,5 +31,22 @@ namespace WeGrow.Controllers
             
             return Ok(models);
         }
+
+        [HttpPatch]
+        public async Task<IActionResult> DeleteOrder([FromBody] int id)
+        {
+            var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
+
+            var order = await repository.GetAsync<Order>(false, x => x.Id == id && x.User_Id.Equals(userId));
+            if(order != null)
+            {
+                await repository.DeleteAsync(order);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }
