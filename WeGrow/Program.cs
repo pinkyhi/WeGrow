@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WeGrow.Extensions;
+using WeGrow.LiqPay.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddJwtSwagger();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper();
+builder.Services.AddLiqPay();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", p => p.RequireScope("WeGrow.admin"));
