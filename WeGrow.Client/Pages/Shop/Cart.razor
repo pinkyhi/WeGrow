@@ -23,6 +23,7 @@
     private Dictionary<ModuleEntity, int> CartViewDictionary { get; set; } = new();
     private decimal TotalPrice = 0;
     private bool toggleCart = false;
+    private bool redirectToLogin = false;
 }
 @{
     CartViewDictionary.Clear();
@@ -40,6 +41,10 @@
         }
         TotalPrice += item.Price;
     }
+}
+@if (redirectToLogin)
+{
+    <RedirectToLogin />
 }
 <div class="cart-wrap">
     <div class="cart">
@@ -114,7 +119,15 @@
         var cartModel = new Dictionary<int, int>(CartViewDictionary.Select(x => new KeyValuePair<int, int>(x.Key.Id, x.Value)));
 
         var content = JsonContent.Create(cartModel);
-        content.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        try
+        {
+            content.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        }
+        catch(NullReferenceException ex)
+        {
+            redirectToLogin = true;
+            return;
+        }
         var result = await HttpClient.PostAsync(new Uri(ApiUrl), content);
 
         if (result.IsSuccessStatusCode)
