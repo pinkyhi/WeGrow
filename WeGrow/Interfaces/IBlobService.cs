@@ -10,7 +10,7 @@ namespace WeGrow.Interfaces
 
         public Task<IEnumerable<BlobItem>> ListBlobsAsync(string containerName);
 
-        public Task<BlobContentInfo> UploadFileBlobAsync(string containerName, string blobName, byte[] bytes);
+        public Task<BlobContentInfo> UploadFileBlobAsync(string containerName, string blobName, byte[] bytes, string contentType = null);
 
         public Task DeleteBlobAsync(string containerName, string blobName);
     }

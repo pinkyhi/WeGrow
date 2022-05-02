@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using WeGrow.Core.Resources;
 using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
+using WeGrow.Interfaces;
 using WeGrow.Models.Entities;
+using WeGrow.Models.Requests;
 
 namespace WeGrow.Controllers
 {
@@ -13,11 +17,13 @@ namespace WeGrow.Controllers
     {
         private readonly IRepository repository;
         private readonly IMapper mapper;
+        private readonly IBlobService blobService;
 
-        public AdminController(IRepository repository, IMapper mapper)
+        public AdminController(IRepository repository, IMapper mapper, IBlobService blobService)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.blobService = blobService;
         }
 
         #region Modules
@@ -47,7 +53,7 @@ namespace WeGrow.Controllers
             var exemplar = await repository.AddAsync(newItem);
             return Ok(mapper.Map<ModuleEntity>(exemplar));
         }
-
+        
         [Route("modules")]
         [HttpPatch]
         public async Task<IActionResult> EditModule([FromBody] ModuleEntity[] oldAndEditedItem)
@@ -56,6 +62,27 @@ namespace WeGrow.Controllers
             mapper.Map(oldAndEditedItem[1], exemplar);
             await repository.UpdateAsync(exemplar);
             return Ok();
+        }
+
+        [Route("modules")]
+        [HttpPut]
+        public async Task<IActionResult> UploadModuleImage([FromBody] ChangeImageRequest request)
+        {
+            var exemplar = await repository.GetAsync<Module>(true, x => x.Id == request.ItemId);
+            var newFileName = $"module{request.ItemId}{request.File.FileName.Substring(request.File.FileName.LastIndexOf('.'))}";
+            try
+            {
+                var uploadResult = await blobService.UploadFileBlobAsync(ConstNames.Blob.Modules, newFileName, request.File.FileContent, request.File.ContentType);
+                var newBlobLink = blobService.GetBlobLinkAsync(ConstNames.Blob.Modules, newFileName);
+                exemplar.BlobName = newFileName;
+                exemplar.BlobLink = newBlobLink.ToString();
+                await repository.UpdateAsync(exemplar);
+            }
+            catch
+            {
+                BadRequest();
+            }
+            return Ok(exemplar.BlobLink);
         }
         #endregion
 

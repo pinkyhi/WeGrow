@@ -15,6 +15,8 @@ namespace WeGrow.DAL.Entities
         [Range(0, Double.PositiveInfinity)]
         public int Amount { get; set; }
         public string BlobLink { get; set; }
+        public string BlobName { get; set; }
+
         public bool Is_Public { get; set; }
 
         public IEnumerable<ModuleInstance> ModuleInstances { get; set; }

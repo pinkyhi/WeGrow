@@ -40,12 +40,12 @@ namespace WeGrow.Services
             return items;
         }
 
-        public async Task<BlobContentInfo> UploadFileBlobAsync(string containerName, string blobName, byte[] bytes)
+        public async Task<BlobContentInfo> UploadFileBlobAsync(string containerName, string blobName, byte[] bytes, string contentType = null)
         {
             var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
             var blobClient = containerClient.GetBlobClient(blobName);
             await using var memoryStream = new MemoryStream(bytes);
-            return await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = blobName.GetContentType()});
+            return await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = contentType ?? blobName.GetContentType()});
         }
 
         public async Task DeleteBlobAsync(string containerName, string blobName)

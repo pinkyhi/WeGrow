@@ -8,6 +8,7 @@
 @using WeGrow.Core.Enums
 @using System.Globalization;
 @using WeGrow.Models.Entities
+@using WeGrow.Models.Requests
 
 @{
     var itemType = Items.GetType().GenericTypeArguments.First();
@@ -123,6 +124,19 @@ else
                                 {
                                     <MudButton Variant="Variant.Filled" OnClick="events => EditEvent(events, item)">Edit</MudButton>
                                 }
+                            }
+                            @if(typeof(TItem) == typeof(ModuleEntity))
+                            {
+                                    var itemId = (item as ModuleEntity).Id;
+                                    <InputFile id="@($"fileinput{itemId}")" OnChange="events => UploadFile(events, item)" hidden accept=".jpg, .jpeg, .png" />
+
+                                <MudButton HtmlTag="label"
+                                            Variant="Variant.Filled"
+                                            Color="Color.Primary"
+                                            StartIcon="@Icons.Filled.CloudUpload"
+                                            for="@($"fileinput{itemId}")">
+                                    Replace image
+                                </MudButton>
                             }
                         </td>
                     </tr>
@@ -251,5 +265,41 @@ else
                 throw new Exception("Edit server error");
             } 
         }        
+    }
+
+    private async Task UploadFile(InputFileChangeEventArgs e, TItem item)
+    {
+        var entry = e.GetMultipleFiles(1).First();
+
+        Stream stream = entry.OpenReadStream();
+        MemoryStream ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        stream.Close();
+
+        UploadedFile uploadedFile = new UploadedFile();
+        uploadedFile.FileName = entry.Name;
+        uploadedFile.ContentType = entry.ContentType;
+        uploadedFile.Size = entry.Size;
+        uploadedFile.FileContent = ms.ToArray();
+        ms.Close();
+
+        var tokenResponse = await TokenService.GetAdminToken();
+        HttpClient.SetBearerToken(tokenResponse.AccessToken);
+        var uri = ApiUrl;
+        var result = await HttpClient.PutAsync(new Uri(uri), JsonContent.Create(new ChangeImageRequest(){ ItemId = (item as ModuleEntity).Id, File = uploadedFile }));
+        if (result.IsSuccessStatusCode)
+        {
+            var newLink = await result.Content.ReadAsStringAsync();
+            (item as ModuleEntity).BlobLink = newLink;
+            var changedItem = ChangedItems.GetValueOrDefault(item);
+            if (changedItem != null)
+            {
+                (changedItem as ModuleEntity).BlobLink = newLink;
+            }        
+        }
+        else
+        {
+            throw new Exception("Image uploading server error");
+        } 
     }
 }
