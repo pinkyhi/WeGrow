@@ -18,7 +18,14 @@
 {
     <MudPaper Class="d-flex gap-4 pa-2" Height="190px" Square="true">
             <MudPaper Class="flex-none d-flex pa-3 mud-theme-primary" Width="180px" Height="180px" Elevation="2">
-                <img src="https://www.sharabangla.com/wp-content/uploads/woocommerce-placeholder-300x300.png" />
+            @if (string.IsNullOrWhiteSpace(item.BlobLink))
+            {
+                <img style="width: 100%; height: 100%;" src="https://www.sharabangla.com/wp-content/uploads/woocommerce-placeholder-300x300.png" />
+            }
+            else
+            {
+                <img style="width: 100%; height: 100%;" src="@item.BlobLink" /> 
+            }
             </MudPaper>
             <MudPaper Class="flex-1 pa-3 flex-wrap" Elevation="1">
                 <MudText Class="d-flex" Typo="Typo.h5">@item.Name</MudText>

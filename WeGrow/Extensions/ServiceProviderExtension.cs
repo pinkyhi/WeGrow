@@ -1,16 +1,24 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WeGrow.DAL;
 using WeGrow.DAL.Interfaces;
 using WeGrow.DAL.Repositories;
+using WeGrow.Interfaces;
 using WeGrow.Mapper;
+using WeGrow.Services;
 
 namespace WeGrow.Extensions
 {
     public static class ServiceProviderExtension
     {
+        public static void AddAzureBlobStorage(this IServiceCollection services, string connectionString)
+        {
+            services.AddSingleton(x => new BlobServiceClient(connectionString));
+            services.AddScoped<IBlobService, BlobService>();
+        }
         public static void AddDataAccess(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<AppDbContext>(options => {

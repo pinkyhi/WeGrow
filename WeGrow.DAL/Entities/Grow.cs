@@ -13,7 +13,7 @@ namespace WeGrow.DAL.Entities
         public GrowStatus Status { get; set; }
         public string HistoryFile { get; set; }
         public bool IsPublic { get; set; }
-
+        public string BlobLink { get; set; }
         public Schedule Schedule { get; set; }
         public SystemInstance System { get; set; }
     }

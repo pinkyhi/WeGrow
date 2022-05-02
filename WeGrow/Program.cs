@@ -21,6 +21,7 @@ builder.Services.AddAuthentication("Bearer")
 
     });
 builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddAzureBlobStorage(builder.Configuration.GetValue<string>("AzureBlobStorageConnectionStrings"));
 
 var app = builder.Build();
 app.UseSwagger();
