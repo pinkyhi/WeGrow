@@ -99,7 +99,7 @@ namespace WeGrow.Controllers
                         var mInstaces = new List<ModuleInstance>();
                         foreach (Receipt r in order.Receipts)
                         {
-                            mInstaces.Add(new ModuleInstance { Module_Id = r.Module_Id });
+                            mInstaces.Add(new ModuleInstance { Module_Id = r.Module_Id, User_Id = order.User_Id });
                         }
                         await repository.UpdateAsync(order);
                         await repository.AddRangeAsync(mInstaces);

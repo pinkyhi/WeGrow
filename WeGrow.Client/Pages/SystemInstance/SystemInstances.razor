@@ -1,0 +1,15 @@
+﻿@using WeGrow.Models.Shop 
+@page "/account/systems"
+@attribute [Authorize]
+
+<MudPaper Class="d-flex flex-row pa-5 gap-3">
+    <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
+        @{
+            var freeModules = GetModulesBySystemId();
+            <ModuleInstanceList Items="freeModules" Title="Free modules" isLoading="modulesLoading"/>
+        }
+    </MudPaper> 
+    <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary">Add new system</MudButton>
+    </MudPaper> 
+</MudPaper>

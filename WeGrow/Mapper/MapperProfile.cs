@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using WeGrow.DAL.Entities;
+using WeGrow.Models.SystemInstances;
 
 namespace WeGrow.Mapper
 {
@@ -6,6 +8,9 @@ namespace WeGrow.Mapper
     {
         public MapperProfile()
         {
+            CreateMap<ModuleInstance, ModuleInstanceViewModel>()
+                .ForMember(d => d.ModuleName, opt => { opt.MapFrom(s => s.Module.Name); })
+                .ForAllOtherMembers(x => x.MapAtRuntime());
         }
     }
 }

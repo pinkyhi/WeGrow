@@ -16,5 +16,9 @@
 
         public const string LiqPayCheckout = "/orders/liqpay-checkout";
         public const string LiqPayNotification = "/orders/liqpay-notification";
+
+        public const string AccountModules = "/account/modules";
+        public const string AccountSystems = "/account/systems";
+
     }
 }

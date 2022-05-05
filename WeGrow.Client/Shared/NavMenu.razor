@@ -18,6 +18,9 @@
     </AuthorizeView>
     <AuthorizeView>
         <Authorized>
+            <MudNavGroup Title="Account" Expanded="true">
+                <MudNavLink Href="@ApiRoutes.AccountSystems" Match="NavLinkMatch.Prefix">Systems</MudNavLink>
+            </MudNavGroup>
             <MudNavLink Href="/logout"  Match="NavLinkMatch.Prefix">Logout</MudNavLink>
         </Authorized>
         <NotAuthorized>

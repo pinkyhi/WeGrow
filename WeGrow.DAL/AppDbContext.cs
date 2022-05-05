@@ -19,10 +19,6 @@ namespace WeGrow.DAL
             modelBuilder.Entity<Receipt>()
     .           HasKey(x => new { x.Order_Id, x.Module_Id });
 
-            // Indexes
-            modelBuilder.Entity<ModuleInstance>()
-                .HasIndex(m => new { m.Module_Id, m.System_Id }).IsUnique();
-
             // One to many binding
             modelBuilder.Entity<Order>()
                 .HasMany(x => x.Receipts)
