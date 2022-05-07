@@ -17,6 +17,8 @@ builder.Services.Configure<IdentityServerSettings>(builder.Configuration.GetSect
 builder.Services.Configure<AdminIdentityServerSettings>(builder.Configuration.GetSection(nameof(AdminIdentityServerSettings)));
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IChartService, ChartService>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

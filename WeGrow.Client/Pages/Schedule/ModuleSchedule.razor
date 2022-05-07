@@ -1,0 +1,18 @@
+﻿@using WeGrow.Client.Services
+@code {
+    [Inject] public IChartService chartService { get; set; } 
+    [Parameter]
+    public int DaysCount { get; set; }
+
+    private int currentDay = 0;
+}
+@{
+    Dictionary<int, double> xy = new();
+    xy.Add(0, 0);
+    xy.Add(12, 6);
+    xy.Add(24, 3);
+    chartService.CreateExtendedChart(xy, out Dictionary<int, double> destChart);
+    var xx = chartService.GetExactValue(destChart, 5.54);
+    var day = chartService.GetDayChart(xy);
+
+}
