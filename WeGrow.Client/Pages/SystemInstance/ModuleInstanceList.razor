@@ -1,31 +1,60 @@
 ﻿@using WeGrow.Models.SystemInstances
 @code {
     [Parameter]
-    public IEnumerable<ModuleInstanceViewModel> Items { get; set; }
+    public List<ModuleInstanceViewModel> Items { get; set; }
 
     [Parameter]
     public string Title { get; set; }
 
     [Parameter]
+    public bool IsSelecting { get; set; }
+
+    [Parameter]
     public bool isLoading { get; set; }
+
+    [Parameter]
+    public HashSet<ModuleInstanceViewModel> SelectedItems { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<HashSet<ModuleInstanceViewModel>> SelectedItemsChanged { get; set; }
 }
-
-
-<MudTable Items="@Items" Hover="true" Breakpoint="Breakpoint.Sm" Bordered="true" Loading="@isLoading" LoadingProgressColor="Color.Info">
-    <ToolBarContent>
-        <MudText Typo="Typo.h5">@Title</MudText>
-        <MudSpacer />
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>Id</MudTh>
-        <MudTh>Module name</MudTh>
-        <MudTh>Last response</MudTh>
-        <MudTh>Belongs to system</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Module name">@context.ModuleName</MudTd>
-        <MudTd DataLabel="Last response">@context.LastResponse</MudTd>
-        <MudTd DataLabel="Belongs to system">@context.System_Id</MudTd>
-    </RowTemplate>
-</MudTable>
+<style type="text/css">
+    .mud-table-head .header-centered th {
+        text-align: center;
+        font-size: 1.2em;
+    }
+</style>
+@{
+    var selectedItems = IsSelecting ? SelectedItems : null;
+    <MudTable Items="@Items" Breakpoint="Breakpoint.Sm" Loading="@isLoading" LoadingProgressColor="Color.Info" Striped="true" Bordered="true" HeaderClass="table-head-bordered" CustomHeader="true" 
+        MultiSelection="IsSelecting" Hover="IsSelecting" @bind-SelectedItems="selectedItems" >
+        <ToolBarContent>
+            <MudText Typo="Typo.h5">@Title</MudText>
+            <MudSpacer />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTHeadRow IsCheckable="true">
+                <MudTh>Id</MudTh>
+                <MudTh>Module name</MudTh>
+                <MudTh>Last response</MudTh>
+                <MudTh>Belongs to system</MudTh>
+            </MudTHeadRow>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Module name">@context.ModuleName</MudTd>
+            <MudTd DataLabel="Last response">@context.LastResponse</MudTd>
+            <MudTd DataLabel="Belongs to system">@context.System_Id</MudTd>
+        </RowTemplate>
+    </MudTable>
+    @if (IsSelecting)
+    {
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit">Submit selection</MudButton>
+    }
+}
+@code{
+    private async Task OnSubmit()
+    {
+        await SelectedItemsChanged.InvokeAsync(SelectedItems);
+    }
+}

@@ -1,27 +1,119 @@
 ﻿@using WeGrow.Models.Shop 
+@using WeGrow.Models.SystemInstances
 @page "/account/systems"
 @attribute [Authorize]
+@code{
+    public List<SystemInstanceViewModel> SystemsList = new();
+    public List<ModuleInstanceViewModel> ModulesList = new();
 
+    public SystemCreationModel CreationModel { get; set; } = new();
+    public List<string> AddingErrors { get; set; } = new();
+}
 <MudPaper Class="d-flex flex-row pa-5 gap-3">
-    <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
-        @{
-            var freeModules = GetModulesBySystemId();
-            <ModuleInstanceList Items="freeModules" Title="Free modules" isLoading="modulesLoading"/>
-        }
-    </MudPaper> 
-    <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary">Add new system</MudButton>
-        @foreach(var system in SystemsList)
+    <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1 gap-2">
+        @if (CreationModel.Step == 0)
         {
-            <MudPaper Outlined="true" Elevation="1" Class="d-flex flex-column flex-1 pa-5 gap-2">
-                <MudText Typo="Typo.h5">Name: @system.Name</MudText>
-                <MudText Typo="Typo.body1">#@system.Id</MudText>
-                <ModuleInstanceList Items="system.ModuleInstances" Title="Modules in use" isLoading="false"/>
-                <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-row flex-1 gap-1">
-                    <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success">Start growing!</MudButton>
-                    <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)">Delete this system</MudButton>
-                </MudPaper>
-            </MudPaper> 
+            var freeModules = GetModulesBySystemId();
+            <ModuleInstanceList Items="freeModules" Title="Free modules" isLoading="modulesLoading" />
+        }
+        else
+        {
+            <MudText Typo="Typo.h4">System creation</MudText>
+            @foreach(var error in AddingErrors)
+            {
+                <MudAlert Severity="Severity.Error">@error</MudAlert>
+            }
+            @switch (CreationModel.Step)
+            {
+                case SystemCreationModel.CreationStep.SystemInfo :
+                    {
+                        <MudTextField T="string" Label="Name" Variant="Variant.Outlined" @bind-Value="CreationModel.Name"></MudTextField>
+                        break;
+                    }
+                case SystemCreationModel.CreationStep.ModulesSelection :
+                    {
+                        var freeModules = GetModulesBySystemId();
+                        <ModuleInstanceList Items="freeModules" Title="Free modules" isLoading="modulesLoading" IsSelecting="true" @bind-SelectedItems="CreationModel.Modules" />
+                        break;
+                    }
+                case SystemCreationModel.CreationStep.ScheduleCreation :
+                    {
+                        break;
+                    }
+            }
+            <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-row flex-1 gap-1">
+                @if(CreationModel.Step != SystemCreationModel.CreationStep.SystemInfo)
+                {
+                    <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Error" OnClick="BackAddingStep">Back</MudButton>
+                }
+                @if(CreationModel.Step != SystemCreationModel.CreationStep.ScheduleCreation)
+                {
+                    <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Primary" OnClick="ForwardAddingStep">Forward</MudButton>
+                }
+                else
+                {
+                    <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success">FINISH</MudButton>
+                }
+            </MudPaper>
+            
+            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAdding">Cancel adding</MudButton>
         }
     </MudPaper> 
+
+    @if(CreationModel.Step == 0 || SystemsList.Count > 0)
+    {
+        <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
+            @if (CreationModel.Step == 0)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartAdding">Add new system</MudButton>
+            }
+            @foreach(var system in SystemsList)
+            {
+                <MudPaper Outlined="true" Elevation="1" Class="d-flex flex-column flex-1 pa-5 gap-2">
+                    <MudText Typo="Typo.h5">Name: 
+            @system.Name</MudText>
+                    <MudText Typo="Typo.body1">#@system.Id</MudText>
+                    <ModuleInstanceList Items="system.ModuleInstances" Title="Modules in use" isLoading="false" />
+                    <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-row flex-1 gap-1">
+                        <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success">Start growing!</MudButton>
+                        <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)">Delete this system</MudButton>
+                    </MudPaper>
+                </MudPaper> 
+            }
+        </MudPaper> 
+    }
+
 </MudPaper>
+@code{
+    public void BackAddingStep()
+    {
+        CreationModel.Step--;
+    }
+    public void ForwardAddingStep()
+    {
+        AddingErrors.RemoveAll(x => true);
+        switch (CreationModel.Step)
+        {
+            case SystemCreationModel.CreationStep.SystemInfo :
+                {
+                    if(string.IsNullOrWhiteSpace(CreationModel.Name)){
+                        AddingErrors.Add("Name is required value");
+                        return;
+                    }
+                    break;
+                }
+            case SystemCreationModel.CreationStep.ModulesSelection :
+                {
+                    if(CreationModel.Modules.Count == 0){
+                        AddingErrors.Add("Modules are required");
+                        return;
+                    }
+                    break;                    }
+            case SystemCreationModel.CreationStep.ScheduleCreation :
+                {
+                    break;
+                }
+        }
+        CreationModel.Step++;
+    }
+}

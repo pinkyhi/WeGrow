@@ -12,9 +12,6 @@ namespace WeGrow.Client.Pages.SystemInstance
 {
     partial class SystemInstances
     {
-        public List<SystemInstanceViewModel> SystemsList = new();
-        public List<ModuleInstanceViewModel> ModulesList = new();
-
         public string ApiUrl { get; set; }
         private bool modulesLoading { get; set; } = true;
         private bool systemsLoading { get; set; } = true;
@@ -23,7 +20,6 @@ namespace WeGrow.Client.Pages.SystemInstance
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IHttpContextAccessor Accessor { get; set; }
         [Inject] private ITokenService TokenService { get; set; }
-
 
         protected override async Task OnInitializedAsync()
         {
@@ -114,15 +110,27 @@ namespace WeGrow.Client.Pages.SystemInstance
             }
         }
 
-        private IEnumerable<ModuleInstanceViewModel> GetModulesBySystemId(string systemId = null)
+        public void StartAdding()
+        {
+            CreationModel.Step = SystemCreationModel.CreationStep.SystemInfo;
+        }
+
+        public void CancelAdding()
+        {
+            CreationModel.Step = SystemCreationModel.CreationStep.None;
+            CreationModel.Modules = new();
+            CreationModel.Name = null;
+        }
+
+        private List<ModuleInstanceViewModel> GetModulesBySystemId(string systemId = null)
         {
             if(string.IsNullOrWhiteSpace(systemId))
             {
-                return ModulesList.Where(x => string.IsNullOrWhiteSpace(x.System_Id));
+                return ModulesList.Where(x => string.IsNullOrWhiteSpace(x.System_Id)).ToList();
             }
             else
             {
-                return ModulesList.Where(x => systemId.Equals(x.System_Id));
+                return ModulesList.Where(x => systemId.Equals(x.System_Id)).ToList();
             }
         }
     }
