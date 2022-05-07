@@ -58,13 +58,6 @@ namespace WeGrow.Controllers
             }
             if(item.ModuleInstances.Count() > 0)
             {
-                /*
-                foreach (var module in item.ModuleInstances)
-                {
-                    module.System_Id = null;
-                }
-                item.ModuleInstances = new List<ModuleInstance>();
-                await repository.UpdateAsync(item);*/
                 await repository.DeleteAsync(item);
             }
 
