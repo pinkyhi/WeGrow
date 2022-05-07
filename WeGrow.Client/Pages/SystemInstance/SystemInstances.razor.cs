@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using System.Security.Claims;
 using WeGrow.Client.Services;
@@ -11,11 +12,13 @@ namespace WeGrow.Client.Pages.SystemInstance
 {
     partial class SystemInstances
     {
-        public List<SystemInstanceEntity> SystemsList = new();
+        public List<SystemInstanceViewModel> SystemsList = new();
         public List<ModuleInstanceViewModel> ModulesList = new();
 
         public string ApiUrl { get; set; }
         private bool modulesLoading { get; set; } = true;
+        private bool systemsLoading { get; set; } = true;
+
         [Inject] private HttpClient HttpClient { get; set; }
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IHttpContextAccessor Accessor { get; set; }
@@ -26,17 +29,23 @@ namespace WeGrow.Client.Pages.SystemInstance
         {
             ApiUrl = Configuration["apiUrl"];
 
-            if (ModulesList.Count == 0)
+            if (ModulesList.Count == 0 && SystemsList.Count == 0)
             {
                 var tokenResponse = await TokenService.GetToken("WeGrow.read");
                 HttpClient.SetBearerToken(tokenResponse.AccessToken);
 
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, ApiUrl + ApiRoutes.AccountModules);
-                HttpResponseMessage result = null;
+                var modelsRequestMessage = new HttpRequestMessage(HttpMethod.Get, ApiUrl + ApiRoutes.AccountModules);
+                var systemsRequestMessage = new HttpRequestMessage(HttpMethod.Get, ApiUrl + ApiRoutes.AccountSystems);
+
+                HttpResponseMessage modulesResult = null;
+                HttpResponseMessage systemsResult = null;
+
                 try
                 {
-                    requestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                    result = await HttpClient.SendAsync(requestMessage);
+                    modelsRequestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    systemsRequestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    modulesResult = await HttpClient.SendAsync(modelsRequestMessage);
+                    systemsResult = await HttpClient.SendAsync(systemsRequestMessage);
                 }
                 catch (NullReferenceException)
                 {
@@ -44,20 +53,64 @@ namespace WeGrow.Client.Pages.SystemInstance
                 }
                 finally
                 {
-                    requestMessage.Dispose();
+                    modelsRequestMessage.Dispose();
+                    systemsRequestMessage.Dispose();
                 }
-
-                if (result.IsSuccessStatusCode)
+                if (modulesResult.IsSuccessStatusCode && systemsResult.IsSuccessStatusCode)
                 {
-                    var resultModel = await result.Content.ReadFromJsonAsync<List<ModuleInstanceViewModel>>();
-                    ModulesList.AddRange(resultModel);
+                    var modulesResultModel = await modulesResult.Content.ReadFromJsonAsync<List<ModuleInstanceViewModel>>();
+                    ModulesList.AddRange(modulesResultModel);
                     modulesLoading = false;
+                    var systemsResultModel = await systemsResult.Content.ReadFromJsonAsync<List<SystemInstanceViewModel>>();
+                    foreach(var system in systemsResultModel)
+                    {
+                        system.ModuleInstances.AddRange(ModulesList.Where(i => i.System_Id?.Equals(system.Id) == true));
+                    }
+                    SystemsList.AddRange(systemsResultModel);
+                    systemsLoading = false;
                 }
                 else
                 {
                     modulesLoading = false;
+                    systemsLoading = false;
                     throw new Exception("Fetch data error");
                 }
+            }
+        }
+
+        public async Task RemoveSystem(SystemInstanceViewModel system)
+        {
+            var tokenResponse = await TokenService.GetToken("WeGrow.write");
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+            var uri = QueryHelpers.AddQueryString(ApiUrl + ApiRoutes.AccountSystems, "id", system.Id);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, uri);
+
+            HttpResponseMessage result = null;
+
+            try
+            {
+                requestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                result = await HttpClient.SendAsync(requestMessage);
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception("Not authorized");
+            }
+            finally
+            {
+                requestMessage.Dispose();
+            }
+            if (result.IsSuccessStatusCode)
+            {
+                foreach(var module in system.ModuleInstances)
+                {
+                    module.System_Id = null;
+                }
+                SystemsList.Remove(system);
+            }
+            else
+            {
+                throw new Exception("Delete data error");
             }
         }
 

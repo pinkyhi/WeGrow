@@ -11,5 +11,17 @@
     </MudPaper> 
     <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
         <MudButton Variant="Variant.Filled" Color="Color.Primary">Add new system</MudButton>
+        @foreach(var system in SystemsList)
+        {
+            <MudPaper Outlined="true" Elevation="1" Class="d-flex flex-column flex-1 pa-5 gap-2">
+                <MudText Typo="Typo.h5">Name: @system.Name</MudText>
+                <MudText Typo="Typo.body1">#@system.Id</MudText>
+                <ModuleInstanceList Items="system.ModuleInstances" Title="Modules in use" isLoading="false"/>
+                <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-row flex-1 gap-1">
+                    <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success">Start growing!</MudButton>
+                    <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)">Delete this system</MudButton>
+                </MudPaper>
+            </MudPaper> 
+        }
     </MudPaper> 
 </MudPaper>

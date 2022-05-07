@@ -26,7 +26,7 @@ namespace WeGrow.Controllers
         }
 
         [Route("modules")]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetModules()
         {
             var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
@@ -34,6 +34,41 @@ namespace WeGrow.Controllers
             var models = orders.Select(x => mapper.Map<ModuleInstanceViewModel>(x)).OrderBy(x => x.System_Id);
 
             return Ok(models);
+        }
+        [Route("systems")]
+        [HttpGet]
+        public async Task<IActionResult> GetSystems()
+        {
+            var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
+            var items = await repository.GetRangeAsync<SystemInstance>(false, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedules));
+            var models = items.Select(x => mapper.Map<SystemInstanceViewModel>(x)).OrderBy(x => x.Is_Active).ThenBy(x => x.Name);
+
+            return Ok(models);
+        }
+
+        [Route("systems")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSystem(string id)
+        {
+            var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
+            var item = await repository.GetAsync<SystemInstance>(true, x => x.Id.Equals(id) && x.User_Id.Equals(userId), y => y.Include(i => i.ModuleInstances));
+            if(item == null)
+            {
+                return BadRequest();
+            }
+            if(item.ModuleInstances.Count() > 0)
+            {
+                /*
+                foreach (var module in item.ModuleInstances)
+                {
+                    module.System_Id = null;
+                }
+                item.ModuleInstances = new List<ModuleInstance>();
+                await repository.UpdateAsync(item);*/
+                await repository.DeleteAsync(item);
+            }
+
+            return Ok();
         }
     }
 }

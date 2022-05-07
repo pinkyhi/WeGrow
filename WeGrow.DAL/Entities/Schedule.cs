@@ -9,6 +9,8 @@
         public string File { get; set; }
         public TimeSpan Duration { get; set; }
         public bool Is_Public { get; set; }
+        public string User_Id { get; set; }
+
 
         public SystemInstance System { get; set; }
         public IEnumerable<Grow> Grows { get; set; }

@@ -9,6 +9,7 @@ namespace WeGrow.DAL.Entities
         public string System_Id { get; set; }
         public int Module_Id { get; set; }
         public DateTime LastResponse { get; set; }
+        public string LastResponseItem { get; set; }
         public string User_Id { get; set; }
 
         public Module Module { get; set; }
