@@ -12,6 +12,7 @@
 
     private int currentDay = 0;
     private bool IsCreating = true;
+    private bool IsIntervalAddingDialog = false;
 }
 @{
     Dictionary<int, double> xy = new();
@@ -50,7 +51,8 @@
         @if(missingIntervals.Count > 0)
         {
             <MudAlert Severity="Severity.Warning">Missing intervals: @(string.Join(' ', missingIntervals.Select(x => $"({x.from}-{x.to});")))</MudAlert>
-            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary">Add new interval</MudButton>
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddIntervalClick">Add new interval</MudButton>
+            <IntervalCreationDialog From="missingIntervals.First().from" ToMax="missingIntervals.First().to" @bind-visible="IsIntervalAddingDialog" CreateIntervalEvent="AddInterval"/>
         }
     }
     <MudExpansionPanels MultiExpansion="true">
@@ -72,6 +74,19 @@
 </MudPaper> 
 
 @code{
+    private void AddInterval((int, int) fromTo)
+    {
+        Schedule.Intervals.Add(new ScheduleIntervalModel()
+            {
+                From = fromTo.Item1,
+                To = fromTo.Item2,
+                DayPatternValues = new()
+            });
+    }
+    private void AddIntervalClick()
+    {
+        IsIntervalAddingDialog = true;
+    }
     private void RemoveInterval(ScheduleIntervalModel interval)
     {
         Schedule.Intervals.Remove(interval);

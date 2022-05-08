@@ -1,0 +1,59 @@
+﻿<MudDialog @bind-IsVisible="visible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            Interval creation
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField T="string" Class="d-flex flex-1" Label="From" Variant="Variant.Outlined" Disabled="true" Value="From.ToString()"></MudTextField>
+        <MudNumericField T="int" Max="ToMax" Min="From" Class="d-flex flex-1" Label="To" @bind-Value="To" Variant="Variant.Outlined" />
+        @if (!string.IsNullOrWhiteSpace(Error))
+        {
+            <MudAlert Severity="Severity.Error">@Error</MudAlert>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Close" Class="px-10">Close</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddClick" Class="px-10">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [Parameter]
+    public int From { get; set; }
+    [Parameter]
+    public int ToMax { get; set; }
+    [Parameter]
+    public EventCallback<(int, int)>CreateIntervalEvent { get; set; }
+    [Parameter]
+    public bool visible { get; set; }
+    [Parameter]
+    public EventCallback<bool> visibleChanged { get; set; }
+
+    private int To { get; set; }
+    private string Error { get; set; } = "";
+
+    private async Task AddClick()
+    {
+        if(To >= From && To <= ToMax)
+        {
+            await CreateIntervalEvent.InvokeAsync((From, To));
+        }
+        else
+        {
+            Error = "\"TO\" value error";
+        }
+    }
+
+    private async Task Close()
+    {
+        visible = false;
+        await visibleChanged.InvokeAsync(visible);
+    }
+
+    private DialogOptions dialogOptions = new DialogOptions() { Position = DialogPosition.TopCenter };
+
+    protected override void OnInitialized()
+    {
+        To = From;
+    }
+}

@@ -4,28 +4,6 @@ namespace WeGrow.Client.Services
 {
     public class ScheduleService : IScheduleService
     {
-        public int? FirstMissingIntervalFrom(int daysCount, List<ScheduleIntervalModel> intervals)
-        {
-            intervals = intervals.OrderBy(x => x.From).ToList();
-            int expectedFrom = 0;
-            for (int i = 0; i < intervals.Count; i++)
-            {
-                if (intervals[i].From != expectedFrom)
-                {
-                    return expectedFrom;
-                }
-                expectedFrom = intervals[i].To + 1;
-                if (i == intervals.Count - 1)
-                {
-                    if (expectedFrom != daysCount)
-                    {
-                        return expectedFrom;
-                    }
-                }
-            }
-            return null;
-        }
-
         public List<(int from, int to)> GetMissingIntervals(int daysCount, List<ScheduleIntervalModel> intervals)
         {
             List<(int from, int to)> result = new List<(int from, int to)> ();
