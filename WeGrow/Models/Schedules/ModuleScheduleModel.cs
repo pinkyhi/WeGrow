@@ -12,6 +12,6 @@ namespace WeGrow.Models.Schedules
 
         public int DaysCount { get; set; }
 
-        public List<ScheduleIntervalModel> Intervals { get; set; }
+        public List<ScheduleIntervalModel> Intervals { get; set; } = new();
     }
 }
