@@ -63,14 +63,14 @@
             {
                 <MudPaper Class="d-inline-flex flex-row mud-theme-warning gap-1 pa-2" Style="max-width: 250px;">
                     <MudNumericField Class="d-inline-flex flex-1" Value="dot.Key" Label="X" Disabled="true" Variant="Variant.Outlined" Style="font-size:small; max-height:40px; background-color:white;"/>
-                    <MudNumericField Min="0" Class="d-inline-flex flex-1" Value="dot.Value" Label="Y" Variant="Variant.Outlined" Style="font-size:small; max-height:40px; background-color:white;" />
+                    <MudNumericField T="double" Min="0" Class="d-inline-flex flex-1" Value="dot.Value" ValueChanged="value => OnValueChange(dot.Key, value)" Label="Y" Variant="Variant.Outlined" Style="font-size:small; max-height:40px; background-color:white;" />
                 </MudPaper> 
             }
             else
             {
                 <MudPaper Class="d-inline-flex flex-row mud-theme-primary gap-1 pa-2" Style="max-width: 250px;">
                     <MudNumericField Class="d-inline-flex flex-1" Value="dot.Key" Label="X" Disabled="true" Variant="Variant.Outlined" Style="font-size:small; max-height:40px; background-color:white;"/>
-                    <MudNumericField T="double" Min="0" ValueChanged="value => OnValueChange(dot.Key, value)"Class="d-inline-flex flex-1" Value="dot.Value" Label="Y" Variant="Variant.Outlined" Style="font-size:small; max-height:40px; background-color:white;" />
+                    <MudNumericField T="double" Min="0" ValueChanged="value => OnValueChange(dot.Key, value)" Class="d-inline-flex flex-1" Value="dot.Value" Label="Y" Variant="Variant.Outlined" Style="font-size:small; max-height:40px; background-color:white;" />
                     @if (IsEditing)
                     {
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="events => DeletePoint(dot.Key)"></MudIconButton>

@@ -20,6 +20,8 @@
     Schedule.ModuleInstanceId = Module.Id;
     Schedule.ModuleName = Module.ModuleName;
     Schedule.ModuleSubject = Module.Subject;
+    Schedule.DaysCount = 90;
+    
     if(Schedule.Intervals.Count == 0)
     {
             Schedule.Intervals = new();
@@ -27,9 +29,10 @@
         {
             From = 0,
             To = 60,
-            DayPatternValues = xy
+            //DayPatternValues = xy
         });
     }
+    
 
     //var xx = chartService.GetExactValue(destChart, 5.54);
 }
@@ -38,13 +41,26 @@
     <MudText Typo="Typo.h6">#@Module.Module_Id</MudText>
 
     <MudExpansionPanels MultiExpansion="true">
-        @foreach(var interval in Schedule.Intervals)
+        @for(int i = 0; i < Schedule.Intervals.Count; i++)
         {
+            var interval = Schedule.Intervals.ElementAt(i);
+            if(interval.DayPatternValues.Count < 2)
+            {
+                interval.DayPatternValues.Add(0, 0);
+                interval.DayPatternValues.Add(24, 10);
+            }
+
             <MudExpansionPanel Text="@($"From: {interval.From}; To: {interval.To};")">
+                <MudButton Style="margin-left: auto;" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveInterval(interval)">Remove this interval</MudButton>
                 <ModuleScheduleIntervalComponent @bind-PatternValues="interval.DayPatternValues" ChartName="@Module.Subject.ToString()" IsEditing="IsCreating"/>
             </MudExpansionPanel>
         }
     </MudExpansionPanels>
-
-
 </MudPaper> 
+
+@code{
+    private void RemoveInterval(ScheduleIntervalModel interval)
+    {
+        Schedule.Intervals.Remove(interval);
+    }
+}
