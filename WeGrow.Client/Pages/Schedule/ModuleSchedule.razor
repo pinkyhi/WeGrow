@@ -3,6 +3,7 @@
 @using WeGrow.Models.SystemInstances
 @code {
     [Inject] public IChartService chartService { get; set; } 
+    [Inject] public IScheduleService scheduleService { get; set; } 
 
     [Parameter]
     public ModuleInstanceViewModel Module { get; set; }
@@ -36,10 +37,22 @@
 
     //var xx = chartService.GetExactValue(destChart, 5.54);
 }
-<MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
+<MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1 gap-2">
     <MudText Typo="Typo.h5">Module name: @Module.ModuleName</MudText>
     <MudText Typo="Typo.h6">#@Module.Module_Id</MudText>
+    <MudText Typo="Typo.h5">Total days count: @Schedule.DaysCount</MudText>
 
+    @if (IsCreating)
+    {
+        <MudAlert Severity="Severity.Info">Intervals should build solid timeline from first to last day</MudAlert>
+
+        var missingIntervals = scheduleService.GetMissingIntervals(Schedule.DaysCount, Schedule.Intervals);
+        @if(missingIntervals.Count > 0)
+        {
+            <MudAlert Severity="Severity.Warning">Missing intervals: @(string.Join(' ', missingIntervals.Select(x => $"({x.from}-{x.to});")))</MudAlert>
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary">Add new interval</MudButton>
+        }
+    }
     <MudExpansionPanels MultiExpansion="true">
         @for(int i = 0; i < Schedule.Intervals.Count; i++)
         {

@@ -18,6 +18,7 @@ builder.Services.Configure<AdminIdentityServerSettings>(builder.Configuration.Ge
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IChartService, ChartService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 
 builder.Services.AddAuthentication(options =>
 {
