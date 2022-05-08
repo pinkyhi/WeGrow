@@ -1,0 +1,34 @@
+﻿@using WeGrow.Client.Services
+@using WeGrow.Models.SystemInstances
+
+@code {
+    [Inject] public IChartService chartService { get; set; } 
+
+    [Parameter]
+    public Dictionary<int, double> PatternValues { get; set; }
+
+    [Parameter]
+    public string ChartName { get; set; }
+
+    [Parameter] 
+    public bool IsEditing { get; set; }
+
+    private Dictionary<string, double> DayPatternChart { get; set; }
+    private string[] XAxisLabels { get; set; }
+    private ChartSeries ChartSeries { get; set; }
+}
+<MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1 gap-3">
+    <MudPaper Class="flex-grow-1" Style="height: 450px;">
+        <MudChart ChartType="ChartType.Line" ChartSeries="@(new List<ChartSeries> {ChartSeries})" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
+    </MudPaper>
+    <MudPaper Class="flex-grow-1">Points @string.Join(',', PatternValues.Select(x => $"({x.Key};{x.Value})"))</MudPaper>
+</MudPaper>
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        chartService.CreateExtendedChart(PatternValues, out Dictionary<int, double> extendedChart);
+        DayPatternChart = chartService.GetDayChart(extendedChart);
+        XAxisLabels = DayPatternChart.Select(x => x.Key).ToArray();
+        ChartSeries = new ChartSeries() { Name = ChartName, Data = DayPatternChart.Select(x => x.Value).ToArray() };
+    }
+}

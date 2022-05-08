@@ -34,7 +34,7 @@
             foreach(var item in sourceChart)
             {
                 var ts = new TimeSpan(item.Key, 0, 0);
-                var str = ts.TotalHours == 24 ? "24:00" : ts.ToString(@"hh\:mm");
+                var str = ts.TotalHours == 24 ? "24" : ts.ToString(@"hh");
                 result.Add(str, item.Value);
             }
             return result;

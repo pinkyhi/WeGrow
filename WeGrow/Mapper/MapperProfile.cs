@@ -10,6 +10,7 @@ namespace WeGrow.Mapper
         {
             CreateMap<ModuleInstance, ModuleInstanceViewModel>()
                 .ForMember(d => d.ModuleName, opt => { opt.MapFrom(s => s.Module.Name); })
+                .ForMember(d => d.Subject, opt => { opt.MapFrom(s => s.Module.Subject); })
                 .ForAllOtherMembers(x => x.MapAtRuntime());
             CreateMap<SystemInstance, SystemInstanceViewModel>()
                 .ForMember(d => d.ModuleInstances, opt => { opt.Ignore(); })

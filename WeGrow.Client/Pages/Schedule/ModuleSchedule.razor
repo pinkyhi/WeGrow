@@ -1,18 +1,51 @@
 ﻿@using WeGrow.Client.Services
+@using WeGrow.Models.Schedules
+@using WeGrow.Models.SystemInstances
 @code {
     [Inject] public IChartService chartService { get; set; } 
+
     [Parameter]
-    public int DaysCount { get; set; }
+    public ModuleInstanceViewModel Module { get; set; }
+
+    public ModuleScheduleModel Schedule { get; set; } = new();
 
     private int currentDay = 0;
+    private bool IsCreating = true;
 }
 @{
     Dictionary<int, double> xy = new();
     xy.Add(0, 0);
     xy.Add(12, 6);
     xy.Add(24, 3);
-    chartService.CreateExtendedChart(xy, out Dictionary<int, double> destChart);
-    var xx = chartService.GetExactValue(destChart, 5.54);
-    var day = chartService.GetDayChart(xy);
+    Schedule.ModuleInstanceId = Module.Id;
+    Schedule.ModuleName = Module.ModuleName;
+    Schedule.ModuleSubject = Module.Subject;
+    Schedule.Intervals = new();
+    Schedule.Intervals.Add(new ScheduleIntervalModel()
+    {
+        From = 0,
+        To = 60,
+        DayPatternValues = xy
+    });
+
+
+    //chartService.CreateExtendedChart(xy, out Dictionary<int, double> destChart);
+    //var xx = chartService.GetExactValue(destChart, 5.54);
+    //var day = chartService.GetDayChart(xy);
 
 }
+<MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
+    <MudText Typo="Typo.h5">Module name: @Module.ModuleName</MudText>
+    <MudText Typo="Typo.h4">#@Module.Module_Id</MudText>
+
+    <MudExpansionPanels MultiExpansion="true">
+        @foreach(var interval in Schedule.Intervals)
+        {
+            <MudExpansionPanel Text="@($"From: {interval.From}; To: {interval.To};")">
+                <ModuleScheduleIntervalComponent PatternValues="interval.DayPatternValues" ChartName="@Module.Subject.ToString()" IsEditing="IsCreating"/>
+            </MudExpansionPanel>
+        }
+    </MudExpansionPanels>
+
+
+</MudPaper> 

@@ -1,4 +1,6 @@
-﻿namespace WeGrow.Models.SystemInstances
+﻿using WeGrow.Core.Enums;
+
+namespace WeGrow.Models.SystemInstances
 {
     public class ModuleInstanceViewModel
     {
@@ -6,6 +8,7 @@
         public string System_Id { get; set; }
         public int Module_Id { get; set; }
         public string ModuleName { get; set; }
+        public ModuleSubject Subject { get; set; }
         public DateTime LastResponse { get; set; }
     }
 }

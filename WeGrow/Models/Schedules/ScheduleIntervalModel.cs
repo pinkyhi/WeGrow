@@ -4,6 +4,6 @@
     {
         public int From { get; set; }
         public int To { get; set; }
-        public Dictionary<int, double> DayValues { get; set; }
+        public Dictionary<int, double> DayPatternValues { get; set; }
     }
 }
