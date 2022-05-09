@@ -47,10 +47,7 @@
             <MudTd DataLabel="Belongs to system">@context.System_Id</MudTd>
         </RowTemplate>
     </MudTable>
-    @if (IsSelecting)
-    {
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit">Submit selection</MudButton>
-    }
+
 }
 @code{
     private async Task OnSubmit()
