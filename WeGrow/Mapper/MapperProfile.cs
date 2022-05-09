@@ -14,6 +14,7 @@ namespace WeGrow.Mapper
                 .ForAllOtherMembers(x => x.MapAtRuntime());
             CreateMap<SystemInstance, SystemInstanceViewModel>()
                 .ForMember(d => d.ModuleInstances, opt => { opt.Ignore(); })
+                .ForMember(d => d.ModuleSchedules, opt => { opt.Ignore(); })
                 .ForAllOtherMembers(x => x.MapAtRuntime());
         }
     }

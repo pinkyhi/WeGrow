@@ -1,4 +1,6 @@
-﻿namespace WeGrow.Models.SystemInstances
+﻿using WeGrow.Models.Schedules;
+
+namespace WeGrow.Models.SystemInstances
 {
     public class SystemInstanceViewModel
     {
@@ -8,5 +10,6 @@
         public bool Is_Active { get; set; }
 
         public List<ModuleInstanceViewModel> ModuleInstances { get; set; } = new();
+        public List<ModuleScheduleModel> ModuleSchedules { get; set; } = new();
     }
 }

@@ -51,7 +51,7 @@
                             @foreach(var moduleSchedule in CreationModel.ModuleSchedules)
                             {
                                 <MudExpansionPanel Text="@($"Module instance id: {moduleSchedule.ModuleInstanceId}")">
-                                    <ModuleSchedule Schedule="moduleSchedule"/>
+                                    <ModuleSchedule Schedule="moduleSchedule" IsCreating="true"/>
                                 </MudExpansionPanel>
                             }
                         </MudExpansionPanels>
@@ -77,7 +77,7 @@
         }
     </MudPaper> 
 
-    @if(CreationModel.Step == 0 || SystemsList.Count > 0)
+    @if(CreationModel.Step == 0)
     {
         <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1">
             @if (CreationModel.Step == 0)
@@ -87,13 +87,24 @@
             @foreach(var system in SystemsList)
             {
                 <MudPaper Outlined="true" Elevation="1" Class="d-flex flex-column flex-1 pa-5 gap-2">
-                    <MudText Typo="Typo.h5">Name: 
-            @system.Name</MudText>
+                    <MudText Typo="Typo.h5">Name: @system.Name</MudText>
                     <MudText Typo="Typo.body1">#@system.Id</MudText>
                     <ModuleInstanceList Items="system.ModuleInstances" Title="Modules in use" isLoading="false" />
+                    <MudExpansionPanels MultiExpansion="true">
+                        <MudExpansionPanel Text="Schedule">
+                            <MudExpansionPanels MultiExpansion="true">
+                                @foreach(var moduleSchedule in system.ModuleSchedules)
+                                {
+                                    <MudExpansionPanel Text="@($"Module instance id: {moduleSchedule.ModuleInstanceId}")">
+                                        <ModuleSchedule Schedule="moduleSchedule" IsCreating="false" />
+                                    </MudExpansionPanel>
+                                }
+                            </MudExpansionPanels>
+                        </MudExpansionPanel>
+                    </MudExpansionPanels>
                     <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-row flex-1 gap-1">
-                        <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success">Start growing!</MudButton>
-                        <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)">Delete this system</MudButton>
+                        <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success" Style="max-height: 80px;">Start growing!</MudButton>
+                        <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)" Style="max-height: 80px;">Delete this system</MudButton>
                     </MudPaper>
                 </MudPaper> 
             }

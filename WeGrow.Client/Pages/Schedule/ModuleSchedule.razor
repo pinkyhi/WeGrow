@@ -8,34 +8,11 @@
     [Parameter]
     public ModuleScheduleModel Schedule { get; set; } = new();
 
-    private int currentDay = 0;
-    private bool IsCreating = true;
-    private bool IsIntervalAddingDialog = false;
-}
-@{
-    /*
-    Dictionary<int, double> xy = new();
-    xy.Add(0, 0);
-    xy.Add(12, 6);
-    xy.Add(24, 3);
-    Schedule.ModuleInstanceId = Module.Id;
-    Schedule.ModuleName = Module.ModuleName;
-    Schedule.ModuleSubject = Module.Subject;
-    Schedule.DaysCount = 90;
-    
-    if(Schedule.Intervals.Count == 0)
-    {
-            Schedule.Intervals = new();
-        Schedule.Intervals.Add(new ScheduleIntervalModel()
-        {
-            From = 0,
-            To = 60,
-            //DayPatternValues = xy
-        });
-    }
-    */
+    [Parameter]
+    public bool IsCreating { get; set; }
 
-    //var xx = chartService.GetExactValue(destChart, 5.54);
+    private int currentDay = 0;
+    private bool IsIntervalAddingDialog = false;
 }
 <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1 gap-2">
     <MudText Typo="Typo.h5">Module name: @Schedule.ModuleName</MudText>
@@ -65,7 +42,10 @@
             }
 
             <MudExpansionPanel Text="@($"From: {interval.From}; To: {interval.To};")">
-                <MudButton Style="margin-left: auto;" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveInterval(interval)">Remove this interval</MudButton>
+                @if (IsCreating)
+                {
+                    <MudButton Style="margin-left: auto;" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveInterval(interval)">Remove this interval</MudButton>
+                }
                 <ModuleScheduleIntervalComponent @bind-PatternValues="interval.DayPatternValues" ChartName="@Schedule.ModuleSubject.ToString()" IsEditing="IsCreating"/>
             </MudExpansionPanel>
         }

@@ -14,6 +14,7 @@ namespace WeGrow.Core.Resources
         public static class Blob
         {
             public const string Modules = "moduleblobs";
+            public const string Schedules = "scheduleblobs";
         }
     }
 }
