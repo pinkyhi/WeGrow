@@ -6,8 +6,6 @@
     [Inject] public IScheduleService scheduleService { get; set; } 
 
     [Parameter]
-    public ModuleInstanceViewModel Module { get; set; }
-
     public ModuleScheduleModel Schedule { get; set; } = new();
 
     private int currentDay = 0;
@@ -15,6 +13,7 @@
     private bool IsIntervalAddingDialog = false;
 }
 @{
+    /*
     Dictionary<int, double> xy = new();
     xy.Add(0, 0);
     xy.Add(12, 6);
@@ -34,13 +33,13 @@
             //DayPatternValues = xy
         });
     }
-    
+    */
 
     //var xx = chartService.GetExactValue(destChart, 5.54);
 }
 <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1 gap-2">
-    <MudText Typo="Typo.h5">Module name: @Module.ModuleName</MudText>
-    <MudText Typo="Typo.h6">#@Module.Module_Id</MudText>
+    <MudText Typo="Typo.h5">Module name: @Schedule.ModuleName</MudText>
+    <MudText Typo="Typo.h6">#@Schedule.ModuleInstanceId</MudText>
     <MudText Typo="Typo.h5">Total days count: @Schedule.DaysCount</MudText>
 
     @if (IsCreating)
@@ -67,7 +66,7 @@
 
             <MudExpansionPanel Text="@($"From: {interval.From}; To: {interval.To};")">
                 <MudButton Style="margin-left: auto;" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveInterval(interval)">Remove this interval</MudButton>
-                <ModuleScheduleIntervalComponent @bind-PatternValues="interval.DayPatternValues" ChartName="@Module.Subject.ToString()" IsEditing="IsCreating"/>
+                <ModuleScheduleIntervalComponent @bind-PatternValues="interval.DayPatternValues" ChartName="@Schedule.ModuleSubject.ToString()" IsEditing="IsCreating"/>
             </MudExpansionPanel>
         }
     </MudExpansionPanels>

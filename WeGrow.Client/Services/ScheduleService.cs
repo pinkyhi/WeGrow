@@ -9,20 +9,27 @@ namespace WeGrow.Client.Services
             List<(int from, int to)> result = new List<(int from, int to)> ();
             intervals = intervals.OrderBy(x => x.From).ToList();
             int expectedFrom = 0;
-            for (int i = 0; i < intervals.Count; i++) 
+            if(intervals.Count > 0)
             {
-                if (intervals[i].From != expectedFrom) 
+                for (int i = 0; i < intervals.Count; i++)
                 {
-                    result.Add((expectedFrom, intervals[i].From - 1));
-                }
-                expectedFrom = intervals[i].To + 1;
-                if (i == intervals.Count - 1) 
-                {
-                    if (expectedFrom != daysCount) 
+                    if (intervals[i].From != expectedFrom)
                     {
-                        result.Add((expectedFrom, daysCount - 1));
+                        result.Add((expectedFrom, intervals[i].From - 1));
+                    }
+                    expectedFrom = intervals[i].To + 1;
+                    if (i == intervals.Count - 1)
+                    {
+                        if (expectedFrom != daysCount)
+                        {
+                            result.Add((expectedFrom, daysCount - 1));
+                        }
                     }
                 }
+            }
+            else
+            {
+                result.Add((expectedFrom, daysCount - 1));
             }
             return result;
         }

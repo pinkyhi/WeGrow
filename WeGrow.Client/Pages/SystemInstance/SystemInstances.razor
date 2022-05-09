@@ -9,16 +9,13 @@
 
     public SystemCreationModel CreationModel { get; set; } = new();
     public List<string> AddingErrors { get; set; } = new();
+    private int ScheduleDaysCount { get; set; } = new();
 }
 <MudPaper Class="d-flex flex-row pa-5 gap-3">
     <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-column flex-1 gap-2">
         @if (CreationModel.Step == 0)
         {
             var freeModules = GetModulesBySystemId();
-            @if (freeModules.Count > 0)
-            {
-                <ModuleSchedule  Module="freeModules.First()"/>
-            }
             <ModuleInstanceList Items="freeModules" Title="Free modules" isLoading="modulesLoading" />
         }
         else
@@ -41,8 +38,22 @@
                         <ModuleInstanceList Items="freeModules" Title="Free modules" isLoading="modulesLoading" IsSelecting="true" @bind-SelectedItems="CreationModel.Modules" />
                         break;
                     }
+                case SystemCreationModel.CreationStep.ScheduleInitialization :
+                    {
+                        ScheduleDaysCount = 30;
+                        <MudNumericField T="int" Max="90" Min="1" Class="d-flex flex-1" Label="Total days" @bind-Value="ScheduleDaysCount" Variant="Variant.Outlined" />
+                        break;
+                    }
                 case SystemCreationModel.CreationStep.ScheduleCreation :
                     {
+                        <MudExpansionPanels MultiExpansion="true">
+                            @foreach(var moduleSchedule in CreationModel.ModuleSchedules)
+                            {
+                                <MudExpansionPanel Text="@($"Module instance id: {moduleSchedule.ModuleInstanceId}")">
+                                    <ModuleSchedule Schedule="moduleSchedule"/>
+                                </MudExpansionPanel>
+                            }
+                        </MudExpansionPanels>
                         break;
                     }
             }
@@ -113,7 +124,23 @@
                         AddingErrors.Add("Modules are required");
                         return;
                     }
-                    break;                    }
+                    break;                
+                }
+            case SystemCreationModel.CreationStep.ScheduleInitialization :
+                {
+                    CreationModel.ModuleSchedules.RemoveAll(x => true);
+                    foreach(var instance in CreationModel.Modules)
+                    {
+                        CreationModel.ModuleSchedules.Add(new Models.Schedules.ModuleScheduleModel()
+                            {
+                                DaysCount = ScheduleDaysCount,
+                                ModuleSubject = instance.Subject,
+                                ModuleInstanceId = instance.Id,
+                                ModuleName = instance.ModuleName
+                            });
+                    }
+                    break;
+                }
             case SystemCreationModel.CreationStep.ScheduleCreation :
                 {
                     break;
