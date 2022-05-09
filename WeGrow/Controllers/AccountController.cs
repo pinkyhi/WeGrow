@@ -63,5 +63,12 @@ namespace WeGrow.Controllers
 
             return Ok();
         }
+
+        [Route("systems")]
+        [HttpPost]
+        public async Task<IActionResult> CreateSystemWithSchedule([FromBody] CreateSystemRequest creationModel)
+        {
+            return Ok();
+        }
     }
 }

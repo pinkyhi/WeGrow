@@ -1,6 +1,7 @@
 ﻿@using WeGrow.Models.Shop 
 @using WeGrow.Models.SystemInstances
 @using WeGrow.Client.Pages.Schedule
+
 @page "/account/systems"
 @attribute [Authorize]
 @code{
@@ -68,7 +69,7 @@
                 }
                 else
                 {
-                    <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success">FINISH</MudButton>
+                    <MudButton Class="flex-grow-1" Variant="Variant.Filled" Color="Color.Success" OnClick="AddSystemWithSchedule">FINISH</MudButton>
                 }
             </MudPaper>
             

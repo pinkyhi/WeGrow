@@ -110,6 +110,44 @@ namespace WeGrow.Client.Pages.SystemInstance
             }
         }
 
+        public async Task AddSystemWithSchedule()
+        {
+            var tokenResponse = await TokenService.GetToken("WeGrow.write");
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+            var systemRequestMessage = new HttpRequestMessage(HttpMethod.Post, ApiUrl + ApiRoutes.AccountSystems);
+            HttpResponseMessage systemResult = null;
+            try
+            {
+                systemRequestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var contentModel = new CreateSystemRequest()
+                {
+                    Name = CreationModel.Name,
+                    ModuleSchedules = CreationModel.ModuleSchedules
+                };
+                systemRequestMessage.Content = JsonContent.Create(contentModel);
+                systemResult = await HttpClient.SendAsync(systemRequestMessage);
+
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception("Not authorized");
+            }
+            finally
+            {
+                systemRequestMessage.Dispose();
+            }
+            if (systemResult.IsSuccessStatusCode)
+            {
+                var createdSystem = await systemResult.Content.ReadFromJsonAsync<SystemInstanceViewModel>();
+                SystemsList.Add(createdSystem);
+                CreationModel.Step = SystemCreationModel.CreationStep.None;
+            }
+            else
+            {
+                throw new Exception("Fetch data error");
+            }
+        }
+
         public void StartAdding()
         {
             CreationModel.Step = SystemCreationModel.CreationStep.SystemInfo;
