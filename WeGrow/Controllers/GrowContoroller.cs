@@ -2,11 +2,16 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Text;
 using WeGrow.Core.Resources;
 using WeGrow.DAL.Entities;
 using WeGrow.DAL.Interfaces;
 using WeGrow.Interfaces;
+using WeGrow.Models.Grow;
+using WeGrow.Models.Schedules;
 using WeGrow.Models.SystemInstances;
+using WeGrow.Temp;
 
 namespace WeGrow.Controllers
 {
@@ -17,9 +22,11 @@ namespace WeGrow.Controllers
         private readonly IRepository repository;
         private readonly IMapper mapper;
         private readonly IBlobService blobService;
+        private readonly IChartService chartService;
 
-        public GrowContoroller(IRepository repository, IMapper mapper, IBlobService blobService)
+        public GrowContoroller(IRepository repository, IMapper mapper, IBlobService blobService, IChartService chartService)
         {
+            this.chartService = chartService;
             this.repository = repository;
             this.mapper = mapper;
             this.blobService = blobService;
@@ -96,6 +103,56 @@ namespace WeGrow.Controllers
             }
 
             return Ok();
+        }
+
+        // Temporary realisation
+        [Route("module")]
+        [HttpGet]
+        public async Task<IActionResult> GetModuleUpdate(string id)
+        {
+            var response = new ModuleUpdateModel();
+            var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
+            var item = await repository.GetAsync<ModuleInstance>(false, x => x.Id.Equals(id) && x.User_Id.Equals(userId), y => y.Include(i => i.System).ThenInclude(i => i.Schedule).Include(i => i.System).ThenInclude(i => i.Grows));
+            if (item == null || item.System.Grows.Count == 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                var scheduleBlob = blobService.GetBlobAsync(ConstNames.Blob.Schedules, item.System.Schedule.BlobName);
+                var moduleSchedules = JsonConvert.DeserializeObject<List<ModuleScheduleModel>>(Encoding.ASCII.GetString(scheduleBlob.Result.Content));
+                var moduleSchedule = moduleSchedules?.FirstOrDefault(x => x.ModuleInstanceId.Equals(id));
+                if(moduleSchedule == null)
+                {
+                    return BadRequest();
+                }
+
+                var maxStart = item.System.Grows.Max(i => i.StartDate);
+                var lastGrow = item.System.Grows.First(x => x.StartDate.Equals(maxStart));
+                if (lastGrow.Status != Core.Enums.GrowStatus.Processing)
+                {
+                    return BadRequest();
+                }
+
+                var daysGone = (DateTime.Now - lastGrow.StartDate).TotalDays;
+
+                var currentInterval = moduleSchedule.Intervals.FirstOrDefault(x => x.From <= daysGone && x.To >= daysGone);
+                if(currentInterval == null)
+                {
+                    return BadRequest();
+                }
+                var now = DateTime.Now;
+                var currentPosition = now - new DateTime(now.Year, now.Month, now.Day);
+                var currenValue = chartService.GetExactValue(currentInterval.DayPatternValues, currentPosition.TotalHours);
+
+                item.LastResponse = DateTime.Now;
+                item.LastResponseItem = Math.Round(currenValue, 3).ToString();
+                response.LastResponse = item.LastResponse;
+                response.LastResponseItem = item.LastResponseItem;
+                await repository.UpdateAsync(item);
+            }
+
+            return Ok(response);
         }
     }
 }

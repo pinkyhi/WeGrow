@@ -1,4 +1,10 @@
-﻿@using WeGrow.Models.SystemInstances
+﻿@using IdentityModel.Client
+@using Microsoft.AspNetCore.WebUtilities
+@using System.Security.Claims
+@using WeGrow.Client.Services
+@using WeGrow.Core.Resources
+@using WeGrow.Models.Grow
+@using WeGrow.Models.SystemInstances
 @code {
     [Parameter]
     public List<ModuleInstanceViewModel> Items { get; set; }
@@ -6,6 +12,13 @@
     public EventCallback<List<ModuleInstanceViewModel>> ItemsChanged { get; set; }
     [Parameter]
     public string Title { get; set; }
+    [Parameter]
+    public string ApiUrl { get; set; }
+
+    [Inject] private HttpClient HttpClient { get; set; }
+    [Inject] private IConfiguration Configuration { get; set; }
+    [Inject] private IHttpContextAccessor Accessor { get; set; }
+    [Inject] private ITokenService TokenService { get; set; }
 }
 <style type="text/css">
     .mud-table-head .header-centered th {
@@ -46,6 +59,37 @@
 @code{
     private async Task OnRenew(ModuleInstanceViewModel item)
     {
-        await ItemsChanged.InvokeAsync(Items);
+        var tokenResponse = await TokenService.GetToken("WeGrow.write");
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+            var uri = QueryHelpers.AddQueryString(ApiUrl + ApiRoutes.GrowModule, "id", item.Id);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+
+            HttpResponseMessage result = null;
+
+            try
+            {
+                requestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                result = await HttpClient.SendAsync(requestMessage);
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception("Not authorized");
+            }
+            finally
+            {
+                requestMessage.Dispose();
+            }
+            if (result.IsSuccessStatusCode)
+            {
+                var responseModel = await result.Content.ReadFromJsonAsync<ModuleUpdateModel>();
+                item.LastResponse = responseModel.LastResponse;
+                item.LastResponseItem = responseModel.LastResponseItem;
+
+                await ItemsChanged.InvokeAsync(Items);
+            }
+            else
+            {
+                throw new Exception("Get data error");
+            }
     }
 }

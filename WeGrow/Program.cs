@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WeGrow.Extensions;
 using WeGrow.LiqPay.Extensions;
+using WeGrow.Temp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddAuthentication("Bearer")
     });
 builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddAzureBlobStorage(builder.Configuration.GetValue<string>("AzureBlobStorageConnectionStrings"));
+
+builder.Services.AddScoped<IChartService, ChartService>();
 
 var app = builder.Build();
 app.UseSwagger();

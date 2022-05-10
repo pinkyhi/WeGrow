@@ -4,7 +4,7 @@ using WeGrow.DAL.Entities;
 
 namespace WeGrow.Models.SystemInstances
 {
-    [AutoMap(typeof(Grow), ReverseMap = true)]
+    [AutoMap(typeof(DAL.Entities.Grow), ReverseMap = true)]
     public class SystemGrowModel
     {
         public int Id { get; set; }

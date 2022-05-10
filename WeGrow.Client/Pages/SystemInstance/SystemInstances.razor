@@ -95,7 +95,7 @@
                     }
                     @if (system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Processing)
                     {
-                        <UpdatableModuleInstanceList @bind-Items="system.ModuleInstances" Title="Modules in use"></UpdatableModuleInstanceList>
+                        <UpdatableModuleInstanceList @bind-Items="system.ModuleInstances" Title="Modules in use" ApiUrl="@ApiUrl"></UpdatableModuleInstanceList>
                     }
                     else
                     {

@@ -21,5 +21,7 @@
         public const string AccountSystems = "/account/systems";
 
         public const string Grows = "/grows";
+        public const string GrowModule = "/grows/module";
+
     }
 }

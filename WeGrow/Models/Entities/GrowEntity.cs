@@ -5,7 +5,7 @@ using WeGrow.DAL.Entities;
 
 namespace WeGrow.Models.Entities
 {
-    [AutoMap(typeof(Grow), ReverseMap = true)]
+    [AutoMap(typeof(DAL.Entities.Grow), ReverseMap = true)]
     public class GrowEntity
     {
         [Key]
