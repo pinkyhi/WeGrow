@@ -20,5 +20,6 @@
         public const string AccountModules = "/account/modules";
         public const string AccountSystems = "/account/systems";
 
+        public const string Grows = "/grows";
     }
 }

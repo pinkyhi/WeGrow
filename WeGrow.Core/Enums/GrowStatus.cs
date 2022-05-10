@@ -2,8 +2,7 @@
 {
     public enum GrowStatus
     {
-        Draft,
-        Current,
+        Processing,
         Succeded
     }
 }

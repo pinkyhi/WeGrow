@@ -103,8 +103,15 @@
                         </MudExpansionPanel>
                     </MudExpansionPanels>
                     <MudPaper Outlined="false" Elevation="0" Class="d-flex flex-row flex-1 gap-1">
-                        <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success" Style="max-height: 80px;">Start growing!</MudButton>
-                        <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)" Style="max-height: 80px;">Delete this system</MudButton>
+                        @if (system.Is_Active)
+                        {
+                            <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Dark" Style="max-height: 80px;" OnClick="events => StopGrowing(system)">Stop growing :(</MudButton>
+                        }
+                        else
+                        {
+                            <MudButton Class="flex-grow-1" Variant="Variant.Outlined" Color="Color.Success" Style="max-height: 80px;" OnClick="events => StartGrowing(system)">Start growing!</MudButton>
+                            <MudButton Class="flex-grow-2" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => RemoveSystem(system)" Style="max-height: 80px;">Delete this system</MudButton>
+                        }
                     </MudPaper>
                 </MudPaper> 
             }

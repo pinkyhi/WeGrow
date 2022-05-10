@@ -13,6 +13,7 @@ namespace WeGrow.Client.Pages.SystemInstance
     partial class SystemInstances
     {
         public string ApiUrl { get; set; }
+
         private bool modulesLoading { get; set; } = true;
         private bool systemsLoading { get; set; } = true;
 
@@ -71,6 +72,68 @@ namespace WeGrow.Client.Pages.SystemInstance
                     systemsLoading = false;
                     throw new Exception("Fetch data error");
                 }
+            }
+        }
+
+        public async Task StopGrowing(SystemInstanceViewModel system)
+        {
+            var tokenResponse = await TokenService.GetToken("WeGrow.write");
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+            var systemRequestMessage = new HttpRequestMessage(HttpMethod.Patch, ApiUrl + ApiRoutes.Grows);
+            HttpResponseMessage systemResult = null;
+            try
+            {
+                systemRequestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                systemRequestMessage.Content = JsonContent.Create(system.Id);
+                systemResult = await HttpClient.SendAsync(systemRequestMessage);
+
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception("Not authorized");
+            }
+            finally
+            {
+                systemRequestMessage.Dispose();
+            }
+            if (systemResult.IsSuccessStatusCode)
+            {
+                system.Is_Active = false;
+            }
+            else
+            {
+                throw new Exception("Patch data error");
+            }
+        }
+
+        public async Task StartGrowing(SystemInstanceViewModel system)
+        {
+            var tokenResponse = await TokenService.GetToken("WeGrow.write");
+            HttpClient.SetBearerToken(tokenResponse.AccessToken);
+            var systemRequestMessage = new HttpRequestMessage(HttpMethod.Post, ApiUrl + ApiRoutes.Grows);
+            HttpResponseMessage systemResult = null;
+            try
+            {
+                systemRequestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                systemRequestMessage.Content = JsonContent.Create(system.Id);
+                systemResult = await HttpClient.SendAsync(systemRequestMessage);
+
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception("Not authorized");
+            }
+            finally
+            {
+                systemRequestMessage.Dispose();
+            }
+            if (systemResult.IsSuccessStatusCode)
+            {
+                system.Is_Active = true;
+            }
+            else
+            {
+                throw new Exception("Patch data error");
             }
         }
 
@@ -144,7 +207,7 @@ namespace WeGrow.Client.Pages.SystemInstance
             }
             else
             {
-                throw new Exception("Fetch data error");
+                throw new Exception("Adding data error");
             }
         }
 

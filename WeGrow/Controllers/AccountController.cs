@@ -79,6 +79,25 @@ namespace WeGrow.Controllers
         }
 
         [Route("systems")]
+        [HttpPatch]
+        public async Task<IActionResult> ChangeActiveStatus([FromBody] string id)
+        {
+            var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
+            var item = await repository.GetAsync<SystemInstance>(true, x => x.Id.Equals(id) && x.User_Id.Equals(userId));
+            if (item == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                item.Is_Active = !item.Is_Active;
+                await repository.UpdateAsync(item);
+            }
+
+            return Ok();
+        }
+
+        [Route("systems")]
         [HttpPost]
         public async Task<IActionResult> CreateSystemWithSchedule([FromBody] CreateSystemRequest creationModel)
         {
