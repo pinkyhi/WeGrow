@@ -45,7 +45,7 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> GetSystems()
         {
             var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
-            var items = await repository.GetRangeAsync<SystemInstance>(false, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedule).Include(i => i.Grows));
+            var items = await repository.GetRangeAsync<SystemInstance>(true, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedule).Include(i => i.Grows).Include(i => i.ModuleInstances));
             var models = new List<SystemInstanceViewModel>();
 
             foreach (var item in items)
@@ -53,10 +53,17 @@ namespace WeGrow.Controllers
                 var scheduleBlob = blobService.GetBlobAsync(ConstNames.Blob.Schedules, item.Schedule.BlobName);
                 var model = mapper.Map<SystemInstanceViewModel>(item);
                 model.ModuleSchedules = JsonConvert.DeserializeObject<List<ModuleScheduleModel>>(Encoding.ASCII.GetString(scheduleBlob.Result.Content));
-                if(item.Grows.Count > 0)
+                model.ModuleInstances = item.ModuleInstances.Select(x => mapper.Map<ModuleInstanceViewModel>(x)).OrderBy(x => x.System_Id).ToList();
+
+                if (item.Grows.Count > 0)
                 {
                     var maxStart = item.Grows.Max(i => i.StartDate);
                     var lastGrow = item.Grows.First(x => x.StartDate.Equals(maxStart));
+                    if(lastGrow.Status == Core.Enums.GrowStatus.Processing && (DateTime.Now - lastGrow.StartDate).TotalDays > lastGrow.TotalDays)
+                    {
+                        lastGrow.Status = Core.Enums.GrowStatus.Succeded;
+                        await repository.UpdateAsync(lastGrow);
+                    }
                     model.LastGrow = mapper.Map<SystemGrowModel>(lastGrow);
                 }
 
@@ -77,7 +84,7 @@ namespace WeGrow.Controllers
             {
                 return BadRequest();
             }
-            if(item.ModuleInstances.Count() > 0)
+            else
             {
                 await repository.DeleteAsync(item);
             }
@@ -98,6 +105,7 @@ namespace WeGrow.Controllers
             Schedule newSchedule = new()
             {
                 Name = creationModel.Name,
+                TotalDays = creationModel.ModuleSchedules.Max(x => x.DaysCount)
             };
 
             try
@@ -123,6 +131,7 @@ namespace WeGrow.Controllers
             };
             newSystem = await repository.AddAsync(newSystem);
             var systemModel = mapper.Map<SystemInstanceViewModel>(newSystem);
+            systemModel.ModuleInstances = moduleInstances.Select(x => mapper.Map<ModuleInstanceViewModel>(x)).OrderBy(x => x.System_Id).ToList();
             systemModel.ModuleSchedules = creationModel.ModuleSchedules;
             return Ok(systemModel);
         }

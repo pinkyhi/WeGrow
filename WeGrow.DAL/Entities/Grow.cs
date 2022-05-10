@@ -18,6 +18,7 @@ namespace WeGrow.DAL.Entities
         public string GrowBlobName { get; set; }
         public string TimelapsBlobName { get; set; }
         public string TimelapsBlobLink { get; set; }
+        public int TotalDays { get; set; }
 
         public Schedule Schedule { get; set; }
         public SystemInstance System { get; set; }

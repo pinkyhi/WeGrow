@@ -48,6 +48,7 @@ namespace WeGrow.Controllers
                     Status = Core.Enums.GrowStatus.Processing,
                     TimelapsBlobLink = "https://wegrowblob.blob.core.windows.net/timelaps/defaultGrowTimelaps.gif",
                     TimelapsBlobName = ConstNames.Blob.DefaultTimelapsName,
+                    TotalDays = item.Schedule.TotalDays
                 };
                 newGrow = await repository.AddAsync(newGrow);
                 item.Is_Active = true;

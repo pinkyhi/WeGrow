@@ -7,7 +7,7 @@
         public string Description { get; set; }
         public string BlobLink { get; set; }
         public string BlobName { get; set; }
-        public TimeSpan Duration { get; set; }
+        public int TotalDays { get; set; }
         public bool Is_Public { get; set; }
         public string User_Id { get; set; }
 

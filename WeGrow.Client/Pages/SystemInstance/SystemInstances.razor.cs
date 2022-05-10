@@ -59,10 +59,12 @@ namespace WeGrow.Client.Pages.SystemInstance
                     ModulesList.AddRange(modulesResultModel);
                     modulesLoading = false;
                     var systemsResultModel = await systemsResult.Content.ReadFromJsonAsync<List<SystemInstanceViewModel>>();
+                    /*
                     foreach(var system in systemsResultModel)
                     {
                         system.ModuleInstances.AddRange(ModulesList.Where(i => i.System_Id?.Equals(system.Id) == true));
                     }
+                    */
                     SystemsList.AddRange(systemsResultModel);
                     systemsLoading = false;
                 }
