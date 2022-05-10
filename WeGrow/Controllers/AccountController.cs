@@ -61,8 +61,9 @@ namespace WeGrow.Controllers
                     var lastGrow = item.Grows.First(x => x.StartDate.Equals(maxStart));
                     if(lastGrow.Status == Core.Enums.GrowStatus.Processing && (DateTime.Now - lastGrow.StartDate).TotalDays > lastGrow.TotalDays)
                     {
+                        item.Is_Active = false;
                         lastGrow.Status = Core.Enums.GrowStatus.Succeded;
-                        await repository.UpdateAsync(lastGrow);
+                        await repository.UpdateAsync(item);
                     }
                     model.LastGrow = mapper.Map<SystemGrowModel>(lastGrow);
                 }

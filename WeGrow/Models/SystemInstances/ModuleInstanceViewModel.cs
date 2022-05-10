@@ -9,6 +9,7 @@ namespace WeGrow.Models.SystemInstances
         public int Module_Id { get; set; }
         public string ModuleName { get; set; }
         public ModuleSubject Subject { get; set; }
+        public string LastResponseItem { get; set; }
         public DateTime LastResponse { get; set; }
     }
 }

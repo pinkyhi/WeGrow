@@ -2,21 +2,10 @@
 @code {
     [Parameter]
     public List<ModuleInstanceViewModel> Items { get; set; }
-
+    [Parameter]
+    public EventCallback<List<ModuleInstanceViewModel>> ItemsChanged { get; set; }
     [Parameter]
     public string Title { get; set; }
-
-    [Parameter]
-    public bool IsSelecting { get; set; }
-
-    [Parameter]
-    public bool isLoading { get; set; }
-
-    [Parameter]
-    public HashSet<ModuleInstanceViewModel> SelectedItems { get; set; } = new();
-
-    [Parameter]
-    public EventCallback<HashSet<ModuleInstanceViewModel>> SelectedItemsChanged { get; set; }
 }
 <style type="text/css">
     .mud-table-head .header-centered th {
@@ -25,9 +14,7 @@
     }
 </style>
 @{
-    var selectedItems = IsSelecting ? SelectedItems : null;
-    <MudTable Items="@Items" Breakpoint="Breakpoint.Sm" Loading="@isLoading" LoadingProgressColor="Color.Info" Striped="true" Bordered="true" HeaderClass="table-head-bordered" CustomHeader="true" 
-        MultiSelection="IsSelecting" Hover="IsSelecting" @bind-SelectedItems="selectedItems" >
+    <MudTable style="border: 2px solid black;" Items="@Items" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Striped="true" Bordered="true" HeaderClass="table-head-bordered" CustomHeader="true" Hover="true" >
         <ToolBarContent>
             <MudText Typo="Typo.h5">@Title</MudText>
             <MudSpacer />
@@ -36,22 +23,29 @@
             <MudTHeadRow IsCheckable="true">
                 <MudTh>Id</MudTh>
                 <MudTh>Module name</MudTh>
-                <MudTh>Last response</MudTh>
+                <MudTh>Last response time</MudTh>
+                <MudTh>Last update</MudTh>
                 <MudTh>Belongs to system</MudTh>
+                <MudTh>Actions</MudTh>
             </MudTHeadRow>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Module name">@context.ModuleName</MudTd>
             <MudTd DataLabel="Last response time">@context.LastResponse</MudTd>
+            <MudTd DataLabel="Last update">@context.LastResponseItem</MudTd>
             <MudTd DataLabel="Belongs to system">@context.System_Id</MudTd>
+            <MudTd DataLabel="Actions">
+                           <MudIconButton Icon="@Icons.Filled.Autorenew" aria-label="update" OnClick="events => OnRenew(context)"></MudIconButton>
+
+            </MudTd>
         </RowTemplate>
     </MudTable>
 
 }
 @code{
-    private async Task OnSubmit()
+    private async Task OnRenew(ModuleInstanceViewModel item)
     {
-        await SelectedItemsChanged.InvokeAsync(SelectedItems);
+        await ItemsChanged.InvokeAsync(Items);
     }
 }

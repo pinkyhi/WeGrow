@@ -88,7 +88,19 @@
                 <MudPaper Outlined="true" Elevation="1" Class="d-flex flex-column flex-1 pa-5 gap-2">
                     <MudText Typo="Typo.h5">Name: @system.Name</MudText>
                     <MudText Typo="Typo.body1">#@system.Id</MudText>
-                    <ModuleInstanceList Items="system.ModuleInstances" Title="Modules in use" isLoading="false" />
+                    @if(!system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Succeded && !string.IsNullOrWhiteSpace(system.LastGrow?.TimelapsBlobLink))
+                    {
+                        <MudText Typo="Typo.h5">@($"Last grow from {system.LastGrow.StartDate.ToShortDateString()} timelaps")</MudText>
+                        <img src="@system.LastGrow.TimelapsBlobLink" defer style="width: 100%;" />
+                    }
+                    @if (system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Processing)
+                    {
+                        <UpdatableModuleInstanceList @bind-Items="system.ModuleInstances" Title="Modules in use"></UpdatableModuleInstanceList>
+                    }
+                    else
+                    {
+                        <ModuleInstanceList Items="system.ModuleInstances" Title="Modules in use" isLoading="false" />
+                    }
                     <MudExpansionPanels MultiExpansion="true">
                         <MudExpansionPanel Text="Schedule">
                             <MudExpansionPanels MultiExpansion="true">

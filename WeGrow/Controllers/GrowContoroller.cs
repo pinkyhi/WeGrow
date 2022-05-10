@@ -69,21 +69,24 @@ namespace WeGrow.Controllers
             }
             else
             {
-                var maxStart = item.Grows.Max(i => i.StartDate);
-                var lastGrow = item.Grows.FirstOrDefault(x => x.StartDate.Equals(maxStart));
-                if(lastGrow?.Status != Core.Enums.GrowStatus.Succeded)
+                if(item.Grows.Count > 0)
                 {
-                    if (!lastGrow.TimelapsBlobName.Equals(ConstNames.Blob.DefaultTimelapsName))
+                    var maxStart = item.Grows.Max(i => i.StartDate);
+                    var lastGrow = item.Grows.FirstOrDefault(x => x.StartDate.Equals(maxStart));
+                    if (lastGrow?.Status != Core.Enums.GrowStatus.Succeded)
                     {
-                        await blobService.DeleteBlobAsync(ConstNames.Blob.Timelaps, lastGrow.TimelapsBlobName);
+                        if (!lastGrow.TimelapsBlobName.Equals(ConstNames.Blob.DefaultTimelapsName))
+                        {
+                            await blobService.DeleteBlobAsync(ConstNames.Blob.Timelaps, lastGrow.TimelapsBlobName);
+                        }
+                        // await blobService.DeleteBlobAsync(ConstNames.Blob.Grows, lastGrow.GrowBlobName);
+                        await repository.DeleteAsync(lastGrow);
+
+                        item.Grows.Remove(lastGrow);
+                        item.Is_Active = false;
+                        await repository.UpdateAsync(item);
+
                     }
-                    // await blobService.DeleteBlobAsync(ConstNames.Blob.Grows, lastGrow.GrowBlobName);
-
-                    item.Grows.Remove(lastGrow);
-                    item.Is_Active = false;
-                    await repository.UpdateAsync(item);
-
-                    await repository.DeleteAsync(lastGrow);
                 }
                 else
                 {
