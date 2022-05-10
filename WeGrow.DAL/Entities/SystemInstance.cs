@@ -12,7 +12,7 @@ namespace WeGrow.DAL.Entities
         public int? ScheduleId { get; set; }
 
         public IEnumerable<ModuleInstance> ModuleInstances { get; set; }
-        public IEnumerable<Grow> Grows { get; set; }
+        public List<Grow> Grows { get; set; }
         public Schedule Schedule { get; set; }
     }
 }

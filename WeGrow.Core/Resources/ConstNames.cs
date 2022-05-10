@@ -15,6 +15,10 @@ namespace WeGrow.Core.Resources
         {
             public const string Modules = "moduleblobs";
             public const string Schedules = "scheduleblobs";
+            public const string Grows = "growblobs";
+            public const string Timelaps = "timelaps";
+
+            public const string DefaultTimelapsName = "defaultGrowTimelaps.gif";
         }
     }
 }

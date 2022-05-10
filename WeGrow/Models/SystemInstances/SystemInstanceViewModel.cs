@@ -11,5 +11,6 @@ namespace WeGrow.Models.SystemInstances
 
         public List<ModuleInstanceViewModel> ModuleInstances { get; set; } = new();
         public List<ModuleScheduleModel> ModuleSchedules { get; set; } = new();
+        public SystemGrowModel LastGrow { get; set; }
     }
 }

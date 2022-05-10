@@ -45,7 +45,7 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> GetSystems()
         {
             var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
-            var items = await repository.GetRangeAsync<SystemInstance>(false, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedule));
+            var items = await repository.GetRangeAsync<SystemInstance>(false, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedule).Include(i => i.Grows));
             var models = new List<SystemInstanceViewModel>();
 
             foreach (var item in items)
@@ -53,6 +53,13 @@ namespace WeGrow.Controllers
                 var scheduleBlob = blobService.GetBlobAsync(ConstNames.Blob.Schedules, item.Schedule.BlobName);
                 var model = mapper.Map<SystemInstanceViewModel>(item);
                 model.ModuleSchedules = JsonConvert.DeserializeObject<List<ModuleScheduleModel>>(Encoding.ASCII.GetString(scheduleBlob.Result.Content));
+                if(item.Grows.Count > 0)
+                {
+                    var maxStart = item.Grows.Max(i => i.StartDate);
+                    var lastGrow = item.Grows.First(x => x.StartDate.Equals(maxStart));
+                    model.LastGrow = mapper.Map<SystemGrowModel>(lastGrow);
+                }
+
                 models.Add(model);
             }
             models = models.OrderBy(x => x.Is_Active).ThenBy(x => x.Name).ToList();
@@ -73,25 +80,6 @@ namespace WeGrow.Controllers
             if(item.ModuleInstances.Count() > 0)
             {
                 await repository.DeleteAsync(item);
-            }
-
-            return Ok();
-        }
-
-        [Route("systems")]
-        [HttpPatch]
-        public async Task<IActionResult> ChangeActiveStatus([FromBody] string id)
-        {
-            var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
-            var item = await repository.GetAsync<SystemInstance>(true, x => x.Id.Equals(id) && x.User_Id.Equals(userId));
-            if (item == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                item.Is_Active = !item.Is_Active;
-                await repository.UpdateAsync(item);
             }
 
             return Ok();

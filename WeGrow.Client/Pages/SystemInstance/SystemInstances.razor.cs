@@ -99,6 +99,7 @@ namespace WeGrow.Client.Pages.SystemInstance
             if (systemResult.IsSuccessStatusCode)
             {
                 system.Is_Active = false;
+                system.LastGrow = null;
             }
             else
             {
@@ -111,13 +112,12 @@ namespace WeGrow.Client.Pages.SystemInstance
             var tokenResponse = await TokenService.GetToken("WeGrow.write");
             HttpClient.SetBearerToken(tokenResponse.AccessToken);
             var systemRequestMessage = new HttpRequestMessage(HttpMethod.Post, ApiUrl + ApiRoutes.Grows);
-            HttpResponseMessage systemResult = null;
+            HttpResponseMessage newGrowResult = null;
             try
             {
                 systemRequestMessage.Headers.Add(ConstNames.Uid, Accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 systemRequestMessage.Content = JsonContent.Create(system.Id);
-                systemResult = await HttpClient.SendAsync(systemRequestMessage);
-
+                newGrowResult = await HttpClient.SendAsync(systemRequestMessage);
             }
             catch (NullReferenceException)
             {
@@ -127,8 +127,10 @@ namespace WeGrow.Client.Pages.SystemInstance
             {
                 systemRequestMessage.Dispose();
             }
-            if (systemResult.IsSuccessStatusCode)
+            if (newGrowResult.IsSuccessStatusCode)
             {
+                var resultModel = await newGrowResult.Content.ReadFromJsonAsync<SystemGrowModel>();
+                system.LastGrow = resultModel;
                 system.Is_Active = true;
             }
             else

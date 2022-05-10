@@ -49,7 +49,7 @@ namespace WeGrow.DAL
                 .HasMany(x => x.Grows)
                 .WithOne(x => x.System)
                 .HasForeignKey(x => x.System_Id)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Schedule>()
                 .HasMany(x => x.Grows)
                 .WithOne(x => x.Schedule)
