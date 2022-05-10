@@ -26,7 +26,7 @@ namespace WeGrow.Client.Pages.SystemInstance
         {
             ApiUrl = Configuration["apiUrl"];
 
-            if (ModulesList.Count == 0 && SystemsList.Count == 0)
+            if (true)
             {
                 var tokenResponse = await TokenService.GetToken("WeGrow.read");
                 HttpClient.SetBearerToken(tokenResponse.AccessToken);
