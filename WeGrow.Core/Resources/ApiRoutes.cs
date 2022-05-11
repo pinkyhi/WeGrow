@@ -23,5 +23,7 @@
         public const string Grows = "/grows";
         public const string GrowModule = "/grows/module";
 
+        public const string SetCulture = "/Culture/SetCulture";
+
     }
 }

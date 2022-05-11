@@ -10,6 +10,10 @@
     <MudAppBar>
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         WeGrow
+        <MudPaper Outlined="false" Elevation="0">
+            <span>Site Language</span>
+            <ChooseLanguageComponent />
+        </MudPaper>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu />

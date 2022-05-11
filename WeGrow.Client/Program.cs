@@ -6,6 +6,15 @@ using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Localization
+var cultures = builder.Configuration.GetSection("Cultures")
+    .GetChildren().ToDictionary(x => x.Key, x => x.Value);
+var supportedCutures = cultures.Keys.ToArray();
+var localizationOptions = new RequestLocalizationOptions()
+    .AddSupportedCultures(supportedCutures)
+    .AddSupportedUICultures(supportedCutures);
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -56,7 +65,10 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+app.UseRequestLocalization(localizationOptions);
+
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -64,3 +76,4 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
