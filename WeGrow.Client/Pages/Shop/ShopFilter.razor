@@ -33,7 +33,7 @@
     </MudSelect>
     <MudNumericField @bind-Value="FilterModel.MinPrice" Label="@Localizer["MinPrice"]" Variant="Variant.Text" Min="0" Max="1000000" />
     <MudNumericField @bind-Value="FilterModel.MaxPrice" Label="@Localizer["MaxPrice"]" Variant="Variant.Text" Min="0" Max="1000000" />
-    <MudCheckBox @bind-Checked="@FilterModel.IsInStock" Label="In stock"></MudCheckBox>
+    <MudCheckBox @bind-Checked="@FilterModel.IsInStock" Label="@Localizer["In stock"]"></MudCheckBox>
     <MudButton OnClick="@(ResetFields)">@Localizer["Reset filters"]</MudButton>
 
     <MudButton Disabled="@filterLoading" Variant="Variant.Outlined" Color="Color.Primary" OnClick="FilterClick">

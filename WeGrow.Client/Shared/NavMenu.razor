@@ -7,7 +7,7 @@
     <AuthorizeView Roles="admin">
         <Authorized>
             <MudNavLink Href="/orders"  Match="NavLinkMatch.Prefix">@Localizer["Orders"]</MudNavLink>
-            <MudNavGroup Title="Admin" Expanded="true">
+            <MudNavGroup Title="@Localizer["Admin"]" Expanded="true">
                 <MudNavLink Href="@ApiRoutes.AdminModules"  Match="NavLinkMatch.Prefix">@Localizer["Modules"]</MudNavLink>
                 <MudNavLink Href="@ApiRoutes.AdminReceipts"  Match="NavLinkMatch.Prefix">@Localizer["Receipts"]</MudNavLink>
                 <MudNavLink Href="@ApiRoutes.AdminOrders"  Match="NavLinkMatch.Prefix">@Localizer["Orders"]</MudNavLink>
@@ -20,7 +20,7 @@
     </AuthorizeView>
     <AuthorizeView>
         <Authorized>
-            <MudNavGroup Title="Account" Expanded="true">
+            <MudNavGroup Title="@Localizer["Account"]" Expanded="true">
                 <MudNavLink Href="@ApiRoutes.AccountSystems" Match="NavLinkMatch.Prefix">@Localizer["Systems"]</MudNavLink>
             </MudNavGroup>
             <MudNavLink Href="/logout"  Match="NavLinkMatch.Prefix">@Localizer["Logout"]</MudNavLink>

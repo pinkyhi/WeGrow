@@ -117,7 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="s" xml:space="preserve">
-    <value>s</value>
+  <data name="100x100 default firmware box for growing and modules installation" xml:space="preserve">
+    <value>100x100 default firmware box for growing and modules installation</value>
+  </data>
+  <data name="5MPx coolest optical cam module for your box :)" xml:space="preserve">
+    <value>5MPx coolest optical cam module for your box :) The best timelapses ever!</value>
+  </data>
+  <data name="Camera module" xml:space="preserve">
+    <value>Camera module</value>
+  </data>
+  <data name="Coal filter" xml:space="preserve">
+    <value>Coal filter</value>
+  </data>
+  <data name="Coal filter that is used to absorb smell from your box." xml:space="preserve">
+    <value>Coal filter that is used to absorb smell from your box.</value>
+  </data>
+  <data name="Gives information about soil pH parameter" xml:space="preserve">
+    <value>Gives information about soil pH parameter</value>
+  </data>
+  <data name="Gives precise temperature info" xml:space="preserve">
+    <value>Gives precise temperature info</value>
+  </data>
+  <data name="Has additional defense layer. Good for common soil." xml:space="preserve">
+    <value>Has additional defense layer. Good for common soil.</value>
+  </data>
+  <data name="LED Lamp 60x60" xml:space="preserve">
+    <value>LED Lamp 60x60</value>
+  </data>
+  <data name="pH meter module" xml:space="preserve">
+    <value>pH meter module</value>
+  </data>
+  <data name="Resist soil watering module" xml:space="preserve">
+    <value>Resist soil watering module</value>
+  </data>
+  <data name="RGB, 100Wt LED" xml:space="preserve">
+    <value>RGB, 100Wt LED</value>
+  </data>
+  <data name="Soil watering module" xml:space="preserve">
+    <value>Soil watering module</value>
+  </data>
+  <data name="Standart box" xml:space="preserve">
+    <value>Standart box</value>
+  </data>
+  <data name="Thermocouple" xml:space="preserve">
+    <value>Thermocouple</value>
+  </data>
+  <data name="This module is used to check soil humidity. Good for coco soil." xml:space="preserve">
+    <value>This module is used to check soil humidity. Good for coco soil.</value>
   </data>
 </root>

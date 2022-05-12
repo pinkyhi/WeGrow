@@ -117,142 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Accepted" xml:space="preserve">
-    <value>Прийнято</value>
+  <data name="100x100 default firmware box for growing and modules installation" xml:space="preserve">
+    <value>100x100 стандартний фірмовий БОКС для встановлення модулів.</value>
   </data>
-  <data name="Account" xml:space="preserve">
-    <value>Акаунт</value>
+  <data name="5MPx coolest optical cam module for your box :)" xml:space="preserve">
+    <value>5MPx дивовижна камера у твій БОКС :) Найкращі таймлапси!</value>
   </data>
-  <data name="Add to cart" xml:space="preserve">
-    <value>Додати у кошик</value>
+  <data name="Camera module" xml:space="preserve">
+    <value>Модуль камери</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Адмінистрування</value>
+  <data name="Coal filter" xml:space="preserve">
+    <value>Вуглевий фільтр</value>
   </data>
-  <data name="Cart" xml:space="preserve">
-    <value>Корзина</value>
+  <data name="Coal filter that is used to absorb smell from your box." xml:space="preserve">
+    <value>Маленький вуглевий фільтр для абсорбування повітря боксу</value>
   </data>
-  <data name="Confirmed" xml:space="preserve">
-    <value>Confirmed</value>
+  <data name="Gives information about soil pH parameter" xml:space="preserve">
+    <value>Перевірка рівня кислотності грунту</value>
   </data>
-  <data name="Count" xml:space="preserve">
-    <value>Кількість</value>
+  <data name="Gives precise temperature info" xml:space="preserve">
+    <value>Надає можливість отримувати точні дані температури у будь якій частині БОКСУ.</value>
   </data>
-  <data name="Filter" xml:space="preserve">
-    <value>Фільтрувати</value>
+  <data name="Has additional defense layer. Good for common soil." xml:space="preserve">
+    <value>На відміну від звичайного модуля поливу, має антикорозійне покриття. Гарно підходить для звичайного грунту.</value>
   </data>
-  <data name="Filtering" xml:space="preserve">
-    <value>Фільтрація</value>
+  <data name="LED Lamp 60x60" xml:space="preserve">
+    <value>LED Лампа 60x60</value>
   </data>
-  <data name="Filtering..." xml:space="preserve">
-    <value>Фільтруємо...</value>
+  <data name="pH meter module" xml:space="preserve">
+    <value>Модуль виміру pH</value>
   </data>
-  <data name="Full price" xml:space="preserve">
-    <value>Повна ціна</value>
+  <data name="Resist soil watering module" xml:space="preserve">
+    <value>Антикорозійний модуль поливу</value>
   </data>
-  <data name="Grows" xml:space="preserve">
-    <value>Врожаї</value>
+  <data name="RGB, 100Wt LED" xml:space="preserve">
+    <value>RGB, 100Wt LED</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Домашня сторінка</value>
+  <data name="Soil watering module" xml:space="preserve">
+    <value>Модуль поливу грунту</value>
   </data>
-  <data name="In stock" xml:space="preserve">
-    <value>В наявності</value>
+  <data name="Standart box" xml:space="preserve">
+    <value>Стандартний БОКС</value>
   </data>
-  <data name="Login" xml:space="preserve">
-    <value>Війти</value>
+  <data name="Thermocouple" xml:space="preserve">
+    <value>Термопара</value>
   </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Вийти</value>
-  </data>
-  <data name="MaxPrice" xml:space="preserve">
-    <value>Макс. ціна</value>
-  </data>
-  <data name="MinPrice" xml:space="preserve">
-    <value>Мін. ціна</value>
-  </data>
-  <data name="Module instances" xml:space="preserve">
-    <value>Доступні модулі</value>
-  </data>
-  <data name="Modules" xml:space="preserve">
-    <value>Модулі</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Ім'я</value>
-  </data>
-  <data name="Order!" xml:space="preserve">
-    <value>Замовити!</value>
-  </data>
-  <data name="Orders" xml:space="preserve">
-    <value>Замовлення</value>
-  </data>
-  <data name="Pay this order" xml:space="preserve">
-    <value>Сплатити це замовлення</value>
-  </data>
-  <data name="Payment is not received" xml:space="preserve">
-    <value>Оплата не отримана</value>
-  </data>
-  <data name="PriceASC" xml:space="preserve">
-    <value>За зростанням цін</value>
-  </data>
-  <data name="PriceDESC" xml:space="preserve">
-    <value>За спадання цін</value>
-  </data>
-  <data name="ReadyToDelivery" xml:space="preserve">
-    <value>Готово до відправки</value>
-  </data>
-  <data name="Receipts" xml:space="preserve">
-    <value>Чеки</value>
-  </data>
-  <data name="Remove this order" xml:space="preserve">
-    <value>Відмінити замовлення</value>
-  </data>
-  <data name="Reset filters" xml:space="preserve">
-    <value>Скинути фільтри</value>
-  </data>
-  <data name="Schedules" xml:space="preserve">
-    <value>Розклади</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Пошук</value>
-  </data>
-  <data name="Sent" xml:space="preserve">
-    <value>Відправлено</value>
-  </data>
-  <data name="Shop" xml:space="preserve">
-    <value>Товари</value>
-  </data>
-  <data name="Sorting" xml:space="preserve">
-    <value>Сортування</value>
-  </data>
-  <data name="Status:" xml:space="preserve">
-    <value>Статус:</value>
-  </data>
-  <data name="Subjects" xml:space="preserve">
-    <value>Галузі</value>
-  </data>
-  <data name="Successed" xml:space="preserve">
-    <value>Успішно</value>
-  </data>
-  <data name="System instances" xml:space="preserve">
-    <value>Системи</value>
-  </data>
-  <data name="Systems" xml:space="preserve">
-    <value>Системи</value>
-  </data>
-  <data name="Total price:" xml:space="preserve">
-    <value>Загальна ціна:</value>
-  </data>
-  <data name="Types" xml:space="preserve">
-    <value>Типи</value>
-  </data>
-  <data name="Unconfirmed" xml:space="preserve">
-    <value>Не підтверджено</value>
-  </data>
-  <data name="Welcome to WeGrow company page!" xml:space="preserve">
-    <value>Вітаємо на сторінці компанії WeGrow</value>
-  </data>
-  <data name="Work of student Ivan Vladymyrov" xml:space="preserve">
-    <value>Робота студента Владимирова Івана</value>
+  <data name="This module is used to check soil humidity. Good for coco soil." xml:space="preserve">
+    <value>Цей модуль перевіряє вологість грунту. Гарно підходить для коко грунту.</value>
   </data>
 </root>

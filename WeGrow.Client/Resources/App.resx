@@ -120,8 +120,14 @@
   <data name="Accepted" xml:space="preserve">
     <value>Accepted</value>
   </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
   <data name="Add to cart" xml:space="preserve">
     <value>Add to cart</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
   </data>
   <data name="Cart" xml:space="preserve">
     <value>Cart</value>
@@ -149,6 +155,9 @@
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
+  </data>
+  <data name="In stock" xml:space="preserve">
+    <value>In stock</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
@@ -191,6 +200,9 @@
   </data>
   <data name="ReadyToDelivery" xml:space="preserve">
     <value>ReadyToDelivery</value>
+  </data>
+  <data name="Receipts" xml:space="preserve">
+    <value>Receipts</value>
   </data>
   <data name="Remove this order" xml:space="preserve">
     <value>Remove this order</value>

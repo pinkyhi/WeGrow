@@ -58,7 +58,7 @@
                                     <tfoot class="mud-table-foot">
                                         <tr class="mud-table-row">
                                             <td class="mud-table-cell" style="font-weight:600; text-align: center;" colspan="3"></td>
-                                            <td class="mud-table-cell" style="font-weight:600;" colspan="1">Total price: @orderTotal UAH</td>
+                                            <td class="mud-table-cell" style="font-weight:600;" colspan="1">@Localizer["Total price:"] @orderTotal UAH</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
 
-                    <MudText Class="mt-3" Typo="Typo.h5">Status:</MudText>
+                    <MudText Class="mt-3" Typo="Typo.h5">@Localizer["Status:"]</MudText>
                     @if (order.Status == Core.Enums.OrderStatus.Unconfirmed)
                     {
                        <MudAlert Severity="Severity.Error">@Localizer["Payment is not received"]</MudAlert> 
