@@ -1,5 +1,6 @@
 ﻿@using WeGrow.Models.Shop
 @using WeGrow.Core.Enums
+@inject IStringLocalizer<App> Localizer
 
 @code {
     [Parameter]
@@ -10,40 +11,40 @@
     private bool filterLoading = false;
 }
 <MudPaper Width="300px" Class="flex-none pa-6" Elevation="3">
-    <MudText Typo="Typo.h5">Filtering</MudText>
+    <MudText Typo="Typo.h5">@Localizer["Filtering"]</MudText>
     <MudDivider DividerType="DividerType.Middle" Class="my-6"/>
-    <MudSelect T="string" Label="Types" MultiSelection="true" @bind-SelectedValues="FilterModel.Types" Variant="Variant.Outlined">
+    <MudSelect T="string" Label="@Localizer["Types"]" MultiSelection="true" @bind-SelectedValues="FilterModel.Types" Variant="Variant.Outlined">
     @foreach (var type in Enum.GetNames(typeof(ModuleType)))
     {
         <MudSelectItem T="string" Value="@type">@type</MudSelectItem>
     }
     </MudSelect>
-    <MudSelect T="string" Label="Subjects" MultiSelection="true" @bind-SelectedValues="FilterModel.Subjects" Variant="Variant.Outlined">
+    <MudSelect T="string" Label="@Localizer["Subjects"]" MultiSelection="true" @bind-SelectedValues="FilterModel.Subjects" Variant="Variant.Outlined">
     @foreach (var subj in Enum.GetNames(typeof(ModuleSubject)))
     {
         <MudSelectItem T="string" Value="@subj">@subj</MudSelectItem>
     }
     </MudSelect>
-    <MudSelect Dense="true" T="string" Label="Sorting" Variant="Variant.Outlined" @bind-Value="FilterModel.SortingType">
+    <MudSelect Dense="true" T="string" Label="@Localizer["Sorting"]" Variant="Variant.Outlined" @bind-Value="FilterModel.SortingType">
     @foreach (var type in Enum.GetNames(typeof(SortingType)))
     {
-        <MudSelectItem T="string" Value="@type">@type</MudSelectItem>
+        <MudSelectItem T="string" Value="@type">@Localizer[$"{type}"]</MudSelectItem>
     }
     </MudSelect>
-    <MudNumericField @bind-Value="FilterModel.MinPrice" Label="MinPrice" Variant="Variant.Text" Min="0" Max="1000000" />
-    <MudNumericField @bind-Value="FilterModel.MaxPrice" Label="MaxPrice" Variant="Variant.Text" Min="0" Max="1000000" />
+    <MudNumericField @bind-Value="FilterModel.MinPrice" Label="@Localizer["MinPrice"]" Variant="Variant.Text" Min="0" Max="1000000" />
+    <MudNumericField @bind-Value="FilterModel.MaxPrice" Label="@Localizer["MaxPrice"]" Variant="Variant.Text" Min="0" Max="1000000" />
     <MudCheckBox @bind-Checked="@FilterModel.IsInStock" Label="In stock"></MudCheckBox>
-    <MudButton OnClick="@(ResetFields)">Reset filter</MudButton>
+    <MudButton OnClick="@(ResetFields)">@Localizer["Reset filters"]</MudButton>
 
     <MudButton Disabled="@filterLoading" Variant="Variant.Outlined" Color="Color.Primary" OnClick="FilterClick">
         @if (filterLoading)
         {
             <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-            <MudText Class="ms-2">Filtering...</MudText>
+            <MudText Class="ms-2">@Localizer["Filtering..."].</MudText>
         }
         else
         {
-            <MudText>Filter</MudText>
+            <MudText>@Localizer["Filter"]</MudText>
         }
     </MudButton>
 

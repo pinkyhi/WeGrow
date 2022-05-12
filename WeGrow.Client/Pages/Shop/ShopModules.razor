@@ -5,6 +5,8 @@
 
 @code {
     [Inject] private IJSRuntime JsRuntime { get; set; }
+    [Inject] IStringLocalizer<App> Localizer { get; set; }
+    [Inject] IStringLocalizer<ShopModules> ModulesLocalizer{ get; set; }
 
     [Parameter]
     public List<ModuleEntity> ShopItems { get; set; }
@@ -28,9 +30,9 @@
             }
             </MudPaper>
             <MudPaper Class="flex-1 pa-3 flex-wrap" Elevation="1">
-                <MudText Class="d-flex" Typo="Typo.h5">@item.Name</MudText>
+                <MudText Class="d-flex" Typo="Typo.h5">@ModulesLocalizer[item.Name]</MudText>
                 <MudDivider Class="d-flex" DividerType="DividerType.Middle" />
-                <MudText Class="d-flex" Typo="Typo.body1">@item.Description</MudText>
+                <MudText Class="d-flex" Typo="Typo.body1">@ModulesLocalizer[item.Description]</MudText>
                 <MudText Class="d-flex" Typo="Typo.body2">#@item.Id</MudText>
             </MudPaper>
             <MudPaper Class="flex-none pa-4" Elevation="2" Width="200px">
@@ -39,7 +41,7 @@
                         <MudText Typo="Typo.h6">@item.Price UAH</MudText>
                     </div>
                     <MudDivider Class="ma-3" DividerType="DividerType.Middle" />
-                    <MudButton OnClick="events=> OnAddToCart(item)" Variant="Variant.Outlined" Color="Color.Secondary">Add to cart</MudButton>
+                    <MudButton OnClick="events=> OnAddToCart(item)" Variant="Variant.Outlined" Color="Color.Secondary">@Localizer["Add to cart"]</MudButton>
                 </MudContainer>
             </MudPaper>
     </MudPaper>

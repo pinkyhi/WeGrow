@@ -91,7 +91,7 @@
                     @if(!system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Succeded && !string.IsNullOrWhiteSpace(system.LastGrow?.TimelapsBlobLink))
                     {
                         <MudText Typo="Typo.h5">@($"Last grow from {system.LastGrow.StartDate.ToShortDateString()} timelaps")</MudText>
-                        <img src="@system.LastGrow.TimelapsBlobLink" defer style="width: 100%;" />
+                        <img src="@system.LastGrow.TimelapsBlobLink" defer style="width: 250px;" />
                     }
                     @if (system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Processing)
                     {

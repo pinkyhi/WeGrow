@@ -1,4 +1,5 @@
 ﻿@using WeGrow.Models.Shop
+@inject IStringLocalizer<App> Localizer
 
 @page "/shop/modules"
 @{
@@ -13,7 +14,7 @@
         <ShopFilter FilterModel="FilterModel" OnFilterApplied="OnFilterApplied" />
     </MudPaper> 
     <MudPaper Outlined="false" Class="d-inline-flex flex-column flex-1">
-        <MudTextField Class="d-flex ma-5" @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" OnAdornmentClick="OnSearch" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
+        <MudTextField Class="d-flex ma-5" @bind-Value="Search" Label="@Localizer["Search"]" Variant="Variant.Outlined" Adornment="Adornment.End" OnAdornmentClick="OnSearch" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Secondary" />
         @if(isLoading){
             <MudProgressCircular Class="d-flex" Style="height:150px;width:150px;margin:auto;" Color="Color.Default" Indeterminate="true" />
         }

@@ -1,9 +1,6 @@
 ﻿@page "/"
 @inject IStringLocalizer<App> Localizer
 <PageTitle>Home</PageTitle>
-@{
-    var x = Localizer["HomeTitle"];
-}
-<h1>@Localizer["HomeTitle"]</h1>
+<h1>@Localizer["Welcome to WeGrow company page!"]</h1>
 
-<SurveyPrompt Title="Happy to use our solution?" />
+<SurveyPrompt Title="@Localizer["Work of student Ivan Vladymyrov"]" />

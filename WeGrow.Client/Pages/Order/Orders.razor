@@ -1,10 +1,14 @@
 ﻿@using IdentityModel.Client
 @using System.Security.Claims
 @using Microsoft.AspNetCore.WebUtilities
+@using WeGrow.Client.Pages.Shop
 @using WeGrow.Core.Resources
 @using WeGrow.LiqPay.Models
 @using WeGrow.Models.Order
 @using WeGrow.Models.Shop
+@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<ShopModules> ModulesLocalizer
+
 
 @page "/orders"
 @attribute [Authorize]
@@ -34,9 +38,9 @@
                                     <thead class="mud-table-head">
                                         <tr class="mud-table-row">
                                             <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Id</span></th>
-                                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Name</span></th>
-                                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Count</span></th>
-                                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">Full price</span></th>
+                                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">@Localizer["Name"]</span></th>
+                                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">@Localizer["Count"]</span></th>
+                                            <th scope="col" class="mud-table-cell" colspan="1"><span class="column-header">@Localizer["Full price"]</span></th>
                                         </tr>
                                     </thead>
                                     <tbody class="mud-table-body">
@@ -45,7 +49,7 @@
                                             orderTotal = kv.Module.Price * kv.Amount;
                                             <tr class="mud-table-row">
                                                 <td data-label="Id" class="mud-table-cell">@kv.Module_Id</td>
-                                                <td data-label="Name" class="mud-table-cell">@kv.Module.Name</td>
+                                                <td data-label="Name" class="mud-table-cell">@ModulesLocalizer[@kv.Module.Name]</td>
                                                 <td data-label="Count" class="mud-table-cell">@kv.Amount</td>
                                                 <td data-label="Full price" class="mud-table-cell">@(kv.Module.Price * kv.Amount)</td>
                                             </tr>
@@ -65,22 +69,22 @@
                     <MudText Class="mt-3" Typo="Typo.h5">Status:</MudText>
                     @if (order.Status == Core.Enums.OrderStatus.Unconfirmed)
                     {
-                       <MudAlert Severity="Severity.Error">Payment is not received</MudAlert> 
+                       <MudAlert Severity="Severity.Error">@Localizer["Payment is not received"]</MudAlert> 
                     }
                     else if(order.Status < Core.Enums.OrderStatus.Sent)
                     {
-                        <MudAlert Severity="Severity.Info">Status: @order.Status.ToString()</MudAlert>
+                        <MudAlert Severity="Severity.Info">@Localizer["Status:"] @Localizer[@order.Status.ToString()]</MudAlert>
                     }
                     else
                     {
-                        <MudAlert Severity="Severity.Success">Status: Successed</MudAlert>
+                        <MudAlert Severity="Severity.Success">@Localizer["Status:"] @Localizer["Successed"]</MudAlert>
                     }
                 </MudCardContent>
                 @if (order.Status == Core.Enums.OrderStatus.Unconfirmed)
                 {
                     <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="events => OnOrderPayClicked(order)">Pay this order</MudButton>
-                        <MudButton Style="margin-left:auto" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => OnOrderDeleteClicked(order)">Remove this order</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="events => OnOrderPayClicked(order)">@Localizer["Pay this order"]</MudButton>
+                        <MudButton Style="margin-left:auto" Variant="Variant.Outlined" Color="Color.Error" OnClick="events => OnOrderDeleteClicked(order)">@Localizer["Remove this order"]</MudButton>
                     </MudCardActions>
                 }
             </MudCard>

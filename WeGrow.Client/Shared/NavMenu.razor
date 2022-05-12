@@ -1,31 +1,32 @@
 ﻿@using WeGrow.Core.Resources
+@inject IStringLocalizer<App> Localizer
+
 <MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
-    <MudNavLink Href="/shop/modules"  Match="NavLinkMatch.Prefix">Shop</MudNavLink>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">@Localizer["Home"]</MudNavLink>
+    <MudNavLink Href="/shop/modules"  Match="NavLinkMatch.Prefix">@Localizer["Shop"]</MudNavLink>
     <AuthorizeView Roles="admin">
         <Authorized>
-            <MudNavLink Href="/orders"  Match="NavLinkMatch.Prefix">Orders</MudNavLink>
+            <MudNavLink Href="/orders"  Match="NavLinkMatch.Prefix">@Localizer["Orders"]</MudNavLink>
             <MudNavGroup Title="Admin" Expanded="true">
-                <MudNavLink Href="@ApiRoutes.AdminModules"  Match="NavLinkMatch.Prefix">Modules</MudNavLink>
-                <MudNavLink Href="@ApiRoutes.AdminReceipts"  Match="NavLinkMatch.Prefix">Receipts</MudNavLink>
-                <MudNavLink Href="@ApiRoutes.AdminOrders"  Match="NavLinkMatch.Prefix">Orders</MudNavLink>
-                <MudNavLink Href="@ApiRoutes.AdminModuleInstances"  Match="NavLinkMatch.Prefix">Module instances</MudNavLink>
-                <MudNavLink Href="@ApiRoutes.AdminSystemInstances"  Match="NavLinkMatch.Prefix">System instances</MudNavLink>
-                <MudNavLink Href="@ApiRoutes.AdminGrows"  Match="NavLinkMatch.Prefix">Grows</MudNavLink>
-                <MudNavLink Href="@ApiRoutes.AdminSchedules"  Match="NavLinkMatch.Prefix">Schedules</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminModules"  Match="NavLinkMatch.Prefix">@Localizer["Modules"]</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminReceipts"  Match="NavLinkMatch.Prefix">@Localizer["Receipts"]</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminOrders"  Match="NavLinkMatch.Prefix">@Localizer["Orders"]</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminModuleInstances"  Match="NavLinkMatch.Prefix">@Localizer["Module instances"]</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminSystemInstances"  Match="NavLinkMatch.Prefix">@Localizer["System instances"]</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminGrows"  Match="NavLinkMatch.Prefix">@Localizer["Grows"]</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AdminSchedules"  Match="NavLinkMatch.Prefix">@Localizer["Schedules"]</MudNavLink>
             </MudNavGroup>
         </Authorized>
     </AuthorizeView>
     <AuthorizeView>
         <Authorized>
             <MudNavGroup Title="Account" Expanded="true">
-                <MudNavLink Href="@ApiRoutes.AccountSystems" Match="NavLinkMatch.Prefix">Systems</MudNavLink>
+                <MudNavLink Href="@ApiRoutes.AccountSystems" Match="NavLinkMatch.Prefix">@Localizer["Systems"]</MudNavLink>
             </MudNavGroup>
-            <MudNavLink Href="/logout"  Match="NavLinkMatch.Prefix">Logout</MudNavLink>
+            <MudNavLink Href="/logout"  Match="NavLinkMatch.Prefix">@Localizer["Logout"]</MudNavLink>
         </Authorized>
         <NotAuthorized>
-            <MudNavLink Href="/login"  Match="NavLinkMatch.Prefix">Login</MudNavLink>
+            <MudNavLink Href="/login"  Match="NavLinkMatch.Prefix">@Localizer["Login"]</MudNavLink>
         </NotAuthorized>
     </AuthorizeView>
-    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
 </MudNavMenu>

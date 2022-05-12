@@ -117,7 +117,127 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HomeTitle" xml:space="preserve">
+  <data name="Accepted" xml:space="preserve">
+    <value>Прийнято</value>
+  </data>
+  <data name="Add to cart" xml:space="preserve">
+    <value>Додати у кошик</value>
+  </data>
+  <data name="Cart" xml:space="preserve">
+    <value>Корзина</value>
+  </data>
+  <data name="Confirmed" xml:space="preserve">
+    <value>Confirmed</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Кількість</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Фільтрувати</value>
+  </data>
+  <data name="Filtering" xml:space="preserve">
+    <value>Фільтрація</value>
+  </data>
+  <data name="Filtering..." xml:space="preserve">
+    <value>Фільтруємо...</value>
+  </data>
+  <data name="Full price" xml:space="preserve">
+    <value>Повна ціна</value>
+  </data>
+  <data name="Grows" xml:space="preserve">
+    <value>Врожаї</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Домашня сторінка</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Війти</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
+  <data name="MaxPrice" xml:space="preserve">
+    <value>Макс. ціна</value>
+  </data>
+  <data name="MinPrice" xml:space="preserve">
+    <value>Мін. ціна</value>
+  </data>
+  <data name="Module instances" xml:space="preserve">
+    <value>Модулі</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ім'я</value>
+  </data>
+  <data name="Order!" xml:space="preserve">
+    <value>Замовити!</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Замовлення</value>
+  </data>
+  <data name="Pay this order" xml:space="preserve">
+    <value>Сплатити це замовлення</value>
+  </data>
+  <data name="Payment is not received" xml:space="preserve">
+    <value>Оплата не отримана</value>
+  </data>
+  <data name="PriceASC" xml:space="preserve">
+    <value>За зростанням цін</value>
+  </data>
+  <data name="PriceDESC" xml:space="preserve">
+    <value>За спадання цін</value>
+  </data>
+  <data name="ReadyToDelivery" xml:space="preserve">
+    <value>Готово до відправки</value>
+  </data>
+  <data name="Remove this order" xml:space="preserve">
+    <value>Відмінити замовлення</value>
+  </data>
+  <data name="Reset filters" xml:space="preserve">
+    <value>Скинути фільтри</value>
+  </data>
+  <data name="Schedules" xml:space="preserve">
+    <value>Розклади</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Пошук</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Відправлено</value>
+  </data>
+  <data name="Shop" xml:space="preserve">
+    <value>Товари</value>
+  </data>
+  <data name="Sorting" xml:space="preserve">
+    <value>Сортування</value>
+  </data>
+  <data name="Status:" xml:space="preserve">
+    <value>Статус:</value>
+  </data>
+  <data name="Subjects" xml:space="preserve">
+    <value>Галузі</value>
+  </data>
+  <data name="Successed" xml:space="preserve">
+    <value>Успішно</value>
+  </data>
+  <data name="System instances" xml:space="preserve">
+    <value>Системи</value>
+  </data>
+  <data name="Systems" xml:space="preserve">
+    <value>Системи</value>
+  </data>
+  <data name="Total price:" xml:space="preserve">
+    <value>Загальна ціна:</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Типи</value>
+  </data>
+  <data name="Unconfirmed" xml:space="preserve">
+    <value>Не підтверджено</value>
+  </data>
+  <data name="Welcome to WeGrow company page!" xml:space="preserve">
     <value>Вітаємо на сторінці компанії WeGrow</value>
+  </data>
+  <data name="Work of student Ivan Vladymyrov" xml:space="preserve">
+    <value>Робота студента Владимирова Івана</value>
   </data>
 </root>
