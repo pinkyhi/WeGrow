@@ -165,6 +165,9 @@
   <data name="Module instances" xml:space="preserve">
     <value>Module instances</value>
   </data>
+  <data name="Modules" xml:space="preserve">
+    <value>Modules</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>

@@ -163,6 +163,9 @@
     <value>Мін. ціна</value>
   </data>
   <data name="Module instances" xml:space="preserve">
+    <value>Доступні модулі</value>
+  </data>
+  <data name="Modules" xml:space="preserve">
     <value>Модулі</value>
   </data>
   <data name="Name" xml:space="preserve">
