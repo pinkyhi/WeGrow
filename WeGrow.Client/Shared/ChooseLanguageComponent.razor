@@ -12,8 +12,9 @@
         .GetChildren().ToDictionary(x => x.Key, x => x.Value);
     }
 
-    private void RequestCultureChange()
+    private void RequestCultureChange(string newLang)
     {
+        selectedCulture = newLang;
         if (string.IsNullOrWhiteSpace(selectedCulture))
         {
             return;
@@ -27,14 +28,29 @@
 }
 @if(cultures != null)
 {
-    <form>
-        <select @bind="selectedCulture">
-            @foreach(var culture in cultures)
+    <div>
+<MudSelect T="string" Value="selectedCulture" ValueChanged="value => RequestCultureChange(value)" Label="Language" Variant="Variant.Outlined" Margin="Margin.Dense">
+    @foreach(var culture in cultures)
+    {
+        var cultureFlagLink = "";
+        switch (culture.Value)
+        {
+            case "Ukraine":
+                cultureFlagLink = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Ukraine.svg/2560px-Flag_of_Ukraine.svg.png";
+                break;
+            case "USA":
+                cultureFlagLink = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/2560px-Flag_of_the_United_States.svg.png";
+                break;
+        }
+        <MudSelectItem Value="@culture.Key">
+            @if (!string.IsNullOrEmpty(cultureFlagLink))
             {
-                <option value="@culture.Key">@culture.Value</option>
+                <img src="@cultureFlagLink" height="14" class="mr-1" /> 
             }
-        </select>
-        <button @onclick="RequestCultureChange">Change</button>
-    </form>
+
+            @culture.Value
+        </MudSelectItem>
+    }
+</MudSelect></div>
 }
 
