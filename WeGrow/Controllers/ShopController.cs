@@ -19,7 +19,7 @@ namespace WeGrow.Controllers
     {
         private readonly IRepository repository;
         private readonly IMapper mapper;
-        private readonly int pageSize = 12;
+        private readonly int pageSize = 6;
         public ShopController(IRepository repository, IMapper mapper)
         {
             this.repository = repository;
