@@ -88,7 +88,7 @@
                 <MudPaper Outlined="true" Elevation="1" Class="d-flex flex-column flex-1 pa-5 gap-2">
                     <MudText Typo="Typo.h5">Name: @system.Name</MudText>
                     <MudText Typo="Typo.body1">#@system.Id</MudText>
-                    @if(!system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Succeded && !string.IsNullOrWhiteSpace(system.LastGrow?.TimelapsBlobLink))
+                    @if(!system.Is_Active && system.LastGrow?.Status == Core.Enums.GrowStatus.Succeded && !string.IsNullOrWhiteSpace(system.LastGrow?.TimelapsBlobLink) && system.ModuleInstances.Any(x => x.Subject == Core.Enums.ModuleSubject.LiveVideo))
                     {
                         <MudText Typo="Typo.h5">@($"Last grow from {system.LastGrow.StartDate.ToShortDateString()} timelaps")</MudText>
                         <img src="@system.LastGrow.TimelapsBlobLink" defer style="width: 250px;" />
@@ -161,13 +161,16 @@
                     CreationModel.ModuleSchedules.RemoveAll(x => true);
                     foreach(var instance in CreationModel.Modules)
                     {
-                        CreationModel.ModuleSchedules.Add(new Models.Schedules.ModuleScheduleModel()
+                        if(instance.ModuleType != Core.Enums.ModuleType.Passive)
+                        {
+                            CreationModel.ModuleSchedules.Add(new Models.Schedules.ModuleScheduleModel()
                             {
                                 DaysCount = ScheduleDaysCount,
                                 ModuleSubject = instance.Subject,
                                 ModuleInstanceId = instance.Id,
                                 ModuleName = instance.ModuleName
                             });
+                        }
                     }
                     break;
                 }

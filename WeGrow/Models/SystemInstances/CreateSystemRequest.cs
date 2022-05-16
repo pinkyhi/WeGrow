@@ -6,5 +6,7 @@ namespace WeGrow.Models.SystemInstances
     {
         public string Name { get; set; }
         public List<ModuleScheduleModel> ModuleSchedules { get; set; } = new();
+        public List<ModuleInstanceViewModel> ModulesList { get; set; } = new();
+
     }
 }

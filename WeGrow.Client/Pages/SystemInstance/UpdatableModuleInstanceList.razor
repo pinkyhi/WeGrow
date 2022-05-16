@@ -49,8 +49,10 @@
             <MudTd DataLabel="Last update">@context.LastResponseItem</MudTd>
             <MudTd DataLabel="Belongs to system">@context.System_Id</MudTd>
             <MudTd DataLabel="Actions">
-                           <MudIconButton Icon="@Icons.Filled.Autorenew" aria-label="update" OnClick="events => OnRenew(context)"></MudIconButton>
-
+                @if(context.ModuleType != Core.Enums.ModuleType.Passive)
+                {
+                    <MudIconButton Icon="@Icons.Filled.Autorenew" aria-label="update" OnClick="events => OnRenew(context)"></MudIconButton>
+                }
             </MudTd>
         </RowTemplate>
     </MudTable>

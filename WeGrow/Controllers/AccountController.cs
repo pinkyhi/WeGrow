@@ -45,7 +45,7 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> GetSystems()
         {
             var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
-            var items = await repository.GetRangeAsync<SystemInstance>(true, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedule).Include(i => i.Grows).Include(i => i.ModuleInstances));
+            var items = await repository.GetRangeAsync<SystemInstance>(true, x => x.User_Id.Equals(userId), y => y.Include(i => i.Schedule).Include(i => i.Grows).Include(i => i.ModuleInstances).ThenInclude(i => i.Module));
             var models = new List<SystemInstanceViewModel>();
 
             foreach (var item in items)
@@ -98,7 +98,7 @@ namespace WeGrow.Controllers
         public async Task<IActionResult> CreateSystemWithSchedule([FromBody] CreateSystemRequest creationModel)
         {
             var userId = HttpContext.Request.Headers.First(x => x.Key == ConstNames.Uid).Value;
-            var moduleInstances = await repository.GetRangeAsync<ModuleInstance>(true, x => creationModel.ModuleSchedules.Any(y => y.ModuleInstanceId.Equals(x.Id)), z => z.Include(item => item.System).Include(item => item.Module));
+            var moduleInstances = await repository.GetRangeAsync<ModuleInstance>(true, x => creationModel.ModulesList.Any(y => y.Id.Equals(x.Id)), z => z.Include(item => item.System).Include(item => item.Module));
 
             // Schedule uploading
             var newFileName = $"{Guid.NewGuid()}.json";

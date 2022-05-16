@@ -183,7 +183,8 @@ namespace WeGrow.Client.Pages.SystemInstance
                 var contentModel = new CreateSystemRequest()
                 {
                     Name = CreationModel.Name,
-                    ModuleSchedules = CreationModel.ModuleSchedules
+                    ModuleSchedules = CreationModel.ModuleSchedules,
+                    ModulesList = CreationModel.Modules.ToList()
                 };
                 systemRequestMessage.Content = JsonContent.Create(contentModel);
                 systemResult = await HttpClient.SendAsync(systemRequestMessage);
