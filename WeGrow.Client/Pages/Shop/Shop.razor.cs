@@ -92,7 +92,6 @@ namespace WeGrow.Client.Pages.Shop
 
         protected async Task OnFilterApplied(ModulesShopFilterModel filterModel)
         {
-            CartItems.Add(ItemsList.First());
             var queryParams = new Dictionary<string, string>();
 
             queryParams.Add("page", "1");

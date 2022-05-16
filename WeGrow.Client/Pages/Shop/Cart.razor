@@ -149,6 +149,8 @@
             throw new Exception("Order server error");
         }
         toggleCart = false;
+        await JsRuntime.InvokeVoidAsync("UpdateCookie", ConstNames.Cart, new List<ModuleEntity>(), 30);
+
     }
 
     protected override void OnInitialized()
