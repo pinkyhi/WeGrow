@@ -6,6 +6,7 @@ namespace WeGrow.Controllers
     [Route("{controller}/[action]")]
     public class CultureController : Controller
     {
+        [HttpGet]
         public IActionResult SetCulture(string culture, string redirectUri)
         {
             if (!string.IsNullOrWhiteSpace(culture))
