@@ -46,7 +46,7 @@
                                     <tbody class="mud-table-body">
                                         @foreach(var kv in order.Receipts)
                                         {
-                                            orderTotal = kv.Module.Price * kv.Amount;
+                                            orderTotal += kv.Module.Price * kv.Amount;
                                             <tr class="mud-table-row">
                                                 <td data-label="Id" class="mud-table-cell">@kv.Module_Id</td>
                                                 <td data-label="Name" class="mud-table-cell">@ModulesLocalizer[@kv.Module.Name]</td>
