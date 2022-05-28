@@ -60,9 +60,12 @@ namespace WeGrow.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(search))
                 {
+                    var ukName = ModulesResource.ResourceManager.GetString(x.Name);
+                    var ukDesc = ModulesResource.ResourceManager.GetString(x.Description);
+
                     result = x.Id.ToString().Contains(search, StringComparison.OrdinalIgnoreCase)
-                                                        || x.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
-                                                        || x.Description.Contains(search, StringComparison.OrdinalIgnoreCase);
+                                                        || x.Name.Contains(search, StringComparison.OrdinalIgnoreCase) || ukName.Contains(search, StringComparison.OrdinalIgnoreCase)
+                                                        || x.Description.Contains(search, StringComparison.OrdinalIgnoreCase) || ukDesc.Contains(search, StringComparison.OrdinalIgnoreCase);
                 }
                 return result;
             });

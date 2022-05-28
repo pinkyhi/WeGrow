@@ -24,4 +24,19 @@
     <ProjectReference Include="..\WeGrow.DAL\WeGrow.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Controllers\ModulesResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModulesResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Controllers\ModulesResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModulesResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
